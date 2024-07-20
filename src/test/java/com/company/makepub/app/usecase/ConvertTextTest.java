@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ConvertTextTest {
 
     private ConvertText convertText;
-    private static List<Markup> markups = new ArrayList<>();
+    private static final List<Markup> markups = new ArrayList<>();
 
     @BeforeAll
     static void beforeAll() {
@@ -29,7 +29,7 @@ class ConvertTextTest {
 
     @BeforeEach
     void setUp() {
-        convertText = new ConvertText(new myUUIDGeneratorTest(), this.markups);
+        convertText = new ConvertText(new myUUIDGeneratorTest(), markups);
     }
 
     @Test
