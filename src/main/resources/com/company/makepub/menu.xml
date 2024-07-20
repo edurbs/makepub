@@ -3,6 +3,7 @@
 
     <menu id="application" title="msg://com.company.makepub/menu.application.title" opened="true">
         <item view="User.list" title="msg://com.company.makepub.view.user/UserListView.title"/>
+        <item view="Markup.list" title="msg://com.company.makepub.view.markup/markupListView.title"/>
     </menu>
 
 </menu-config>
