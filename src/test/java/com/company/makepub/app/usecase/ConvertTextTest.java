@@ -20,16 +20,25 @@ class ConvertTextTest {
 
     @BeforeAll
     static void beforeAll() {
-        markups.add(new Markup("_", "<i>", "</i>", false, false, false));
-        markups.add(new Markup("~", "<b>", "</b>", false, false, false));
-        markups.add(new Markup("*", "<b><sup><a epub:type=\"noteref\" href=\"#{idFootNote}\">*</a></sup></b>", "", false, true, false));
-        markups.add(new Markup("£", "<aside id=\"{idFootNote}\" epub:type=\"footnote\"><p>", "</p></aside>", true, false, true));
+        markups.add(new Markup("_", "<i>", "</i>", false, false, false, false, null));
+        markups.add(new Markup("~", "<b>", "</b>", false, false, false, false, null));
+        markups.add(new Markup("*", "<b><sup><a epub:type=\"noteref\" href=\"#{idFootNote}\">*</a></sup></b>", "", false, true, false, false, null));
+        markups.add(new Markup("£", "<aside id=\"{idFootNote}\" epub:type=\"footnote\"><p>", "</p></aside>", true, false, true, false, null));
+        markups.add(new Markup("=", "<h5>", "</h5>", true, false, false, true, null));
 
     }
 
     @BeforeEach
     void setUp() {
         convertText = new ConvertText(new myUUIDGeneratorTest(), markups);
+    }
+
+    @Test
+    @DisplayName("Should convert question with a box")
+    void shouldConvertQuestion(){
+        String text = "=Hello, ~World!~ Hello";
+        String boxQuestion = "<textarea id=\"123\" rows=\"3\" cols=\"40\"></textarea>";
+        String expected = "<h5>Hello, World! Hello<h5>"+boxQuestion;
     }
 
     @Test

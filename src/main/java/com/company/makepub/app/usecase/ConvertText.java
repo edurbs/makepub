@@ -23,41 +23,66 @@ public class ConvertText {
         List<String> lines = List.of(text.split("\n"));
         for(String line : lines) {
             for (Markup markup : markups) {
-                int index = line.indexOf(markup.id());
-                while (index >= 0) {
-                    int lineSize = line.length();
-                    line = convertLine(markup, line, index);
-                    int diff =  line.length() - lineSize;
-                    index += diff;
-                    index = line.indexOf(markup.id(), index + 1);
-                }
+                line = applyMarkups(line, markup);
             }
             textConverted.append(line).append("\n");
         }
         return textConverted.toString().trim();
     }
 
+    private String applyMarkups(String line, Markup markup) {
+        int index = line.indexOf(markup.id());
+        if(markup.isParagraph() && index==0){
+            line = convertLine(markup, line, index);
+        }else if (!markup.isParagraph()){
+            line = formatAsNotParagraph(markup, line, index);
+        }
+        return line;
+    }
+
+    private String formatAsNotParagraph(Markup markup, String line, int index) {
+        while (index >= 0) {
+            int lineSize = line.length();
+            line = convertLine(markup, line, index);
+            int diff =  line.length() - lineSize;
+            index += diff;
+            index = line.indexOf(markup.id(), index + 1);
+        }
+        return line;
+    }
+
     private String convertLine(Markup markup, final String text, final int firstIndex) {
         String textConverted = text;
-        textConverted = replaceAt(firstIndex, textConverted, markup.htmlStart());
-        if(!markup.htmlEnd().isEmpty()) {
-            int nextIndex = textConverted.indexOf(markup.id());
-            if(nextIndex > 0){
-                textConverted = replaceAt(nextIndex, textConverted, markup.htmlEnd());
-            }
-        }
         if(markup.isParagraph()) {
             textConverted = convertLineAsBlock(markup, textConverted);
+        }else{
+            textConverted = replaceAt(firstIndex, textConverted, markup.htmlStart());
+            if(!markup.htmlEnd().isEmpty()) {
+                int nextIndex = textConverted.indexOf(markup.id());
+                if(nextIndex > 0){
+                    textConverted = replaceAt(nextIndex, textConverted, markup.htmlEnd());
+                }
+            }
         }
         if(markup.isFootnote()) {
             textConverted = replaceVariableFootnote(markup, textConverted);
         }
+        if(markup.isQuestion()) {
+            textConverted = convertLineAsQuestionWithBox(textConverted);
+        }
+
         return textConverted;
+    }
+
+    private String convertLineAsQuestionWithBox(final String textConverted) {
+        String uuidQuestion = uuidGenerator.generate();
+        String questionBox = "<textarea id=\"" + uuidQuestion + "\" rows=\"3\" cols=\"40\"></textarea>";
+        return textConverted + questionBox;
     }
 
     private String convertLineAsBlock(Markup markup, final String text) {
         String textConverted = text;
-        textConverted = textConverted + markup.htmlEnd();
+        textConverted = markup.htmlStart() + textConverted.substring(1) + markup.htmlEnd();
         return textConverted;
     }
 

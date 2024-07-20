@@ -48,7 +48,7 @@
                           minHeight="20em"
                           dataContainer="markupsDc"
                           columnReorderingAllowed="true"
-                          selectionMode="MULTI">
+                >
                     <actions>
                         <action id="create" type="list_create"/>
                         <action id="edit" type="list_edit"/>
@@ -58,9 +58,11 @@
                         <column property="id"/>
                         <column property="htmlStart"/>
                         <column property="htmlEnd"/>
-                        <column property="isParagraph"/>
-                        <column property="isFootnoteSymbol"/>
-                        <column property="isFootnoteText"/>
+                        <column property="isParagraph" visible="false"/>
+                        <column property="isFootnoteSymbol" visible="false"/>
+                        <column property="isFootnoteText" visible="false"/>
+                        <column property="isQuestion" visible="false"/>
+                        <column property="description"/>
                     </columns>
                 </dataGrid>
                 <hbox id="lookupActions" visible="false">
@@ -73,9 +75,13 @@
                     <textField id="idField" property="id"/>
                     <textField id="htmlStartField" property="htmlStart"/>
                     <textField id="htmlEndField" property="htmlEnd"/>
-                    <checkbox id="isParagraphField" property="isParagraph"/>
+                    <textField id="descriptionField" property="description"/>
+                    <checkbox id="isParagraphField" property="isParagraph">
+                        <tooltip text="Indica de deve ser feita a formatação de todo o parágrafo"/>
+                    </checkbox>
                     <checkbox id="isFootnoteSymbolField" property="isFootnoteSymbol"/>
                     <checkbox id="isFootnoteTextField" property="isFootnoteText"/>
+                    <checkbox id="isQuestionField" property="isQuestion"/>
                 </formLayout>
                 <hbox id="detailActions">
                     <button id="saveBtn" text="msg:///actions.Save" icon="CHECK" themeNames="primary"/>

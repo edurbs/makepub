@@ -1,5 +1,6 @@
 package com.company.makepub.entity;
 
+import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -11,8 +12,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.time.OffsetDateTime;
 
 @JmixEntity
-@Table(name = "MARKUP", indexes = {
-        @Index(name = "IDX_MARKUP_UNQ", columnList = "ID", unique = true)
+@Table(name = "MARKUP", uniqueConstraints = {
+        @UniqueConstraint(name = "IDX_MARKUP_UNQ", columnNames = {"ID"})
 })
 @Entity
 public class Markup {
@@ -20,6 +21,13 @@ public class Markup {
     @Column(name = "ID", nullable = false)
     @Id
     private String id;
+
+    @InstanceName
+    @Column(name = "DESCRIPTION")
+    private String description;
+
+    @Column(name = "IS_QUESTION")
+    private Boolean isQuestion;
 
     @NotNull
     @Column(name = "HTML_START")
@@ -59,6 +67,22 @@ public class Markup {
     @LastModifiedDate
     @Column(name = "LAST_MODIFIED_DATE")
     private OffsetDateTime lastModifiedDate;
+
+    public Boolean getIsQuestion() {
+        return isQuestion;
+    }
+
+    public void setIsQuestion(Boolean isQuestion) {
+        this.isQuestion = isQuestion;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 
     public Boolean getIsFootnoteText() {
         return isFootnoteText;
