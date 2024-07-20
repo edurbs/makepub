@@ -1,22 +1,35 @@
 package com.company.makepub.app.usecase;
 
-import com.company.makepub.app.gateway.UUIDGenerator;
+import com.company.makepub.app.domain.Markup;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 
 class ConvertTextTest {
 
-    private static ConvertText convertText;
+    private ConvertText convertText;
+    private static List<Markup> markups = new ArrayList<>();
+
+    @BeforeAll
+    static void beforeAll() {
+        markups.add(new Markup("_", "<i>", "</i>", false, false, false));
+        markups.add(new Markup("~", "<b>", "</b>", false, false, false));
+        markups.add(new Markup("*", "<b><sup><a epub:type=\"noteref\" href=\"#{idFootNote}\">*</a></sup></b>", "", false, true, false));
+        markups.add(new Markup("£", "<aside id=\"{idFootNote}\" epub:type=\"footnote\"><p>", "</p></aside>", true, false, true));
+
+    }
 
     @BeforeEach
     void setUp() {
-        convertText = new ConvertText(new myUUIDGeneratorTest());
+        convertText = new ConvertText(new myUUIDGeneratorTest(), this.markups);
     }
 
     @Test
