@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://converter.title">
+    <actions>
+    </actions>
+    <layout>
+        <h3 text="Conversor de texto com markupRecords para EPUB 3"/>
+        <textArea id="textAreaInput" width="90%" alignSelf="CENTER" maxHeight="200px" minHeight="200px"/>
+        <hbox justifyContent="CENTER" alignItems="CENTER" alignSelf="CENTER">
+            <fileUploadField id="coverUpload" uploadText="Upload capa"/>
+            <button id="convertButton" alignSelf="CENTER" text="Gerar EPUB"/>
+        </hbox>
+        <textArea id="textAreaOutput" width="90%" alignSelf="CENTER" maxHeight="200px" minHeight="200px"
+                  readOnly="true"/>
+
+    </layout>
+</view>

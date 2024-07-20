@@ -26,13 +26,16 @@ public class Markup {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(name = "IS_QUESTION")
-    private Boolean isQuestion;
+    @NotNull
+    @Column(name = "IS_QUESTION", nullable = false)
+    private Boolean isQuestion = false;
 
+    @Lob
     @NotNull
     @Column(name = "HTML_START")
     private String htmlStart;
 
+    @Lob
     @Column(name = "HTML_END")
     private String htmlEnd;
 

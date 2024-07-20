@@ -1,6 +1,6 @@
 package com.company.makepub.app.usecase;
 
-import com.company.makepub.app.domain.Markup;
+import com.company.makepub.app.domain.MarkupRecord;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,21 +16,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ConvertTextTest {
 
     private ConvertText convertText;
-    private static final List<Markup> markups = new ArrayList<>();
+    private static final List<MarkupRecord> MY_MARKUPS = new ArrayList<>();
 
     @BeforeAll
     static void beforeAll() {
-        markups.add(new Markup("_", "<i>", "</i>", false, false, false, false, null));
-        markups.add(new Markup("~", "<b>", "</b>", false, false, false, false, null));
-        markups.add(new Markup("*", "<b><sup><a epub:type=\"noteref\" href=\"#{idFootNote}\">*</a></sup></b>", "", false, true, false, false, null));
-        markups.add(new Markup("£", "<aside id=\"{idFootNote}\" epub:type=\"footnote\"><p>", "</p></aside>", true, false, true, false, null));
-        markups.add(new Markup("=", "<h5>", "</h5>", true, false, false, true, null));
+        MY_MARKUPS.add(new MarkupRecord("_", "<i>", "</i>", false, false, false, false, null));
+        MY_MARKUPS.add(new MarkupRecord("~", "<b>", "</b>", false, false, false, false, null));
+        MY_MARKUPS.add(new MarkupRecord("*", "<b><sup><a epub:type=\"noteref\" href=\"#{idFootNote}\">*</a></sup></b>", "", false, true, false, false, null));
+        MY_MARKUPS.add(new MarkupRecord("£", "<aside id=\"{idFootNote}\" epub:type=\"footnote\"><p>", "</p></aside>", true, false, true, false, null));
+        MY_MARKUPS.add(new MarkupRecord("=", "<h5>", "</h5>", true, false, false, true, null));
 
     }
 
     @BeforeEach
     void setUp() {
-        convertText = new ConvertText(new myUUIDGeneratorTest(), markups);
+        convertText = new ConvertText(new myUUIDGeneratorTest(), MY_MARKUPS);
     }
 
     @Test
@@ -38,7 +38,17 @@ class ConvertTextTest {
     void shouldConvertQuestion(){
         String text = "=Hello, ~World!~ Hello";
         String boxQuestion = "<textarea id=\"123\" rows=\"3\" cols=\"40\"></textarea>";
-        String expected = "<h5>Hello, World! Hello<h5>"+boxQuestion;
+        String expected = "<h5>Hello, <b>World!</b> Hello</h5>"+boxQuestion;
+        assertEquals(expected, convertText.convert(text));
+    }
+
+    @Test
+    @DisplayName("Should convert question with a box one time only")
+    void shouldConvertQuestionOneTime(){
+        String text = "=Hello, =~World!~ Hello";
+        String boxQuestion = "<textarea id=\"123\" rows=\"3\" cols=\"40\"></textarea>";
+        String expected = "<h5>Hello, =<b>World!</b> Hello</h5>"+boxQuestion;
+        assertEquals(expected, convertText.convert(text));
     }
 
     @Test

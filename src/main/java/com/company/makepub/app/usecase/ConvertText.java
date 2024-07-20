@@ -1,6 +1,6 @@
 package com.company.makepub.app.usecase;
 
-import com.company.makepub.app.domain.Markup;
+import com.company.makepub.app.domain.MarkupRecord;
 import com.company.makepub.app.gateway.UUIDGenerator;
 
 import java.util.ArrayList;
@@ -8,66 +8,67 @@ import java.util.List;
 
 public class ConvertText {
     private final UUIDGenerator uuidGenerator;
-    private final List<Markup> markups = new ArrayList<>();
+    private final List<MarkupRecord> markupRecords = new ArrayList<>();
 
     private final List<String> footNotes = new ArrayList<>();
     private int footNoteIndex = 0;
 
-    public ConvertText(UUIDGenerator uuidGenerator, List<Markup> markups) {
+    public ConvertText(UUIDGenerator uuidGenerator, List<MarkupRecord> markupRecords) {
         this.uuidGenerator = uuidGenerator;
-        this.markups.addAll(markups);
+        this.markupRecords.addAll(markupRecords);
     }
 
     public String convert(final String text) {
         StringBuilder textConverted = new StringBuilder();
         List<String> lines = List.of(text.split("\n"));
         for(String line : lines) {
-            for (Markup markup : markups) {
-                line = applyMarkups(line, markup);
+            for (MarkupRecord markupRecord : markupRecords) {
+                line = applyMarkups(line, markupRecord);
             }
             textConverted.append(line).append("\n");
         }
         return textConverted.toString().trim();
     }
 
-    private String applyMarkups(String line, Markup markup) {
-        int index = line.indexOf(markup.id());
-        if(markup.isParagraph() && index==0){
-            line = convertLine(markup, line, index);
-        }else if (!markup.isParagraph()){
-            line = formatAsNotParagraph(markup, line, index);
+    private String applyMarkups(String line, MarkupRecord markupRecord) {
+        int index = line.indexOf(markupRecord.id());
+        if(markupRecord.isParagraph() && index==0){
+            line = convertLine(markupRecord, line, index);
+        }else if (!markupRecord.isParagraph()){
+            line = formatAsNotParagraph(markupRecord, line, index);
         }
         return line;
     }
 
-    private String formatAsNotParagraph(Markup markup, String line, int index) {
+    private String formatAsNotParagraph(MarkupRecord markupRecord, String line, int index) {
         while (index >= 0) {
             int lineSize = line.length();
-            line = convertLine(markup, line, index);
+            line = convertLine(markupRecord, line, index);
             int diff =  line.length() - lineSize;
             index += diff;
-            index = line.indexOf(markup.id(), index + 1);
+            index = line.indexOf(markupRecord.id(), index + 1);
         }
         return line;
     }
 
-    private String convertLine(Markup markup, final String text, final int firstIndex) {
+    private String convertLine(MarkupRecord markupRecord, final String text, final int firstIndex) {
         String textConverted = text;
-        if(markup.isParagraph()) {
-            textConverted = convertLineAsBlock(markup, textConverted);
+        if(markupRecord.isParagraph()) {
+            textConverted = convertLineAsBlock(markupRecord, textConverted);
         }else{
-            textConverted = replaceAt(firstIndex, textConverted, markup.htmlStart());
-            if(!markup.htmlEnd().isEmpty()) {
-                int nextIndex = textConverted.indexOf(markup.id());
+            textConverted = replaceAt(firstIndex, textConverted, markupRecord.htmlStart());
+
+            if(markupRecord.htmlEnd()!=null && !markupRecord.htmlEnd().isBlank()) {
+                int nextIndex = textConverted.indexOf(markupRecord.id());
                 if(nextIndex > 0){
-                    textConverted = replaceAt(nextIndex, textConverted, markup.htmlEnd());
+                    textConverted = replaceAt(nextIndex, textConverted, markupRecord.htmlEnd());
                 }
             }
         }
-        if(markup.isFootnote()) {
-            textConverted = replaceVariableFootnote(markup, textConverted);
+        if(markupRecord.isFootnote()) {
+            textConverted = replaceVariableFootnote(markupRecord, textConverted);
         }
-        if(markup.isQuestion()) {
+        if(markupRecord.isQuestion()) {
             textConverted = convertLineAsQuestionWithBox(textConverted);
         }
 
@@ -80,16 +81,17 @@ public class ConvertText {
         return textConverted + questionBox;
     }
 
-    private String convertLineAsBlock(Markup markup, final String text) {
+    private String convertLineAsBlock(MarkupRecord markupRecord, final String text) {
         String textConverted = text;
-        textConverted = markup.htmlStart() + textConverted.substring(1) + markup.htmlEnd();
+        String htmlEnd = markupRecord.htmlEnd() == null ? "" : markupRecord.htmlEnd();
+        textConverted = markupRecord.htmlStart() + textConverted.substring(1) + htmlEnd;
         return textConverted;
     }
 
-    private String replaceVariableFootnote(Markup markup, final String text) {
+    private String replaceVariableFootnote(MarkupRecord markupRecord, final String text) {
         String idFootnoteVariable = "{idFootNote}";
         String textConverted = text;
-        if(markup.isFootnoteSymbol()) {
+        if(markupRecord.isFootnoteSymbol()) {
             String uuid = uuidGenerator.generate();
             footNotes.add(uuid);
             return textConverted.replace(idFootnoteVariable, uuid);
