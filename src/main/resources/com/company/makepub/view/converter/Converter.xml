@@ -4,7 +4,7 @@
     <actions>
     </actions>
     <layout>
-        <h3 text="Conversor de texto com markupRecords para EPUB 3"/>
+        <h3 text="Conversor de texto com markups para EPUB 3"/>
         <textArea id="textAreaInput" width="90%" alignSelf="CENTER" maxHeight="200px" minHeight="200px"/>
         <hbox justifyContent="CENTER" alignItems="CENTER" alignSelf="CENTER">
             <fileUploadField id="coverUpload" uploadText="Upload capa"/>
