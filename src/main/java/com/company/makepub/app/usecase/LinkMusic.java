@@ -3,6 +3,7 @@ package com.company.makepub.app.usecase;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.gateway.UUIDGenerator;
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
+import com.company.makepub.app.usecase.types.EpubMap;
 import com.company.makepub.app.usecase.types.LinkReferencePage;
 
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class LinkMusic implements LinkReferencePage {
     }
 
     @Override
-    public Map<String, String> execute(final String text) {
+    public Map<EpubMap, String> execute(final String text) {
         StringBuilder linkedText = new StringBuilder();
         List<String> lines = List.of(text.split("\n"));
         for(String line : lines) {
@@ -34,9 +35,9 @@ public class LinkMusic implements LinkReferencePage {
             }
             linkedText.append(line).append("\n");
         }
-        Map<String, String> result = new HashMap<>();
-        result.put("text", linkedText.toString());
-        result.put("musics", finalizeMusicPage());
+        Map<EpubMap, String> result = new HashMap<>();
+        result.put(EpubMap.TEXT, linkedText.toString());
+        result.put(EpubMap.MUSIC, finalizeMusicPage());
         return result;
     }
 
