@@ -14,7 +14,7 @@ public class MarkupMapper {
                 markup.getIsFootnoteSymbol(),
                 markup.getIsFootnoteText(),
                 markup.getIsQuestion(),
-                markup.getCreatedBy()
+                markup.getDescription()
         );
     }
 }
