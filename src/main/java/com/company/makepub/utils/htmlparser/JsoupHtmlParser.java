@@ -22,7 +22,17 @@ public class JsoupHtmlParser implements HtmlParser {
         }
         Element tagElement = doc.getElementById(tag);
         if(tagElement != null) {
-            tagContent = tagElement.html();
+            tagContent = tagElement.wholeText();
+            StringBuilder sb = new StringBuilder();
+            String[] lines = tagContent.split("\n");
+            for(String line : lines) {
+                if(!line.isBlank()){
+                    sb.append("<p>");
+                    sb.append(line.trim());
+                    sb.append("</p>\n");
+                }
+            }
+            tagContent = sb.toString();
         }
         return tagContent;
     }

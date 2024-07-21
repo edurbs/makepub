@@ -10,6 +10,7 @@ import com.company.makepub.app.usecase.types.StringConversor;
 import com.company.makepub.app.usecase.types.UseCase;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -46,7 +47,7 @@ public class EpubCreator {
     }
 
     private void createOtherEpubPages() {
-        finalEpubMap.put(EpubMap.CONTENT, EpubMap.CONTENT.getDefaultText().formatted(uuidGenerator.generate()));
+        finalEpubMap.put(EpubMap.CONTENT, EpubMap.CONTENT.getDefaultText());
         finalEpubMap.put(EpubMap.COVER, EpubMap.COVER.getDefaultText());
         finalEpubMap.put(EpubMap.NAV, EpubMap.NAV.getDefaultText());
         finalEpubMap.put(EpubMap.STYLE, EpubMap.SCRIPTURES.getDefaultText());
@@ -66,27 +67,25 @@ public class EpubCreator {
 
     private EpubFile createEpubFile() {
         String zipFilename = "file.epub";
-        byte[] fileContent = new byte[0];
-        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
-             ZipOutputStream zos = new ZipOutputStream(baos)) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        try (ZipOutputStream zos = new ZipOutputStream(baos)) {
             for(EpubMap epubMap : EpubMap.values()){
                 switch (epubMap) {
-                    case EpubMap.COVER -> addByteArrayToZip(zos, epubMap.getPath(), coverImage);
-                    case EpubMap.TEXT, EpubMap.SCRIPTURES, EpubMap.MUSIC -> addStringToZip(zos, epubMap.getPath(), finalEpubMap.get(epubMap));
+                    case EpubMap.IMAGE -> addByteArrayToZip(zos, epubMap.getPath(), coverImage);
+                    case EpubMap.TEXT, EpubMap.SCRIPTURES, EpubMap.MUSIC-> addStringToZip(zos, epubMap.getPath(), finalEpubMap.get(epubMap));
                     default -> addStringToZip(zos, epubMap.getPath(), epubMap.getDefaultText());
                 }
             }
-            fileContent=baos.toByteArray();
         } catch (IOException e) {
             throw new UseCaseException("Não foi possível criar arquivo zip", e.getCause());
         }
-        return new EpubFile(zipFilename, fileContent);
+        return new EpubFile(zipFilename, baos.toByteArray());
     }
     private static void addStringToZip(ZipOutputStream zos, String fileName, String content) throws IOException {
         ZipEntry zipEntry = new ZipEntry(fileName);
         zos.putNextEntry(zipEntry);
 
-        byte[] bytes = content.getBytes();
+        byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
         InputStream is = new ByteArrayInputStream(bytes);
         byte[] buffer = new byte[1024];
         int length;

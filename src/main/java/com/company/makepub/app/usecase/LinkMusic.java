@@ -46,6 +46,7 @@ public class LinkMusic implements LinkReferencePage {
                 <?xml version="1.0" encoding="utf-8"?>
                 <!DOCTYPE html>
                 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+                <head><title></title></head>
                 <body>
                 """;
         String end = "</body></html>";
@@ -70,8 +71,20 @@ public class LinkMusic implements LinkReferencePage {
 
     private String getMusicText(String musicNumber, String musicId) {
         String start = "<aside id=\""+musicId+"\" epub:type=\"footnote\">";
-        String end = "</aside>";
-        return start + parseMusicPage(musicNumber) + end;
+        String end = "</aside><br/><hr></hr><br/>";
+        StringBuilder sb = new StringBuilder();
+        String musicPage = parseMusicPage(musicNumber);
+        String[] lines = musicPage.split("\n");
+        for(int i = 0; i < lines.length; i++) {
+            switch (i) {
+                case 0 -> sb.append("<h4>").append(lines[i]).append("</h4>");
+                case 1 -> sb.append("<h3>").append(lines[i]).append("</h3>");
+                default -> sb.append(lines[i]);
+            }
+            sb.append("\n");
+        }
+        String musicText = sb.toString();
+        return start + musicText + end;
     }
 
     private String parseMusicPage(String musicNumber) {

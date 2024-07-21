@@ -4,6 +4,20 @@ import java.util.UUID;
 
 public enum EpubMap {
 
+    MIME("mimetype", "application/epub+zip"),
+    CALIBRE("META-INF/calibre_bookmarks.txt", """
+            encoding=json+base64:
+            W3sicG9zIjogImVwdWJjZmkoLzQvMi80LzExOC8yOjApIiwgInBvc190eXBlIjogImVwdWJjZmkiLCAi
+            dGltZXN0YW1wIjogIjIwMjQtMDUtMThUMjM6NTc6MDIuNDMyNjE3KzAwOjAwIiwgInR5cGUiOiAibGFz
+            dC1yZWFkIn1d"""),
+    CONTAINER("META-INF/container.xml", """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
+                <rootfiles>
+                    <rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/>
+               </rootfiles>
+            </container>
+            """),
     COVER("OEBPS/Text/cover.xhtml", """
             <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
             <!DOCTYPE html>
@@ -53,10 +67,10 @@ public enum EpubMap {
             </html>
             """),
     TEXT("OEBPS/Text/Section0001.xhtml",""),
-    MUSIC("OEBPS/Music/Section0002.xhtml",""),
-    SCRIPTURES("OEBPS/Scriptures/Section0003.xhtml", ""),
+    MUSIC("OEBPS/Text/Section0002.xhtml",""),
+    SCRIPTURES("OEBPS/Text/Section0003.xhtml", ""),
     IMAGE("OEBPS/Images/cover.png", ""),
-    STYLE("OEBPS/sgc-nav.css", """
+    STYLE("OEBPS/Styles/sgc-nav.css", """
             nav#landmarks {
                 display:none;
             }
@@ -73,7 +87,6 @@ public enum EpubMap {
               <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
                 <dc:language>xav</dc:language>
                 <meta property="dcterms:modified">2024-07-21T15:57:48Z</meta>
-                <dc:identifier id="BookId">urn:uuid:%s]</dc:identifier>
                 <meta name="cover" content="capa_6.png"/>
               </metadata>
               <manifest>
