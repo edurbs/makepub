@@ -29,11 +29,11 @@ public class LinkScriptures implements LinkReferencePage {
     }
 
     private String linkScriptures(final String text, final String scriptures) {
-        return null;
+        return "";
     }
 
     private String getScriptures(final String text) {
-        return null;
+        return "";
     }
 
 

@@ -3,15 +3,19 @@ package com.company.makepub.app.usecase;
 import com.company.makepub.app.domain.EpubFile;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.gateway.UUIDGenerator;
+import com.company.makepub.app.usecase.exceptions.UseCaseException;
 import com.company.makepub.app.usecase.types.EpubMap;
 import com.company.makepub.app.usecase.types.LinkReferencePage;
 import com.company.makepub.app.usecase.types.StringConversor;
 import com.company.makepub.app.usecase.types.UseCase;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
-public class EpubCreator implements UseCase {
+public class EpubCreator {
 
     private final UUIDGenerator uuidGenerator;
     private final HtmlParser htmlParser;
@@ -19,34 +23,91 @@ public class EpubCreator implements UseCase {
     private final LinkReferencePage linkMusic;
     private final LinkReferencePage linkScriptures;
     private final String mainText;
-    private final Map<EpubMap, String> epubMap = new HashMap<>();
+    private final byte[] coverImage;
+    private final Map<EpubMap, String> finalEpubMap = new HashMap<>();
 
-    public EpubCreator(UUIDGenerator uuidGenerator, HtmlParser htmlParser, StringConversor markupConversor, LinkReferencePage linkMusic, LinkReferencePage linkScriptures, String mainText) {
+    public EpubCreator(UUIDGenerator uuidGenerator, HtmlParser htmlParser, StringConversor markupConversor, LinkReferencePage linkMusic, LinkReferencePage linkScriptures, String mainText, byte[] coverImage) {
         this.uuidGenerator = uuidGenerator;
         this.htmlParser = htmlParser;
         this.markupConversor = markupConversor;
         this.linkMusic = linkMusic;
         this.linkScriptures = linkScriptures;
         this.mainText = mainText;
+        this.coverImage = coverImage;
     }
 
-    @Override
-    public void execute(){
+    public EpubFile execute(){
         String convertedText = markupConversor.convert(mainText);
-        Map<EpubMap, String> musicMap = linkMusic.execute(convertedText);
-        convertedText = musicMap.get(EpubMap.TEXT);
-        Map<EpubMap, String> scripturesMap = linkScriptures.execute(convertedText);
-        epubMap.put(EpubMap.TEXT, scripturesMap.get(EpubMap.TEXT));
-        epubMap.put(EpubMap.MUSIC, musicMap.get(EpubMap.MUSIC));
-        epubMap.put(EpubMap.SCRIPTURES, scripturesMap.get(EpubMap.SCRIPTURES));
-
+        String linkedTextWithMusic = createLinkedMusic(convertedText);
+        String linkedTextWithMusicAndScriptures = createLinkedScritpures(linkedTextWithMusic);
+        finalEpubMap.put(EpubMap.TEXT, linkedTextWithMusicAndScriptures);
+        createOtherEpubPages();
+        return createEpubFile();
     }
 
-    public EpubFile getEpubFile() {
-        // TODO make zipfile and rename to epub
-        // TODO add cover, nav, etc.
-        String filename = "";
-        byte[] content = new byte[0];
-        return new EpubFile(filename, content);
+    private void createOtherEpubPages() {
+        finalEpubMap.put(EpubMap.CONTENT, EpubMap.CONTENT.getDefaultText().formatted(uuidGenerator.generate()));
+        finalEpubMap.put(EpubMap.COVER, EpubMap.COVER.getDefaultText());
+        finalEpubMap.put(EpubMap.NAV, EpubMap.NAV.getDefaultText());
+        finalEpubMap.put(EpubMap.STYLE, EpubMap.SCRIPTURES.getDefaultText());
+    }
+
+    private String createLinkedScritpures(String linkedTextWithMusic) {
+        Map<EpubMap, String> scripturesMap = linkScriptures.execute(linkedTextWithMusic);
+        finalEpubMap.put(EpubMap.SCRIPTURES, scripturesMap.get(EpubMap.SCRIPTURES));
+        return scripturesMap.get(EpubMap.TEXT);
+    }
+
+    private String createLinkedMusic(String convertedText) {
+        Map<EpubMap, String> musicMap = linkMusic.execute(convertedText);
+        finalEpubMap.put(EpubMap.MUSIC, musicMap.get(EpubMap.MUSIC));
+        return musicMap.get(EpubMap.TEXT);
+    }
+
+    private EpubFile createEpubFile() {
+        String zipFilename = "file.epub";
+        byte[] fileContent = new byte[0];
+        try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             ZipOutputStream zos = new ZipOutputStream(baos)) {
+            for(EpubMap epubMap : EpubMap.values()){
+                switch (epubMap) {
+                    case EpubMap.COVER -> addByteArrayToZip(zos, epubMap.getPath(), coverImage);
+                    case EpubMap.TEXT, EpubMap.SCRIPTURES, EpubMap.MUSIC -> addStringToZip(zos, epubMap.getPath(), finalEpubMap.get(epubMap));
+                    default -> addStringToZip(zos, epubMap.getPath(), epubMap.getDefaultText());
+                }
+            }
+            fileContent=baos.toByteArray();
+        } catch (IOException e) {
+            throw new UseCaseException("Não foi possível criar arquivo zip", e.getCause());
+        }
+        return new EpubFile(zipFilename, fileContent);
+    }
+    private static void addStringToZip(ZipOutputStream zos, String fileName, String content) throws IOException {
+        ZipEntry zipEntry = new ZipEntry(fileName);
+        zos.putNextEntry(zipEntry);
+
+        byte[] bytes = content.getBytes();
+        InputStream is = new ByteArrayInputStream(bytes);
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = is.read(buffer)) >= 0) {
+            zos.write(buffer, 0, length);
+        }
+        is.close();
+        zos.closeEntry();
+    }
+
+    private static void addByteArrayToZip(ZipOutputStream zos, String fileName, byte[] content) throws IOException {
+        ZipEntry zipEntry = new ZipEntry(fileName);
+        zos.putNextEntry(zipEntry);
+
+        InputStream is = new ByteArrayInputStream(content);
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = is.read(buffer)) >= 0) {
+            zos.write(buffer, 0, length);
+        }
+        is.close();
+        zos.closeEntry();
     }
 }
