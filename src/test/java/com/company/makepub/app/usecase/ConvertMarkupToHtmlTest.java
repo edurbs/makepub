@@ -1,21 +1,28 @@
 package com.company.makepub.app.usecase;
 
 import com.company.makepub.app.domain.MarkupRecord;
+import com.company.makepub.app.gateway.UUIDGenerator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(MockitoExtension.class)
+class ConvertMarkupToHtmlTest {
 
+    @Mock
+    private UUIDGenerator mockUUIDGenerator;
 
-class ConvertTextTest {
-
-    private ConvertText convertText;
+    private ConvertMarkupToHtml convertMarkupToHtml;
     private static final List<MarkupRecord> MY_MARKUPS = new ArrayList<>();
 
     @BeforeAll
@@ -30,32 +37,36 @@ class ConvertTextTest {
 
     @BeforeEach
     void setUp() {
-        convertText = new ConvertText(new myUUIDGeneratorTest(), MY_MARKUPS);
+        convertMarkupToHtml = new ConvertMarkupToHtml(mockUUIDGenerator, MY_MARKUPS);
     }
 
     @Test
     @DisplayName("Should convert question with a box")
     void shouldConvertQuestion(){
+        Mockito.when(mockUUIDGenerator.generate())
+                .thenReturn("123");
         String text = "=Hello, ~World!~ Hello";
         String boxQuestion = "<textarea id=\"123\" rows=\"3\" cols=\"40\"></textarea>";
         String expected = "<h5>Hello, <b>World!</b> Hello</h5>"+boxQuestion;
-        assertEquals(expected, convertText.convert(text));
+        assertEquals(expected, convertMarkupToHtml.convert(text));
     }
 
     @Test
     @DisplayName("Should convert question with a box one time only")
     void shouldConvertQuestionOneTime(){
+        Mockito.when(mockUUIDGenerator.generate())
+                .thenReturn("123");
         String text = "=Hello, =~World!~ Hello";
         String boxQuestion = "<textarea id=\"123\" rows=\"3\" cols=\"40\"></textarea>";
         String expected = "<h5>Hello, =<b>World!</b> Hello</h5>"+boxQuestion;
-        assertEquals(expected, convertText.convert(text));
+        assertEquals(expected, convertMarkupToHtml.convert(text));
     }
 
     @Test
     @DisplayName("Should not convert anything")
     void convert() {
         String text = "Hello, World!";
-        assertEquals(text, convertText.convert(text));
+        assertEquals(text, convertMarkupToHtml.convert(text));
     }
 
     @Test
@@ -63,7 +74,7 @@ class ConvertTextTest {
     void convertBold() {
         String text = "Hello, ~World!~ Hello";
         String expected = "Hello, <b>World!</b> Hello";
-        assertEquals(expected, convertText.convert(text));
+        assertEquals(expected, convertMarkupToHtml.convert(text));
     }
 
     @Test
@@ -71,7 +82,7 @@ class ConvertTextTest {
     void convertBold2() {
         String text = "Hello, ~World!~ Hello Hello, ~World!~ Hello";
         String expected = "Hello, <b>World!</b> Hello Hello, <b>World!</b> Hello";
-        assertEquals(expected, convertText.convert(text));
+        assertEquals(expected, convertMarkupToHtml.convert(text));
     }
 
     @Test
@@ -79,7 +90,7 @@ class ConvertTextTest {
     void convertBold3() {
         String text = "Hello, ~World!~ Hello Hello, ~World!~ Hello Hello, ~World!~ Hello";
         String expected = "Hello, <b>World!</b> Hello Hello, <b>World!</b> Hello Hello, <b>World!</b> Hello";
-        assertEquals(expected, convertText.convert(text));
+        assertEquals(expected, convertMarkupToHtml.convert(text));
     }
 
     @Test
@@ -87,7 +98,7 @@ class ConvertTextTest {
     void convertItalic() {
         String text = "Hello, _World!_ Hello";
         String expected = "Hello, <i>World!</i> Hello";
-        assertEquals(expected, convertText.convert(text));
+        assertEquals(expected, convertMarkupToHtml.convert(text));
     }
 
     @Test
@@ -95,12 +106,14 @@ class ConvertTextTest {
     void convertItalicAndBold() {
         String text = "Hello, _~World!~_ Hello";
         String expected = "Hello, <i><b>World!</b></i> Hello";
-        assertEquals(expected, convertText.convert(text));
+        assertEquals(expected, convertMarkupToHtml.convert(text));
     }
 
     @Test
     @DisplayName("Should convert Footnote text")
     void convertFootnote() {
+        Mockito.when(mockUUIDGenerator.generate())
+                .thenReturn("123");
         String text = """
                 Hello, World!* Hello
                 £Text footnote.
@@ -109,12 +122,15 @@ class ConvertTextTest {
                 Hello, World!<b><sup><a epub:type="noteref" href="#123">*</a></sup></b> Hello
                 <aside id="123" epub:type="footnote"><p>Text footnote.</p></aside>
                 """;
-        assertEquals(expected.trim(), convertText.convert(text));
+        assertEquals(expected.trim(), convertMarkupToHtml.convert(text));
     }
 
     @Test
     @DisplayName("Should convert two Footnote texts")
     void convertTwoFootnote() {
+        Mockito.when(mockUUIDGenerator.generate())
+                .thenReturn("123")
+                .thenReturn("124");
         String text = """
                 Hello, World!* Hello
                 Hello,* World! Hello
@@ -127,12 +143,15 @@ class ConvertTextTest {
                 <aside id="123" epub:type="footnote"><p>Text footnote.</p></aside>
                 <aside id="124" epub:type="footnote"><p>Another thing.</p></aside>
                 """;
-        assertEquals(expected.trim(), convertText.convert(text));
+        assertEquals(expected.trim(), convertMarkupToHtml.convert(text));
     }
 
     @Test
     @DisplayName("Should convert two Footnote texts in same line")
     void convertTwoFootnoteSameLine() {
+        Mockito.when(mockUUIDGenerator.generate())
+                .thenReturn("123")
+                .thenReturn("124");
         String text = """
                 Hello, World!* Hello Hello,* World! Hello
                 £Text footnote.
@@ -143,10 +162,9 @@ class ConvertTextTest {
                 <aside id="123" epub:type="footnote"><p>Text footnote.</p></aside>
                 <aside id="124" epub:type="footnote"><p>Another thing.</p></aside>
                 """;
-        assertEquals(expected.trim(), convertText.convert(text));
+        assertEquals(expected.trim(), convertMarkupToHtml.convert(text));
     }
 
 
 
 }
-

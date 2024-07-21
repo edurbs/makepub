@@ -2,22 +2,24 @@ package com.company.makepub.app.usecase;
 
 import com.company.makepub.app.domain.MarkupRecord;
 import com.company.makepub.app.gateway.UUIDGenerator;
+import com.company.makepub.app.usecase.types.StringConversor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConvertText {
+public class ConvertMarkupToHtml implements StringConversor {
     private final UUIDGenerator uuidGenerator;
     private final List<MarkupRecord> markupRecords = new ArrayList<>();
 
     private final List<String> footNotes = new ArrayList<>();
     private int footNoteIndex = 0;
 
-    public ConvertText(UUIDGenerator uuidGenerator, List<MarkupRecord> markupRecords) {
+    public ConvertMarkupToHtml(UUIDGenerator uuidGenerator, List<MarkupRecord> markupRecords) {
         this.uuidGenerator = uuidGenerator;
         this.markupRecords.addAll(markupRecords);
     }
 
+    @Override
     public String convert(final String text) {
         StringBuilder textConverted = new StringBuilder();
         List<String> lines = List.of(text.split("\n"));
