@@ -3,15 +3,13 @@
       title="msg://converter.title">
     <actions>
     </actions>
-    <layout>
+    <layout alignItems="CENTER">
         <h3 text="Conversor de texto com markups para EPUB 3"/>
         <textArea id="textAreaInput" width="90%" alignSelf="CENTER" maxHeight="200px" minHeight="200px"/>
-        <hbox justifyContent="CENTER" alignItems="CENTER" alignSelf="CENTER">
-            <fileUploadField id="coverUpload" uploadText="Upload capa"/>
-            <button id="convertButton" alignSelf="CENTER" text="Gerar EPUB"/>
-        </hbox>
-        <textArea id="textAreaOutput" width="90%" alignSelf="CENTER" maxHeight="200px" minHeight="200px"
-                  readOnly="true"/>
+        <fileUploadField id="coverUpload" uploadText="Imagem da Capa" acceptedFileTypes=".png"
+                         dropAllowed="true" uploadIcon="FILE_PICTURE" clearButtonVisible="true"
+                         fileNameVisible="true" fileNotSelectedText="Arquivo não selecionado"/>
+        <button id="convertButton" alignSelf="CENTER" text="Gerar EPUB" icon="PLAY"/>
 
     </layout>
 </view>
