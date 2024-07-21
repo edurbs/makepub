@@ -42,6 +42,10 @@ dependencies {
     testImplementation 'io.jmix.flowui:jmix-flowui-test-assist'
     implementation 'io.jmix.translations:jmix-translations-pt-br'
     implementation 'org.postgresql:postgresql'
+
+    // https://mvnrepository.com/artifact/org.jsoup/jsoup
+    implementation 'org.jsoup:jsoup:1.18.1'
+
 }
 
 test {
