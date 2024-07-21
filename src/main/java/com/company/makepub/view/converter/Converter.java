@@ -2,8 +2,8 @@ package com.company.makepub.view.converter;
 
 
 import com.company.makepub.app.domain.MarkupRecord;
-import com.company.makepub.app.usecase.ConvertText;
-import com.company.makepub.app.usecase.myUUIDGenerator;
+import com.company.makepub.app.usecase.ConvertMarkupToHtml;
+import com.company.makepub.utils.uuid.MyUUIDGenerator;
 import com.company.makepub.entity.mapper.MarkupMapper;
 import com.company.makepub.entity.repository.MarkupRepository;
 import com.company.makepub.view.main.MainView;
@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 @Route(value = "Converter", layout = MainView.class)
 @ViewController("Converter")
@@ -36,7 +35,7 @@ public class Converter extends StandardView {
         markupRepository.findAll()
                 .forEach(m -> markupRecordList.add(
                         new MarkupMapper().to(m)));
-        String outputText = new ConvertText(new myUUIDGenerator(), markupRecordList)
+        String outputText = new ConvertMarkupToHtml(new MyUUIDGenerator(), markupRecordList)
                 .convert(inputText);
         textAreaOutput.setValue(outputText);
     }
