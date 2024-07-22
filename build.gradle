@@ -55,3 +55,11 @@ test {
 vaadin {
     optimizeBundle = false
 }
+
+bootBuildImage {
+    environment = [
+            "BP_JVM_JLINK_ENABLED" : "true",
+            "BP_JVM_VERSION" : "21",
+            "BP_JVM_TYPE" : "JRE"
+    ]
+}
