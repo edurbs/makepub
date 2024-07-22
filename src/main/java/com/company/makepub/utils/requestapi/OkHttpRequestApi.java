@@ -9,6 +9,9 @@ import java.io.IOException;
 public class OkHttpRequestApi implements RequestApi {
     @Override
     public String get(String apiUrl, String textToConvert) throws UseCaseException {
+        if(textToConvert == null || textToConvert.isBlank()) {
+            return "";
+        }
         String requestBody = """
                 {
                     "text" : "%s"
