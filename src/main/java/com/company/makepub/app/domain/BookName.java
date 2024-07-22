@@ -87,7 +87,7 @@ public enum BookName {
         return scriptures[chapter - 1];
     }
 
-    public int getOrdinalValue(String book) {
+    public static int getOrdinalValue(String book) {
         return BookName.valueOf(book.toUpperCase()).ordinal() + 1;
     }
 

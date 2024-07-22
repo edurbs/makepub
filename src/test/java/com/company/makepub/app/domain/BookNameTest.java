@@ -31,7 +31,7 @@ class BookNameTest {
     @Test
     @DisplayName("Given a string should get ordinal value")
     void getOrdinalValue() {
-        int actual = BookName.BOOK_01_GEN.getOrdinalValue("book_66_rev");
+        int actual = BookName.getOrdinalValue("book_66_rev");
         assertEquals(66, actual);
     }
 
