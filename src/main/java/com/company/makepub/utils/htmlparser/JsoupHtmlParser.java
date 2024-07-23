@@ -67,8 +67,17 @@ public class JsoupHtmlParser implements HtmlParser {
         if(startIndex != -1 && endIndex != -1) {
             scriptureText = siteText.substring(startIndex, endIndex);
         }
+        if(scriptureText.isBlank()) {
+            return "";
+        }
+        return removeHtmlTags(scriptureText);
+    }
 
-        return scriptureText;
+    private String removeHtmlTags(String scriptureText) {
+        return Jsoup.parse(scriptureText)
+                .wholeText()
+                .replace(" ", " ")
+                .trim();
     }
 
     public String getTextBetweenTagIdOld(String site, String tagIdStart, String tagIdEnd) {

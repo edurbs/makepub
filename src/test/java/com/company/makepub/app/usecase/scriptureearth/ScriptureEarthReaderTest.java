@@ -32,7 +32,7 @@ class ScriptureEarthReaderTest {
     void getScripture() {
         String result = sut.getScripture("Lucas", 10, 9);
         String expected = """
-                <span class="v">9</span><span class="vsp">&nbsp;</span>Tame 'ri wa'õtõ 'remhã, ma'ãpé ihâzé ré norĩ hã pese za'ra wa'aba mono. Duré dama rowasu'u za'ra wa'aba mono, ãne: “'Re ihâimana u'âsi mono da'ãma 're isib'a'uwẽ mono zé hã ma we atẽme tiwisi za'ra wa'wa.”
+                9 Tame 'ri wa'õtõ 'remhã, ma'ãpé ihâzé ré norĩ hã pese za'ra wa'aba mono. Duré dama rowasu'u za'ra wa'aba mono, ãne: “'Re ihâimana u'âsi mono da'ãma 're isib'a'uwẽ mono zé hã ma we atẽme tiwisi za'ra wa'wa.”
                 """.trim();
         assertEquals(expected, result);
     }
@@ -42,9 +42,9 @@ class ScriptureEarthReaderTest {
     void getScripture1() {
         String result = sut.getScripture("2 Samuel", 18, 32);
         String expected = """
-                <div class="p"><span class="v">32</span><span class="vsp">&nbsp;</span>— E bété Absarõ, iprédupté hã. E rowẽ na te tihâiba. — Ãne te apito hã sadanha.</div>
-                <div class="p">Tawamhã romreme 'wapéi'wa, ma ãne ãma sada'â:</div>
-                <div class="p">— Wa hã ĩma iwẽ uptabi aré, õhõ zô marĩ iwatobro ne, uburé asitob'ru norĩ zô, duré uburé asada ihâimana za'ra norĩ zô zama, marĩ sô iwatobro za'ra da hã.
+                32 — E bété Absarõ, iprédupté hã. E rowẽ na te tihâiba. — Ãne te apito hã sadanha.
+                Tawamhã romreme 'wapéi'wa, ma ãne ãma sada'â:
+                — Wa hã ĩma iwẽ uptabi aré, õhõ zô marĩ iwatobro ne, uburé asitob'ru norĩ zô, duré uburé asada ihâimana za'ra norĩ zô zama, marĩ sô iwatobro za'ra da hã.
                 """.trim();
         assertEquals(expected, result);
     }
