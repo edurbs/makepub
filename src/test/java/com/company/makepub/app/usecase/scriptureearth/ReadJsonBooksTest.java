@@ -1,9 +1,8 @@
-package com.company.makepub.app.usecase;
+package com.company.makepub.app.usecase.scriptureearth;
 
 import com.company.makepub.app.domain.BookAddress;
 import com.company.makepub.app.domain.BookName;
 import com.company.makepub.app.domain.JsonBookRecord;
-import com.company.makepub.app.domain.ScriptureEarthBookName;
 import com.company.makepub.app.gateway.JsonParser;
 import com.company.makepub.app.gateway.UrlReader;
 import org.junit.jupiter.api.DisplayName;
@@ -14,13 +13,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.awt.print.Book;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-class ReadJsonBooksScriptureEarthTest {
+class ReadJsonBooksTest {
 
     @Mock
     UrlReader urlReader;
@@ -45,7 +43,7 @@ class ReadJsonBooksScriptureEarthTest {
         List<JsonBookRecord> jsonBookRecords = List.of(new JsonBookRecord("Lucas", "xav-19-LUK-001.html"));
         Mockito.when(jsonParser.parse(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn(jsonBookRecords);
 
-        ReadJsonBooksScriptureEarth sut = new ReadJsonBooksScriptureEarth(jsonParser, urlReader);
+        ReadJsonBooks sut = new ReadJsonBooks(jsonParser, urlReader);
         List<BookAddress> bookAddresses = sut.execute();
 
         assertEquals(1, bookAddresses.size());

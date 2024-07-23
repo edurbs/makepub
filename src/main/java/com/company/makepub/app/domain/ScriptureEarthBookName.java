@@ -90,7 +90,7 @@ public enum ScriptureEarthBookName {
                 return name;
             }
         }
-        throw new IllegalArgumentException("No enum constant found for string: " + bookName);
+        return null;
     }
 
     public static ScriptureEarthBookName fromMepsFormatEnum(BookName bookName) {

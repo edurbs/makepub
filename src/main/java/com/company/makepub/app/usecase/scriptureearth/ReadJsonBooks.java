@@ -1,4 +1,4 @@
-package com.company.makepub.app.usecase;
+package com.company.makepub.app.usecase.scriptureearth;
 
 import com.company.makepub.app.domain.BookAddress;
 import com.company.makepub.app.domain.BookName;
@@ -10,12 +10,12 @@ import com.company.makepub.app.gateway.UrlReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ReadJsonBooksScriptureEarth {
+public class ReadJsonBooks {
 
     private final JsonParser<JsonBookRecord> jsonParser;
     private final UrlReader urlReader;
 
-    public ReadJsonBooksScriptureEarth(JsonParser<JsonBookRecord> jsonParser, UrlReader urlReader) {
+    public ReadJsonBooks(JsonParser<JsonBookRecord> jsonParser, UrlReader urlReader) {
         this.jsonParser = jsonParser;
         this.urlReader = urlReader;
     }
@@ -26,10 +26,15 @@ public class ReadJsonBooksScriptureEarth {
         String baseRef = "https://www.scriptureearth.org/data/xav/sab/xav/";
         return jsonBookRecords
                 .stream()
-                .map(record -> new BookAddress(
-                        getEnumFromName(record.ref()),
-                        baseRef + record.ref()
-                ))
+                .map(record ->  {
+                    if(record.ref() == null) {
+                        return null;
+                    }
+                    return new BookAddress(
+                            getEnumFromName(record.ref()),
+                            baseRef + record.ref()
+                    );}
+                )
                 .collect(Collectors.toList());
     }
 
