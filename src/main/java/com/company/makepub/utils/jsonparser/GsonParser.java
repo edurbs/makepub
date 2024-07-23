@@ -8,7 +8,14 @@ import java.util.List;
 public class GsonParser<T> implements JsonParser<T>  {
     @Override
     public List<T> parse(String json, Class<T[]> clazz) {
-        T[] array = new Gson().fromJson(json, clazz);
-        return List.of(array);
+        if(json == null || json.isBlank()) {
+            return List.of();
+        }
+        try {
+            T[] array = new Gson().fromJson(json, clazz);
+            return List.of(array);
+        } catch (Exception e) {
+            return List.of();
+        }
     }
 }
