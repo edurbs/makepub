@@ -13,12 +13,12 @@ class ScriptureEarthBookNameTest {
     }
 
     @Test
-    @DisplayName("Should get correct meps format from String")
+    @DisplayName("Should get correct enum from 3 digit String")
     void fromString() {
-        String mepsFormat = "BOOK_64_3JO";
+        String string = "3JN";
         assertEquals(
                 ScriptureEarthBookName.BOOK_3JN,
-                ScriptureEarthBookName.fromString(mepsFormat));
+                ScriptureEarthBookName.fromString(string));
     }
 
     @Test

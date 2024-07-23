@@ -79,10 +79,15 @@ public enum ScriptureEarthBookName {
         return this.toString().substring(5);
     }
 
+    public BookName getBookName() {
+        return this.bookName;
+    }
+
     public static ScriptureEarthBookName fromString(String bookName) {
-        for (ScriptureEarthBookName scriptureEarthBookName : ScriptureEarthBookName.values()) {
-            if (scriptureEarthBookName.bookName.equals(BookName.valueOf(bookName))) {
-                return scriptureEarthBookName;
+        for (ScriptureEarthBookName name : ScriptureEarthBookName.values()) {
+            String enumName = name.getName();
+            if (enumName.equals(bookName)) {
+                return name;
             }
         }
         throw new IllegalArgumentException("No enum constant found for string: " + bookName);
