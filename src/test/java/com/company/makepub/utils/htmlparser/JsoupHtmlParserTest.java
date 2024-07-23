@@ -1,6 +1,8 @@
 package com.company.makepub.utils.htmlparser;
 
+import com.company.makepub.app.gateway.UrlReader;
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
+import com.company.makepub.utils.linkreader.JavaUrlReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -8,7 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class JsoupHtmlParserTest {
 
-    public final JsoupHtmlParser sut = new JsoupHtmlParser();
+    private final UrlReader javaUrlReader = new JavaUrlReader();
+    private final JsoupHtmlParser sut = new JsoupHtmlParser(javaUrlReader);
 
     @Test
     @DisplayName("Should parse the wol.jw.org page and return the tag content")

@@ -1,7 +1,7 @@
 package com.company.makepub.app.usecase.scriptureearth;
 
 import com.company.makepub.app.domain.BookAddress;
-import com.company.makepub.app.domain.BookName;
+import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.JsonBookRecord;
 import com.company.makepub.app.gateway.JsonParser;
 import com.company.makepub.app.gateway.UrlReader;
@@ -37,7 +37,7 @@ class ReadJsonBooksTest {
                 ];
                 """;
         String finalRef = "https://www.scriptureearth.org/data/xav/sab/xav/xav-19-LUK-001.html";
-        BookName finalBook = BookName.BOOK_42_LUK;
+        Book finalBook = Book.BOOK_42_LUK;
 
         Mockito.when(urlReader.execute(ArgumentMatchers.any())).thenReturn(jsonFromSite);
         List<JsonBookRecord> jsonBookRecords = List.of(new JsonBookRecord("Lucas", "xav-19-LUK-001.html"));

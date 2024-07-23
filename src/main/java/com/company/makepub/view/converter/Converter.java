@@ -5,11 +5,13 @@ import com.company.makepub.app.domain.EpubFile;
 import com.company.makepub.app.domain.MarkupRecord;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.gateway.UUIDGenerator;
+import com.company.makepub.app.gateway.UrlReader;
 import com.company.makepub.app.usecase.ConvertMarkupToHtml;
 import com.company.makepub.app.usecase.EpubCreator;
 import com.company.makepub.app.usecase.LinkMusic;
 import com.company.makepub.app.usecase.LinkScriptures;
 import com.company.makepub.utils.htmlparser.JsoupHtmlParser;
+import com.company.makepub.utils.linkreader.JavaUrlReader;
 import com.company.makepub.utils.uuid.MyUUIDGenerator;
 import com.company.makepub.entity.mapper.MarkupMapper;
 import com.company.makepub.entity.repository.MarkupRepository;
@@ -59,7 +61,8 @@ public class Converter extends StandardView {
                         new MarkupMapper().to(m)));
 
         UUIDGenerator uuidGenerator = new MyUUIDGenerator();
-        HtmlParser htmlParser = new JsoupHtmlParser();
+        UrlReader javaUrlReader = new JavaUrlReader();
+        HtmlParser htmlParser = new JsoupHtmlParser(javaUrlReader);
         ConvertMarkupToHtml markupConversor = new ConvertMarkupToHtml(uuidGenerator, markupRecordList);
         LinkMusic linkMusic = new LinkMusic(htmlParser, uuidGenerator, "DANHOꞌRE");
         LinkScriptures linkScriptures = new LinkScriptures(htmlParser, uuidGenerator);

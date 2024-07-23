@@ -1,6 +1,7 @@
 package com.company.makepub.utils.htmlparser;
 
 import com.company.makepub.app.gateway.HtmlParser;
+import com.company.makepub.app.gateway.UrlReader;
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
 import jakarta.validation.constraints.NotNull;
 import org.jsoup.Jsoup;
@@ -10,6 +11,12 @@ import java.io.IOException;
 import java.util.List;
 
 public class JsoupHtmlParser implements HtmlParser {
+
+    private UrlReader urlReader;
+
+    public JsoupHtmlParser(UrlReader urlReader) {
+        this.urlReader = urlReader;
+    }
 
     @Override
     public String parse(@NotNull String site, @NotNull String tag) throws UseCaseException {
@@ -51,9 +58,20 @@ public class JsoupHtmlParser implements HtmlParser {
         }
     }
 
-    // TODO test
     @Override
     public String getTextBetweenTagId(String site, String tagIdStart, String tagIdEnd) {
+        String scriptureText = "";
+        String siteText = urlReader.execute(site);
+        int startIndex = siteText.indexOf(tagIdStart)+tagIdStart.length();
+        int endIndex = siteText.indexOf(tagIdEnd);
+        if(startIndex != -1 && endIndex != -1) {
+            scriptureText = siteText.substring(startIndex, endIndex);
+        }
+
+        return scriptureText;
+    }
+
+    public String getTextBetweenTagIdOld(String site, String tagIdStart, String tagIdEnd) {
         Document document = getDocument(site);
         StringBuilder extractedText = new StringBuilder();
         Element content = document.getElementById("content");

@@ -1,7 +1,7 @@
 package com.company.makepub.app.usecase.scriptureearth;
 
 import com.company.makepub.app.domain.BookAddress;
-import com.company.makepub.app.domain.BookName;
+import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.usecase.types.BibleReader;
 
@@ -28,15 +28,15 @@ public class ScriptureEarthReader implements BibleReader {
     public String getScripture(final String book, final int chapter, final int startVerse, final int endVerse) {
         int checkedEndVerse = Math.max(startVerse, endVerse);
         List<BookAddress> bookAddresses = readJsonBooks.execute();
-        BookName bookName = BookName.getBookName(book);
+        Book bookName = Book.getBookName(book);
         Optional<BookAddress> bookAddress = bookAddresses.stream()
-                .filter(b -> b.bookName().equals(bookName))
+                .filter(b -> b.book().equals(bookName))
                 .findFirst();
         if (bookAddress.isEmpty()) {
             throw new IllegalArgumentException("Book not found: " + book);
         }
         String url = bookAddress.get().url();
-        return getScriptureFromSite(url, chapter, startVerse, checkedEndVerse);
+        return getScriptureFromSite(url, chapter, startVerse, checkedEndVerse).trim();
     }
 
     private String getScriptureFromSite(final String url, final int chapter, final int startVerse, final int endVerse) {
@@ -44,8 +44,8 @@ public class ScriptureEarthReader implements BibleReader {
         String chapterUrl = url.replaceAll("(\\d{3})(\\.html)$", chapterNumberWithZeros+"$2");
         return htmlParser.getTextBetweenTagId(
                 chapterUrl,
-                "v"+startVerse,
-                "v"+(endVerse+1)
+                "<a id=\"v"+startVerse+"\"></a>",
+                "<span id=\"bookmarks"+endVerse+"\">"
         );
     }
 

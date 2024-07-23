@@ -26,14 +26,14 @@ class ScriptureEarthBookNameTest {
     void fromMepsFormat() {
         assertEquals(
                 ScriptureEarthBookName.BOOK_3JN,
-                ScriptureEarthBookName.fromMepsFormatEnum(BookName.BOOK_64_3JO));
+                ScriptureEarthBookName.fromMepsFormatEnum(Book.BOOK_64_3JO));
     }
 
     @Test
     @DisplayName("Should get correct scripture earth format from meps format")
     void getMepsFormatFromScriptureEarth() {
         assertEquals(
-                BookName.BOOK_64_3JO,
+                Book.BOOK_64_3JO,
                 ScriptureEarthBookName.getMepsFormatFromScriptureEarthEnum(ScriptureEarthBookName.BOOK_3JN));
     }
 

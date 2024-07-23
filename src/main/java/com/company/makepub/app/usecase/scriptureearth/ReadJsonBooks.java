@@ -1,7 +1,7 @@
 package com.company.makepub.app.usecase.scriptureearth;
 
 import com.company.makepub.app.domain.BookAddress;
-import com.company.makepub.app.domain.BookName;
+import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.JsonBookRecord;
 import com.company.makepub.app.domain.ScriptureEarthBookName;
 import com.company.makepub.app.gateway.JsonParser;
@@ -38,13 +38,13 @@ public class ReadJsonBooks {
                 .collect(Collectors.toList());
     }
 
-    private BookName getEnumFromName(final String link) {
+    private Book getEnumFromName(final String link) {
         // given xav-19-LUK-001.html then extract LUK
         int index = link.indexOf("-") + 4;
         if (index >= 0) {
             String nameExtracted = link.substring(index, index + 3);
             ScriptureEarthBookName scriptureEarthBookName = ScriptureEarthBookName.fromScriptureEarthString(nameExtracted);
-            return BookName.getBookNameFromScriptureEarth(scriptureEarthBookName);
+            return Book.getBookNameFromScriptureEarth(scriptureEarthBookName);
         }
         return null;
     }
