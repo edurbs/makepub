@@ -83,7 +83,7 @@ public enum ScriptureEarthBookName {
         return this.bookName;
     }
 
-    public static ScriptureEarthBookName fromString(String bookName) {
+    public static ScriptureEarthBookName fromScriptureEarthString(String bookName) {
         for (ScriptureEarthBookName name : ScriptureEarthBookName.values()) {
             String enumName = name.getName();
             if (enumName.equals(bookName)) {
@@ -100,6 +100,10 @@ public enum ScriptureEarthBookName {
             }
         }
         throw new IllegalArgumentException("No enum constant found for enum: " + bookName.name());
+    }
+
+    public static BookName getMepsFormatFromScriptureEarthEnum(ScriptureEarthBookName scriptureEarthBookName) {
+        return scriptureEarthBookName.bookName;
     }
 
 }

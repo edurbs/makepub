@@ -18,15 +18,23 @@ class ScriptureEarthBookNameTest {
         String string = "3JN";
         assertEquals(
                 ScriptureEarthBookName.BOOK_3JN,
-                ScriptureEarthBookName.fromString(string));
+                ScriptureEarthBookName.fromScriptureEarthString(string));
     }
 
     @Test
-    @DisplayName("Should get correct meps format from Enum")
+    @DisplayName("Should get correct scripture earth format from meps format")
     void fromMepsFormat() {
         assertEquals(
                 ScriptureEarthBookName.BOOK_3JN,
                 ScriptureEarthBookName.fromMepsFormatEnum(BookName.BOOK_64_3JO));
+    }
+
+    @Test
+    @DisplayName("Should get correct scripture earth format from meps format")
+    void getMepsFormatFromScriptureEarth() {
+        assertEquals(
+                BookName.BOOK_64_3JO,
+                ScriptureEarthBookName.getMepsFormatFromScriptureEarthEnum(ScriptureEarthBookName.BOOK_3JN));
     }
 
     @Test
