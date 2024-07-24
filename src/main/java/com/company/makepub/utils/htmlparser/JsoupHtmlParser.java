@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.util.List;
 
 public class JsoupHtmlParser implements HtmlParser {
 
@@ -50,7 +51,6 @@ public class JsoupHtmlParser implements HtmlParser {
     }
 
     private @NotNull Document getDocument(String site) {
-
         try {
             return Jsoup.connect(site).get();
         } catch (IOException e) {
@@ -59,24 +59,29 @@ public class JsoupHtmlParser implements HtmlParser {
     }
 
     @Override
-    public String getTextBetweenTagId(String site, String tagIdStart, String tagIdEnd) {
+    public String getTextBetweenTagId(String site, String tagIdStart, String tagIdEnd, List<String> tagsToRemove) {
         String scriptureText = "";
         String siteText = urlReader.execute(site);
-        int startIndex = siteText.indexOf(tagIdStart)+tagIdStart.length();
-        int endIndex = siteText.indexOf(tagIdEnd);
+        int startIndex = siteText.indexOf(tagIdStart);
+        int endIndex = siteText.indexOf(tagIdEnd, startIndex);
         if(startIndex != -1 && endIndex != -1) {
-            scriptureText = siteText.substring(startIndex, endIndex);
+            scriptureText = siteText.substring(startIndex+tagIdStart.length(), endIndex);
         }
         if(scriptureText.isBlank()) {
             return "";
         }
-        return removeHtmlTags(scriptureText);
+        return removeHtmlTags(scriptureText, tagsToRemove);
     }
 
-    private String removeHtmlTags(String scriptureText) {
-        return Jsoup.parse(scriptureText)
-                .wholeText()
+    private String removeHtmlTags(String scriptureText, List<String> tagsToRemove) {
+        Document document = Jsoup.parse(scriptureText);
+        String cssQuery = String.join(", ", tagsToRemove);
+        document.select(cssQuery).remove();
+        return document.wholeText()
                 .replace(" ", " ")
+                .replace("\n\n\n", "\n")
+                .replace("\n\n", "\n")
+                .replace("\n\n", "\n")
                 .trim();
     }
 }

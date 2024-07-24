@@ -49,5 +49,75 @@ class ScriptureEarthReaderTest {
         assertEquals(expected, result);
     }
 
+    @Test
+    @DisplayName("Should get Gênesis 2:4")
+    void getScriptureGen2_4() {
+        String result = sut.getScripture("Gênesis", 2, 4);
+        String expected = """
+                4 Ãne ma tô hâiwa duré uburé iwa 're isimasa mono da hã ti'ai me hã poto za'ra.
+                — Uburé Danhib'apito 'Re ihâimana u'âsi mono, hâiwa duré uburé iwa 're isimasa mono da hã ti'ai me hã, te te poto za'ra wamhã,
+                """.trim();
+        assertEquals(expected, result);
+    }
+
+    @Test
+    @DisplayName("Should get Gênesis 2:25")
+    void getScriptureGen2_25() {
+        String result = sut.getScripture("Gênesis", 2, 25);
+        String expected = """
+                25 Tawamhã aibâ norĩ, timro me hã ai'uréiwi 're nem nherẽ, sima 're siséb zahuré mono õ di.
+                """.trim();
+        assertEquals(expected, result);
+    }
+
+    @Test
+    @DisplayName("Should get Gênesis 2:1")
+    void getScriptureGen2_1() {
+        String result = sut.getScripture("Gênesis", 2, 1);
+        String expected = """
+                Ãne 'Re ihâimana u'âsi mono, ma tô te te apoto 'rãsutu, hâiwa duré ti'a hã, duré uburé marĩ iwab zahuré si'uiwa na 're ihâimana za'ra mono da hã.
+                """.trim();
+        assertEquals(expected, result);
+    }
+
+    @Test
+    @DisplayName("Should get Rute 4:18")
+    void getScriptureRu4_18() {
+        String result = sut.getScripture("Rute", 4, 18);
+        String expected = """
+                18-22 Davihi hi'rata norĩ hã Perizihi hawimhã ãne isisi za'ra hã: Periz hã Hesirõhõ mama, Hezirõ hã Rãhã mama, Rã hã Aminadabihi mama, Aminadabi hã Nasõhõ mama, Nasõ hã Samohõ mama, Samo hã Boazihi mama, Boaz hã Obedihi mama, Obedi hã Zéséhé mama, duré Zésé hã Davihi mama.
+                """.trim();
+        assertEquals(expected, result);
+    }
+
+    @Test
+    @DisplayName("Should get Romanos 2:24")
+    void getScriptureRom2_24() {
+        String result = sut.getScripture("Romanos", 2, 24);
+        String expected = """
+                24 Ãne 'Re ihâimana u'âsi mono mreme na Ibaihâ iwazé pese na rob'ui'éré hã:
+                “A norĩ wa'wa hã Zudeu na 're aihâimana za'ra wa'aba mono, 'Re ihâimana u'âsi mono nhimiroti zarina si 're aihâimana za'ra wa'aba mono õ wa, te zudeu'õ norĩ hã 'Re ihâimana u'âsi mono ãma te te 're wasété za'ra.”
+                """.trim();
+        assertEquals(expected, result);
+    }
+
+    @Test
+    @DisplayName("Should get Romanos 2:29")
+    void getScriptureRom2_29() {
+        String result = sut.getScripture("Romanos", 2, 29);
+        String expected = """
+                """.trim();
+        assertEquals(expected, result);
+    }
+
+    @Test
+    @DisplayName("Should get Salmo 119:137")
+    void getScriptureSal119_137() {
+        String result = sut.getScripture("Salmos", 119, 137);
+        String expected = """
+                """.trim();
+        assertEquals(expected, result);
+    }
+
 
 }

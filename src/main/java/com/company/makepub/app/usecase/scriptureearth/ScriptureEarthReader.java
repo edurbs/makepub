@@ -25,28 +25,51 @@ public class ScriptureEarthReader implements BibleReader {
     }
 
     @Override
-    public String getScripture(final String book, final int chapter, final int startVerse, final int endVerse) {
+    public String getScripture(final String bookName, final int chapter, final int startVerse, final int endVerse) {
         int checkedEndVerse = Math.max(startVerse, endVerse);
         List<BookAddress> bookAddresses = readJsonBooks.execute();
-        Book bookName = Book.getBookName(book);
+        Book book = Book.getBookName(bookName);
+        if (book == null) {
+            return "";
+        }
         Optional<BookAddress> bookAddress = bookAddresses.stream()
-                .filter(b -> b.book().equals(bookName))
+                .filter(b -> b.book().equals(book))
                 .findFirst();
         if (bookAddress.isEmpty()) {
-            throw new IllegalArgumentException("Book not found: " + book);
+            throw new IllegalArgumentException("Book not found: " + bookName);
         }
         String url = bookAddress.get().url();
-        return getScriptureFromSite(url, chapter, startVerse, checkedEndVerse).trim();
+        return getScriptureFromSite(url, chapter, startVerse, checkedEndVerse, book);
     }
 
-    private String getScriptureFromSite(final String url, final int chapter, final int startVerse, final int endVerse) {
+    private String getScriptureFromSite(final String url, final int chapter, final int startVerse, final int endVerse, final Book book) {
+        List<String> tagsToRemove = List.of("div.s", "div.r", "div.video-block", "div.footer", "div.c-drop");
+        String tagIdStart = "<a id=\"v" + startVerse + "\"></a>";
+        String tagIdEnd = "<a id=\"v" + (endVerse+1) + "\"></a>";
         String chapterNumberWithZeros = String.format("%03d", chapter);
         String chapterUrl = url.replaceAll("(\\d{3})(\\.html)$", chapterNumberWithZeros+"$2");
-        return htmlParser.getTextBetweenTagId(
+        if(isLastVerse(chapter, endVerse, book)){
+            tagIdEnd="<span id=\"bookmarks";
+        }
+        String result = htmlParser.getTextBetweenTagId(
                 chapterUrl,
-                "<a id=\"v"+startVerse+"\"></a>",
-                "<span id=\"bookmarks"+endVerse+"\">"
-        );
+                tagIdStart,
+                tagIdEnd,
+                tagsToRemove
+        ).trim();
+        if(result.isBlank()){
+            result = htmlParser.getTextBetweenTagId(
+                    chapterUrl,
+                    tagIdStart,
+                    "<span id=\"bookmarks",
+                    tagsToRemove
+            ).trim();
+        }
+        return result;
+    }
+
+    private boolean isLastVerse(int chapter, int endVerse, Book book) {
+        return endVerse == book.getNumberOfScriptures(chapter);
     }
 
 }
