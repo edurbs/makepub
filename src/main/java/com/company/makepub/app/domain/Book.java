@@ -83,6 +83,10 @@ public enum Book {
         this.scriptures = scriptures;
     }
 
+    public String getFullName() {
+        return this.fullName;
+    }
+
     public String getMepsFormat() {
         return this.toString().substring(5);
     }
