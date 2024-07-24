@@ -87,6 +87,14 @@ public enum Book {
         return this.fullName;
     }
 
+    public String getAbbreviation1() {
+        return this.abbreviation1;
+    }
+
+    public String getAbbreviation2() {
+        return this.abbreviation2;
+    }
+
     public String getMepsFormat() {
         return this.toString().substring(5);
     }
