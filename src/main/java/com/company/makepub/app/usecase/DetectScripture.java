@@ -28,12 +28,13 @@ public class DetectScripture {
             String[] foundSplitted = found.split(" ");
             int chapter = Integer.parseInt(foundSplitted[foundSplitted.length-1]);
             int indexEndChapter = matcher.end();
-            int verse = findVerse(html, indexEndChapter);
-            result.add(new ScriptureAddress(book, chapter, verse));
+            ScriptureAddress tempScriptureAddress = new ScriptureAddress(book, chapter, 0,0);
+            findVerse(html, indexEndChapter, result, tempScriptureAddress);
+            //result.add(new ScriptureAddress(book, chapter, verse));
         }
     }
 
-    private int findVerse(String html, int indexEndChapter) {
+    private void findVerse(String html, int indexEndChapter, List<ScriptureAddress> result, ScriptureAddress tempScriptureAddress) {
         String verseNumber = "";
         if(html.charAt(indexEndChapter) == ':') {
             String verseRegex = "(\\d+-\\d+)|(\\d+,*)";
@@ -41,9 +42,32 @@ public class DetectScripture {
             Matcher verseMatcher = versePattern.matcher(html.substring(indexEndChapter));
             if(verseMatcher.find()) {
                 verseNumber = verseMatcher.group();
-                return Integer.parseInt(verseNumber);
+                if(verseNumber.contains(",")) {
+                    verseNumber = verseNumber.replaceAll("\\D+", "");
+                    int verse = Integer.parseInt(verseNumber);
+                    result.add(new ScriptureAddress(tempScriptureAddress.book(), tempScriptureAddress.chapter(), verse, 0));
+                    while(verseMatcher.find()) {
+                        verseNumber = verseMatcher.group();
+                        verseNumber = verseNumber.replaceAll("\\D+", "");
+                        verse = Integer.parseInt(verseNumber);
+                        result.add(new ScriptureAddress(tempScriptureAddress.book(), tempScriptureAddress.chapter(), verse,0));
+                    }
+                } else if(verseNumber.contains("-")) {
+                    String[] verseNumberSplitted = verseNumber.split("-");
+                    verseNumber = verseNumberSplitted[0];
+                    verseNumber = verseNumber.replaceAll("\\D+", "");
+                    int verse = Integer.parseInt(verseNumber);
+                    String endVerseNumber = verseNumberSplitted[1];
+                    endVerseNumber = endVerseNumber.replaceAll("\\D+", "");
+                    int endVerse = Integer.parseInt(endVerseNumber);
+                    result.add(new ScriptureAddress(tempScriptureAddress.book(), tempScriptureAddress.chapter(), verse, endVerse));
+
+                }else {
+                    int verse = Integer.parseInt(verseNumber);
+                    result.add(new ScriptureAddress(tempScriptureAddress.book(), tempScriptureAddress.chapter(), verse, 0));
+                }
             }
         }
-        return 0;
+
     }
 }
