@@ -68,7 +68,25 @@ class DetectScriptureTest {
     @DisplayName("Should get the correct addresses")
     void test1() {
         List<ScriptureAddress> actual = sut.execute(html);
+        assertEquals(expected, actual);
+    }
 
+    @Test
+    @DisplayName("Detect FullNameBook 10:1")
+    void test2() {
+        List<ScriptureAddress> actual = sut.execute("Salmos 10:1");
+        List<ScriptureAddress> expected = List.of(new ScriptureAddress(Book.BOOK_19_PSA, 10, 1));
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Detect FullNameBook 10:1, 2")
+    void test3() {
+        List<ScriptureAddress> actual = sut.execute("Salmos 10:1, 2");
+        List<ScriptureAddress> expected = List.of(
+                new ScriptureAddress(Book.BOOK_19_PSA, 10, 1),
+                new ScriptureAddress(Book.BOOK_19_PSA, 10, 2)
+        );
         assertEquals(expected, actual);
     }
 

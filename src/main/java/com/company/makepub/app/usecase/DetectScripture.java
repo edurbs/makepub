@@ -27,7 +27,23 @@ public class DetectScripture {
             String found = matcher.group().trim();
             String[] foundSplitted = found.split(" ");
             int chapter = Integer.parseInt(foundSplitted[foundSplitted.length-1]);
-            result.add(new ScriptureAddress(book, chapter, 0));
+            int indexEndChapter = matcher.end();
+            int verse = findVerse(html, indexEndChapter);
+            result.add(new ScriptureAddress(book, chapter, verse));
         }
+    }
+
+    private int findVerse(String html, int indexEndChapter) {
+        String verseNumber = "";
+        if(html.charAt(indexEndChapter) == ':') {
+            String verseRegex = "(\\d+-\\d+)|(\\d+,*)";
+            Pattern versePattern = Pattern.compile(verseRegex);
+            Matcher verseMatcher = versePattern.matcher(html.substring(indexEndChapter));
+            if(verseMatcher.find()) {
+                verseNumber = verseMatcher.group();
+                return Integer.parseInt(verseNumber);
+            }
+        }
+        return 0;
     }
 }
