@@ -1,7 +1,5 @@
 package com.company.makepub.app.domain;
 
-import com.company.makepub.app.usecase.exceptions.UseCaseException;
-
 public enum Book {
 
     BOOK_01_GEN("Gênesis",            "Gên.",    "Gên", new Integer[] {31, 25, 24, 26, 32, 22, 24, 22, 29, 32, 32, 20, 18, 24, 21, 16, 27, 33, 38, 18, 34, 24, 20, 67, 34, 35, 46, 22, 35, 43, 55, 32, 20, 31, 29, 43, 36, 30, 23, 23, 57, 38, 34, 34, 28, 34, 31, 22, 33, 26}),
@@ -115,9 +113,27 @@ public enum Book {
         return this.ordinal() + 1;
     }
 
-    public static Book getBookName(String fullName) {
+    public static Book getBookNameFromFullName(String fullName) {
         for (Book book : Book.values()) {
-            if (book.fullName.equals(fullName)) {
+            if (book.fullName.equals(fullName.trim())) {
+                return book;
+            }
+        }
+        return null;
+    }
+
+    public static Book getBookNameFromAbbreviation1(String abbreviation1) {
+        for (Book book : Book.values()) {
+            if (book.abbreviation1.equals(abbreviation1.trim())) {
+                return book;
+            }
+        }
+        return null;
+    }
+
+    public static Book getBookNameFromAbbreviation2(String abbreviation2) {
+        for (Book book : Book.values()) {
+            if (book.abbreviation2.equals(abbreviation2.trim())) {
                 return book;
             }
         }

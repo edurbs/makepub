@@ -28,7 +28,7 @@ public class ScriptureEarthReader implements BibleReader {
     public String getScripture(final String bookName, final int chapter, final int startVerse, final int endVerse) {
         int checkedEndVerse = Math.max(startVerse, endVerse);
         List<BookAddress> bookAddresses = readJsonBooks.execute();
-        Book book = Book.getBookName(bookName);
+        Book book = Book.getBookNameFromFullName(bookName);
         if (book == null) {
             return "";
         }
