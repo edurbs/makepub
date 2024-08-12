@@ -1,7 +1,6 @@
-package com.company.makepub.app.usecase;
+package com.company.makepub.app.usecase.scripture;
 
 import com.company.makepub.app.gateway.RequestApi;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

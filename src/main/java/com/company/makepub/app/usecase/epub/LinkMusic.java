@@ -1,4 +1,4 @@
-package com.company.makepub.app.usecase;
+package com.company.makepub.app.usecase.epub;
 
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.gateway.UUIDGenerator;

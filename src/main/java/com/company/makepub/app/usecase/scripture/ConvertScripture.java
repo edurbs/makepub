@@ -1,4 +1,4 @@
-package com.company.makepub.app.usecase;
+package com.company.makepub.app.usecase.scripture;
 
 import com.company.makepub.app.gateway.RequestApi;
 

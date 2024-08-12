@@ -1,4 +1,4 @@
-package com.company.makepub.app.usecase;
+package com.company.makepub.app.usecase.epub;
 
 import com.company.makepub.app.domain.EpubFile;
 import com.company.makepub.app.gateway.HtmlParser;
@@ -7,7 +7,6 @@ import com.company.makepub.app.usecase.exceptions.UseCaseException;
 import com.company.makepub.app.usecase.types.EpubMap;
 import com.company.makepub.app.usecase.types.LinkReferencePage;
 import com.company.makepub.app.usecase.types.StringConversor;
-import com.company.makepub.app.usecase.types.UseCase;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

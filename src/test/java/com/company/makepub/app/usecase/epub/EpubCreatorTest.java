@@ -1,4 +1,4 @@
-package com.company.makepub.app.usecase;
+package com.company.makepub.app.usecase.epub;
 
 import com.company.makepub.app.domain.EpubFile;
 import com.company.makepub.app.gateway.HtmlParser;
@@ -6,7 +6,6 @@ import com.company.makepub.app.gateway.UUIDGenerator;
 import com.company.makepub.app.usecase.types.EpubMap;
 import com.company.makepub.app.usecase.types.LinkReferencePage;
 import com.company.makepub.app.usecase.types.StringConversor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

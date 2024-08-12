@@ -1,4 +1,4 @@
-package com.company.makepub.app.usecase;
+package com.company.makepub.app.usecase.scripture;
 
 import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.ScriptureAddress;
@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class DetectScriptureTest {
 
     private static String html;
-    private final DetectScripture sut = new DetectScripture();
     private static List<ScriptureAddress> expected;
 
 //    @BeforeAll
@@ -68,18 +67,36 @@ class DetectScriptureTest {
 //        assertEquals(expected, actual);
 //    }
 
+    DetectScripture init(String html) {
+        return new DetectScripture(html);
+    }
+
     @Test
     @DisplayName("Detect Salmos 10:1")
     void test2(TestInfo testInfo) {
-        List<ScriptureAddress> actual = sut.execute(testInfo.getDisplayName());
+        var sut = init(testInfo.getDisplayName());
+        List<ScriptureAddress> actual = sut.execute();
         List<ScriptureAddress> expected = List.of(new ScriptureAddress(Book.BOOK_19_PSA, 10, 1,0));
         assertEquals(expected, actual);
     }
 
     @Test
+    @DisplayName("Link Salmos 10:1")
+    void test2f(TestInfo testInfo) {
+        var sut = init(testInfo.getDisplayName());
+        sut.execute();
+        String expectedHtml = """
+                Link Salmos 10:<a href="#Salmos 10:1">1</a>
+                """;
+        String actualHtml = sut.getHtml();
+        assertEquals(expectedHtml, actualHtml);
+    }
+
+    @Test
     @DisplayName("Detect Salmos 10:1, 2")
     void test3(TestInfo testInfo) {
-        List<ScriptureAddress> actual = sut.execute(testInfo.getDisplayName());
+        var sut = init(testInfo.getDisplayName());
+        List<ScriptureAddress> actual = sut.execute();
         List<ScriptureAddress> expected = List.of(
                 new ScriptureAddress(Book.BOOK_19_PSA, 10, 1,0),
                 new ScriptureAddress(Book.BOOK_19_PSA, 10, 2,0)
@@ -88,9 +105,22 @@ class DetectScriptureTest {
     }
 
     @Test
+    @DisplayName("Link Salmos 10:1, 2")
+    void test3f(TestInfo testInfo) {
+        var sut = init(testInfo.getDisplayName());
+        sut.execute();
+        String expectedHtml = """
+                Link Salmos 10:<a href="#Salmos 10:1">1</a>, <a href="#Salmos 10:2">2</a>
+                """;
+        String actualHtml = sut.getHtml();
+        assertEquals(expectedHtml, actualHtml);
+    }
+
+    @Test
     @DisplayName("Detect Salmos 10:1, 2, 4")
     void test4(TestInfo testInfo) {
-        List<ScriptureAddress> actual = sut.execute(testInfo.getDisplayName());
+        var sut = init(testInfo.getDisplayName());
+        List<ScriptureAddress> actual = sut.execute();
         List<ScriptureAddress> expected = List.of(
                 new ScriptureAddress(Book.BOOK_19_PSA, 10, 1,0),
                 new ScriptureAddress(Book.BOOK_19_PSA, 10, 2,0),
@@ -102,7 +132,8 @@ class DetectScriptureTest {
     @Test
     @DisplayName("Detect Salmos 10:1-4")
     void test5(TestInfo testInfo) {
-        List<ScriptureAddress> actual = sut.execute(testInfo.getDisplayName());
+        var sut = init(testInfo.getDisplayName());
+        List<ScriptureAddress> actual = sut.execute();
         List<ScriptureAddress> expected = List.of(
                 new ScriptureAddress(Book.BOOK_19_PSA, 10, 1, 4)
         );
