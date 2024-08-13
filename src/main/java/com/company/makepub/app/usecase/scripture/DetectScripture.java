@@ -91,7 +91,7 @@ public class DetectScripture {
             booksForRegex.append(book.getFullName()).append("|");
             booksForRegex.append(book.getAbbreviation1()).append("|");
         }
-        return "((%s)\\s)?\\b\\d{1,3}:\\d{1,3}(?:[-,]\\s*\\d{1,3})?(?:,\\s*\\d{1,3})?\\b"
+        return "((%s)\\s)?\\b\\d{1,3}:\\d{1,3}(?:[-,]\\s*\\d{1,3})*(?:,\\s*\\d{1,3})?(?:-\\s*\\d{1,3})?\\b"
                 .formatted(booksForRegex.toString().trim());
     }
 }

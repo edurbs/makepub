@@ -66,6 +66,35 @@ class DetectScriptureTest {
         }
 
         @Test
+        @DisplayName("Detect Salmo 10:1, 2, 5-8, 10, 12-14")
+        void test4b(TestInfo testInfo) {
+            var sut = init(testInfo.getDisplayName());
+            List<ScriptureAddress> actual = sut.execute();
+            List<ScriptureAddress> expected = List.of(
+                    new ScriptureAddress(Book.BOOK_19_PSA, 10, 1,0),
+                    new ScriptureAddress(Book.BOOK_19_PSA, 10, 2,0),
+                    new ScriptureAddress(Book.BOOK_19_PSA, 10, 5,8),
+                    new ScriptureAddress(Book.BOOK_19_PSA, 10, 10,0),
+                    new ScriptureAddress(Book.BOOK_19_PSA, 10, 12,14)
+            );
+            assertEquals(expected, actual);
+        }
+
+        @Test
+        @DisplayName("Detect Salmo 10:1-3, 5-8, 10, 12")
+        void test4c(TestInfo testInfo) {
+            var sut = init(testInfo.getDisplayName());
+            List<ScriptureAddress> actual = sut.execute();
+            List<ScriptureAddress> expected = List.of(
+                    new ScriptureAddress(Book.BOOK_19_PSA, 10, 1,3),
+                    new ScriptureAddress(Book.BOOK_19_PSA, 10, 5,8),
+                    new ScriptureAddress(Book.BOOK_19_PSA, 10, 10,0),
+                    new ScriptureAddress(Book.BOOK_19_PSA, 10, 12,0)
+            );
+            assertEquals(expected, actual);
+        }
+
+        @Test
         @DisplayName("Detect Salmo 10:1-4")
         void test5(TestInfo testInfo) {
             var sut = init(testInfo.getDisplayName());
