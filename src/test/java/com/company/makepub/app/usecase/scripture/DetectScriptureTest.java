@@ -114,9 +114,9 @@ class DetectScriptureTest {
             var sut = init(testInfo.getDisplayName());
             sut.execute();
             String expectedHtml = """
-                Link Salmos 10:<a href="#Salmos 10:1">1</a>
-                """;
-            String actualHtml = sut.getHtml();
+                Link <a href="#uuid">Salmo 10:1</a>
+                """.trim();
+            String actualHtml = sut.getLinkedHtml();
             assertEquals(expectedHtml, actualHtml);
         }
         @Test
@@ -127,7 +127,7 @@ class DetectScriptureTest {
             String expectedHtml = """
                 Link Salmos 10:<a href="#Salmos 10:1">1</a>, <a href="#Salmos 10:2">2</a>
                 """;
-            String actualHtml = sut.getHtml();
+            String actualHtml = sut.getLinkedHtml();
             assertEquals(expectedHtml, actualHtml);
         }
     }

@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 public class DetectScripture {
 
     private final String html;
+    private final StringBuilder linkedHtml = new StringBuilder();
     private String htmlWithScriptureAddress;
     private final List<ScriptureAddress> scriptureAddressList = new ArrayList<>();
 
@@ -18,8 +19,8 @@ public class DetectScripture {
         this.html = html;
     }
 
-    public String getHtml() {
-        return html;
+    public String getLinkedHtml() {
+        return  linkedHtml.toString();
     }
 
     public List<ScriptureAddress> execute() {
@@ -45,12 +46,12 @@ public class DetectScripture {
             }
             final int chapter = Integer.parseInt(scriptureAddress.split(":")[0].trim());
             final String allVerses = scriptureAddress.split(":")[1].trim();
-            detectScriptureAddress(scriptureAddressList, bookName, chapter, allVerses);
+            detectScriptureAddress(scriptureAddressList, bookName, chapter, allVerses, matcher);
         }
         return scriptureAddressList;
     }
 
-    private void detectScriptureAddress(List<ScriptureAddress> result, final String bookName, final int chapter, final String allVerses) {
+    private void detectScriptureAddress(List<ScriptureAddress> result, final String bookName, final int chapter, final String allVerses, Matcher matcher) {
         String[] versesBetweenCommas = allVerses.split(",");
         for (String verseString : versesBetweenCommas) {
             if(verseString.contains("-")) {
@@ -60,7 +61,9 @@ public class DetectScripture {
                 result.add(new ScriptureAddress(getBook(bookName), chapter, startVerse, endVerse));
             }else{
                 final int verse = Integer.parseInt(verseString.trim());
-                result.add(new ScriptureAddress(getBook(bookName), chapter, verse, 0));
+                var address = new ScriptureAddress(getBook(bookName), chapter, verse, 0);
+                result.add(address);
+                linkVerse(address, bookName + " " + chapter + ":" + verseString, matcher );
             }
         }
     }
@@ -93,5 +96,13 @@ public class DetectScripture {
         }
         return "((%s)\\s)?\\b\\d{1,3}:\\d{1,3}(?:[-,]\\s*\\d{1,3})*(?:,\\s*\\d{1,3})?(?:-\\s*\\d{1,3})?\\b"
                 .formatted(booksForRegex.toString().trim());
+    }
+
+    private void linkVerse(ScriptureAddress scriptureAddress, String textAddress, Matcher verseMatcher) {
+        String linkedVerse = """
+                <a href="#uuid">%s</a>
+                """.formatted(textAddress).trim();
+        verseMatcher.appendReplacement(linkedHtml, linkedVerse);
+        verseMatcher.appendTail(linkedHtml);
     }
 }
