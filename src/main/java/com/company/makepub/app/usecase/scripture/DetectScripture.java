@@ -10,7 +10,9 @@ import java.util.regex.Pattern;
 
 public class DetectScripture {
 
-    private String html;
+    private final String html;
+    private String htmlWithScriptureAddress;
+    private final List<ScriptureAddress> scriptureAddressList = new ArrayList<>();
 
     public DetectScripture(String html) {
         this.html = html;
@@ -21,77 +23,75 @@ public class DetectScripture {
     }
 
     public List<ScriptureAddress> execute() {
-        List<ScriptureAddress> result = new ArrayList<>();
-        String regex = "(%s)\\s+(\\d+)|(%s)\\s+(\\d+)|(%s)\\s+(\\d+)";
-        for(Book book : Book.values()) {
-            String regexFormatted = regex.formatted(book.getFullName(), book.getAbbreviation1(), book.getAbbreviation2());
-            searchForName(regexFormatted, book, result);
-        }
-        return result;
-    }
 
-    private void searchForName(String regex, Book book, List<ScriptureAddress> result) {
-
+        final String regex = getRegex();
         Pattern pattern = Pattern.compile(regex);
+
         Matcher matcher = pattern.matcher(html);
+        String lastBookName="";
         while (matcher.find()) {
-            String found = matcher.group().trim();
-            String[] foundSplitted = found.split(" ");
-            int chapter = Integer.parseInt(foundSplitted[foundSplitted.length-1]);
-            int indexEndChapter = matcher.end();
-            ScriptureAddress tempScriptureAddress = new ScriptureAddress(book, chapter, 0,0);
-            findVerse(indexEndChapter, result, tempScriptureAddress);
+            final String bookName;
+            final String fullScriptureAddress;
+            final String scriptureAddress;
+            if(isAddressWithBookName(matcher)) {
+                bookName = matcher.group(2).trim();
+                lastBookName = bookName;
+                fullScriptureAddress = matcher.group(0).trim();
+                scriptureAddress = fullScriptureAddress.replace(bookName, "").trim();
+            }else{
+                bookName = lastBookName;
+                fullScriptureAddress = matcher.group(0).trim();
+                scriptureAddress = fullScriptureAddress;
+            }
+            final int chapter = Integer.parseInt(scriptureAddress.split(":")[0].trim());
+            final String allVerses = scriptureAddress.split(":")[1].trim();
+            detectScriptureAddress(scriptureAddressList, bookName, chapter, allVerses);
         }
+        return scriptureAddressList;
     }
 
-    private void findVerse(int indexEndChapter, List<ScriptureAddress> result, ScriptureAddress tempScriptureAddress) {
-        StringBuilder sb = new StringBuilder();
-        String verseNumber = "";
-        if(html.charAt(indexEndChapter) == ':') {
-            String verseRegex = "(\\d+-\\d+)|(\\d+,*)";
-            Pattern versePattern = Pattern.compile(verseRegex);
-            Matcher verseMatcher = versePattern.matcher(html);
-            verseMatcher.region(indexEndChapter, html.length());
-            if(verseMatcher.find()) {
-                verseNumber = verseMatcher.group();
-                if(verseNumber.contains(",")) {
-                    verseNumber = verseNumber.replaceAll("\\D+", "");
-                    int verse = Integer.parseInt(verseNumber);
-                    linkVerse(tempScriptureAddress, verse, verseMatcher, sb, "");
-                    result.add(new ScriptureAddress(tempScriptureAddress.book(), tempScriptureAddress.chapter(), verse, 0));
-                    while(verseMatcher.find()) {
-                        verseNumber = verseMatcher.group();
-                        verseNumber = verseNumber.replaceAll("\\D+", "");
-                        verse = Integer.parseInt(verseNumber);
-                        linkVerse(tempScriptureAddress, verse, verseMatcher, sb, "");
-                        result.add(new ScriptureAddress(tempScriptureAddress.book(), tempScriptureAddress.chapter(), verse,0));
-                    }
-                } else if(verseNumber.contains("-")) {
-                    String[] verseNumberSplitted = verseNumber.split("-");
-                    verseNumber = verseNumberSplitted[0];
-                    verseNumber = verseNumber.replaceAll("\\D+", "");
-                    int verse = Integer.parseInt(verseNumber);
-                    String endVerseNumber = verseNumberSplitted[1];
-                    endVerseNumber = endVerseNumber.replaceAll("\\D+", "");
-                    int endVerse = Integer.parseInt(endVerseNumber);
-                    linkVerse(tempScriptureAddress, verse, verseMatcher, sb, "");
-                    result.add(new ScriptureAddress(tempScriptureAddress.book(), tempScriptureAddress.chapter(), verse, endVerse));
-
-                }else {
-                    int verse = Integer.parseInt(verseNumber);
-                    linkVerse(tempScriptureAddress, verse, verseMatcher, sb, "");
-                    result.add(new ScriptureAddress(tempScriptureAddress.book(), tempScriptureAddress.chapter(), verse, 0));
-                }
+    private void detectScriptureAddress(List<ScriptureAddress> result, final String bookName, final int chapter, final String allVerses) {
+        String[] versesBetweenCommas = allVerses.split(",");
+        for (String verseString : versesBetweenCommas) {
+            if(verseString.contains("-")) {
+                String[] versesBetweenHyphens = verseString.split("-");
+                final int startVerse = Integer.parseInt(versesBetweenHyphens[0].trim());
+                final int endVerse = Integer.parseInt(versesBetweenHyphens[1].trim());
+                result.add(new ScriptureAddress(getBook(bookName), chapter, startVerse, endVerse));
+            }else{
+                final int verse = Integer.parseInt(verseString.trim());
+                result.add(new ScriptureAddress(getBook(bookName), chapter, verse, 0));
             }
         }
-        html = sb.toString();
     }
 
-    private void linkVerse(ScriptureAddress tempScriptureAddress, int verse, Matcher verseMatcher, StringBuilder sb, String postfix) {
-        String linkedVerse = """
-                <a href="#%s %d:%d">%d</a>%s
-                """.formatted(tempScriptureAddress.book().getFullName(), tempScriptureAddress.chapter(), verse, verse, postfix).trim();
-        verseMatcher.appendReplacement(sb, linkedVerse);
-        verseMatcher.appendTail(sb);
+    /**
+     * @param matcher the regex matcher
+     * @return true if the address contains a book name, for example, John 1:1
+     */
+    private boolean isAddressWithBookName(Matcher matcher) {
+        return matcher.groupCount() == 2;
+    }
+
+    private Book getBook(String bookName) {
+        for (Book book : Book.values()) {
+            if (book.getFullName().equals(bookName)) {
+                return book;
+            }
+            if(book.getAbbreviation1().equals(bookName)) {
+                return book;
+            }
+        }
+        return null;
+    }
+
+    private String getRegex(){
+        StringBuilder booksForRegex = new StringBuilder();
+        for(Book book : Book.values()) {
+            booksForRegex.append(book.getFullName()).append("|");
+            booksForRegex.append(book.getAbbreviation1()).append("|");
+        }
+        return "((%s)\\s)?\\b\\d{1,3}:\\d{1,3}(?:[-,]\\s*\\d{1,3})?(?:,\\s*\\d{1,3})?\\b"
+                .formatted(booksForRegex.toString().trim());
     }
 }
