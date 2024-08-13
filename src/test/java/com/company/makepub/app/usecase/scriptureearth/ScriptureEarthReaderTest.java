@@ -1,6 +1,8 @@
 package com.company.makepub.app.usecase.scriptureearth;
 
+import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.JsonBookRecord;
+import com.company.makepub.app.domain.ScriptureAddress;
 import com.company.makepub.app.usecase.types.BibleReader;
 import com.company.makepub.utils.htmlparser.JsoupHtmlParser;
 import com.company.makepub.utils.jsonparser.GsonParser;
@@ -64,6 +66,16 @@ class ScriptureEarthReaderTest {
     @DisplayName("Should get Gênesis 2:25")
     void getScriptureGen2_25() {
         String result = sut.getScripture("Gênesis", 2, 25);
+        String expected = """
+                25 Tawamhã aibâ norĩ, timro me hã ai'uréiwi 're nem nherẽ, sima 're siséb zahuré mono õ di.
+                """.trim();
+        assertEquals(expected, result);
+    }
+
+    @Test
+    @DisplayName("Should get Gênesis 2:25")
+    void getScriptureGen2_25WithRecord() {
+        String result = sut.getScripture(new ScriptureAddress(Book.BOOK_01_GEN, 2, 25, 0));
         String expected = """
                 25 Tawamhã aibâ norĩ, timro me hã ai'uréiwi 're nem nherẽ, sima 're siséb zahuré mono õ di.
                 """.trim();
