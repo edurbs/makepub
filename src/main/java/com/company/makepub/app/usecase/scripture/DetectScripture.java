@@ -2,7 +2,6 @@ package com.company.makepub.app.usecase.scripture;
 
 import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.ScriptureAddress;
-import com.company.makepub.app.gateway.UUIDGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,23 +11,24 @@ public class DetectScripture {
 
     private final List<ScriptureAddress> scriptureAddressList = new ArrayList<>();
     private final Matcher matcher;
+    private final String lastBookName;
 
-    public DetectScripture(Matcher matcher) {
+    public DetectScripture(Matcher matcher, String lastBookName) {
         this.matcher = matcher;
+        this.lastBookName = lastBookName;
     }
 
     public List<ScriptureAddress> execute() {
-        String lastBookName="";
-        while (matcher.find()) {
-            var extractor = new ScriptureAddressExtractor(matcher, lastBookName);
-            final String bookName = extractor.getBookName();
-            final int chapter = extractor.getChapter();
-            final String allVerses = extractor.getAllVerses();
-            String[] versesBetweenCommas = allVerses.split(",");
-            for (String verseString : versesBetweenCommas) {
-                addToList(verseString, bookName, chapter);
-            }
+
+        var extractor = new ScriptureAddressExtractor(matcher, lastBookName);
+        final String bookName = extractor.getBookName();
+        final int chapter = extractor.getChapter();
+        final String allVerses = extractor.getAllVerses();
+        String[] versesBetweenCommas = allVerses.split(",");
+        for (String verseString : versesBetweenCommas) {
+            addToList(verseString, bookName, chapter);
         }
+
         return scriptureAddressList;
     }
 

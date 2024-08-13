@@ -7,13 +7,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
 import java.util.List;
+import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DetectScriptureTest {
 
     DetectScripture init(String html) {
-        return new DetectScripture(new MakeRegex(html).execute() );
+        Matcher matcher = new MakeRegex(html).getMatcher();
+        matcher.find();
+        return new DetectScripture(matcher, "" );
     }
 
     @Test
