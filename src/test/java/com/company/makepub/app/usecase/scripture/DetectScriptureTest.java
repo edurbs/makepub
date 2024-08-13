@@ -23,7 +23,8 @@ class DetectScriptureTest {
     private UUIDGenerator mockUUIDGenerator;
 
     DetectScripture init(String html) {
-        return new DetectScripture(html, mockUUIDGenerator);
+
+        return new DetectScripture(mockUUIDGenerator, new MakeRegex(html).execute() );
     }
 
     void setupMockUUIDGenerator(String uuid) {

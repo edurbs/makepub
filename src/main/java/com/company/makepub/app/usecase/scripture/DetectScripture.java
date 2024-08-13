@@ -12,27 +12,24 @@ import java.util.regex.Pattern;
 public class DetectScripture {
 
     private final UUIDGenerator uuidGenerator;
-    private final String html;
-    private final StringBuilder linkedHtml = new StringBuilder();
-    private final StringBuilder scripturesHtml = new StringBuilder();
-    private final List<ScriptureAddress> scriptureAddressList = new ArrayList<>();
 
-    public DetectScripture(String html, UUIDGenerator uuidGenerator) {
-        this.html = html;
+    private final StringBuilder linkedHtml = new StringBuilder();
+    private final List<ScriptureAddress> scriptureAddressList = new ArrayList<>();
+    private final Matcher matcher;
+
+    public DetectScripture(UUIDGenerator uuidGenerator, Matcher matcher) {
         this.uuidGenerator = uuidGenerator;
+        this.matcher = matcher;
     }
 
     public String getLinkedHtml() {
         return linkedHtml.toString();
     }
 
-    public String getScripturesHtml() {
-        return scripturesHtml.toString();
-    }
 
     public List<ScriptureAddress> execute() {
 
-        final Matcher matcher = new MakeRegex(html).execute();
+
         String lastBookName="";
         while (matcher.find()) {
             final String bookName;
