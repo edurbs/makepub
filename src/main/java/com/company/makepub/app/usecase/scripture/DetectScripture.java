@@ -32,10 +32,7 @@ public class DetectScripture {
 
     public List<ScriptureAddress> execute() {
 
-        final String regex = getRegex();
-        Pattern pattern = Pattern.compile(regex);
-
-        Matcher matcher = pattern.matcher(html);
+        final Matcher matcher = new MakeRegex(html).execute();
         String lastBookName="";
         while (matcher.find()) {
             final String bookName;
@@ -52,12 +49,12 @@ public class DetectScripture {
                 scriptureAddress = fullScriptureAddress;
             }
             final int chapter = Integer.parseInt(scriptureAddress.split(":")[0].trim());
-            final String allVerses = scriptureAddress.split(":")[1];
-            detectScriptureAddress(scriptureAddressList, bookName, chapter, allVerses, matcher);
             String addressPrefix = bookName + " " + chapter + ":";
             if(bookName.isBlank()){
                 addressPrefix = " " + chapter + ":";
             }
+            final String allVerses = scriptureAddress.split(":")[1];
+            detectScriptureAddress(scriptureAddressList, bookName, chapter, allVerses, matcher);
             linkVerse(addressPrefix + allVerses, matcher );
         }
         return scriptureAddressList;
@@ -99,15 +96,7 @@ public class DetectScripture {
         return null;
     }
 
-    private String getRegex(){
-        StringBuilder booksForRegex = new StringBuilder();
-        for(Book book : Book.values()) {
-            booksForRegex.append(book.getFullName()).append("|");
-            booksForRegex.append(book.getAbbreviation1()).append("|");
-        }
-        return "((%s)\\s)?\\d+:\\d+(?:[-,]\\s*\\d+)*"
-                .formatted(booksForRegex.toString().trim());
-    }
+
 
     private void linkVerse(String textAddress, Matcher verseMatcher) {
         String optionsForTagA = "epub:type=\"noteref\"";
