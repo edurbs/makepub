@@ -47,6 +47,7 @@ public class DetectScripture {
             final int chapter = Integer.parseInt(scriptureAddress.split(":")[0].trim());
             final String allVerses = scriptureAddress.split(":")[1].trim();
             detectScriptureAddress(scriptureAddressList, bookName, chapter, allVerses, matcher);
+            linkVerse(bookName + " " + chapter + ":" + allVerses, matcher );
         }
         return scriptureAddressList;
     }
@@ -63,7 +64,6 @@ public class DetectScripture {
                 final int verse = Integer.parseInt(verseString.trim());
                 var address = new ScriptureAddress(getBook(bookName), chapter, verse, 0);
                 result.add(address);
-                linkVerse(address, bookName + " " + chapter + ":" + verseString, matcher );
             }
         }
     }
@@ -98,7 +98,7 @@ public class DetectScripture {
                 .formatted(booksForRegex.toString().trim());
     }
 
-    private void linkVerse(ScriptureAddress scriptureAddress, String textAddress, Matcher verseMatcher) {
+    private void linkVerse(String textAddress, Matcher verseMatcher) {
         String linkedVerse = """
                 <a href="#uuid">%s</a>
                 """.formatted(textAddress).trim();
