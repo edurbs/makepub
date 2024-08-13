@@ -2,6 +2,7 @@ package com.company.makepub.app.usecase.scripture;
 
 import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.ScriptureAddress;
+import com.company.makepub.app.gateway.UUIDGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,17 +11,23 @@ import java.util.regex.Pattern;
 
 public class DetectScripture {
 
+    private final UUIDGenerator uuidGenerator;
     private final String html;
     private final StringBuilder linkedHtml = new StringBuilder();
-    private String htmlWithScriptureAddress;
+    private final StringBuilder scripturesHtml = new StringBuilder();
     private final List<ScriptureAddress> scriptureAddressList = new ArrayList<>();
 
-    public DetectScripture(String html) {
+    public DetectScripture(String html, UUIDGenerator uuidGenerator) {
         this.html = html;
+        this.uuidGenerator = uuidGenerator;
     }
 
     public String getLinkedHtml() {
-        return  linkedHtml.toString();
+        return linkedHtml.toString();
+    }
+
+    public String getScripturesHtml() {
+        return scripturesHtml.toString();
     }
 
     public List<ScriptureAddress> execute() {
@@ -38,16 +45,20 @@ public class DetectScripture {
                 bookName = matcher.group(2).trim();
                 lastBookName = bookName;
                 fullScriptureAddress = matcher.group(0).trim();
-                scriptureAddress = fullScriptureAddress.replace(bookName, "").trim();
+                scriptureAddress = fullScriptureAddress.replace(bookName, "");
             }else{
                 bookName = lastBookName;
                 fullScriptureAddress = matcher.group(0).trim();
                 scriptureAddress = fullScriptureAddress;
             }
             final int chapter = Integer.parseInt(scriptureAddress.split(":")[0].trim());
-            final String allVerses = scriptureAddress.split(":")[1].trim();
+            final String allVerses = scriptureAddress.split(":")[1];
             detectScriptureAddress(scriptureAddressList, bookName, chapter, allVerses, matcher);
-            linkVerse(bookName + " " + chapter + ":" + allVerses, matcher );
+            String addressPrefix = bookName + " " + chapter + ":";
+            if(bookName.isBlank()){
+                addressPrefix = " " + chapter + ":";
+            }
+            linkVerse(addressPrefix + allVerses, matcher );
         }
         return scriptureAddressList;
     }
@@ -94,15 +105,16 @@ public class DetectScripture {
             booksForRegex.append(book.getFullName()).append("|");
             booksForRegex.append(book.getAbbreviation1()).append("|");
         }
-        return "((%s)\\s)?\\b\\d{1,3}:\\d{1,3}(?:[-,]\\s*\\d{1,3})*(?:,\\s*\\d{1,3})?(?:-\\s*\\d{1,3})?\\b"
+        return "((%s)\\s)?\\d+:\\d+(?:[-,]\\s*\\d+)*"
                 .formatted(booksForRegex.toString().trim());
     }
 
     private void linkVerse(String textAddress, Matcher verseMatcher) {
+        String optionsForTagA = "epub:type=\"noteref\"";
+        String uuid = uuidGenerator.generate();
         String linkedVerse = """
-                <a href="#uuid">%s</a>
-                """.formatted(textAddress).trim();
+                 <a %s href="#%s">%s</a>""".formatted(optionsForTagA, uuid, textAddress);
         verseMatcher.appendReplacement(linkedHtml, linkedVerse);
-        verseMatcher.appendTail(linkedHtml);
+        //verseMatcher.appendTail(linkedHtml);
     }
 }
