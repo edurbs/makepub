@@ -73,7 +73,7 @@ class ScriptureEarthReaderTest {
     }
 
     @Test
-    @DisplayName("Should get Gênesis 2:25")
+    @DisplayName("Should get Gênesis 2:25 com record")
     void getScriptureGen2_25WithRecord() {
         String result = sut.getScripture(new ScriptureAddress(Book.BOOK_01_GEN, 2, 25, 0));
         String expected = """
@@ -128,6 +128,18 @@ class ScriptureEarthReaderTest {
         String result = sut.getScripture("Salmos", 119, 137);
         String expected = """
                 """.trim();
+        assertEquals(expected, result);
+    }
+
+    @Test
+    @DisplayName("Should get Salmo 119:10-12 com record")
+    void getScriptureSal119_10_12_withRecord() {
+        String result = sut.getScripture(new ScriptureAddress(Book.BOOK_19_PSA, 119, 10, 12));
+        String expected = """
+                10 Wa hã wa ĩpẽ'ẽ na niha na ai'ãma si 're ĩmorĩ da hã ĩsima te 're rosa'rata. Ma'ãpé tahawa, ĩwi sawi na, aimreme te rẽme tõ da.
+                11 Aimreme hã wa tô ĩsima te 're tété ĩpẽ'ẽ 'remhã, ĩwasédé te aiwi 're 'manharĩ tõ mono da.
+                12 Uburé Danhib'apito, wa ai'ãma 're ĩwata!
+                Asimiroti na, ma'ãpé ãma ĩma rowahutu.""".trim();
         assertEquals(expected, result);
     }
 
