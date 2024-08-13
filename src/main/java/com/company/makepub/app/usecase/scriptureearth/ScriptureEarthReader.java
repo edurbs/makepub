@@ -2,6 +2,7 @@ package com.company.makepub.app.usecase.scriptureearth;
 
 import com.company.makepub.app.domain.BookAddress;
 import com.company.makepub.app.domain.Book;
+import com.company.makepub.app.domain.ScriptureAddress;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.usecase.types.BibleReader;
 
@@ -27,16 +28,26 @@ public class ScriptureEarthReader implements BibleReader {
     @Override
     public String getScripture(final String bookName, final int chapter, final int startVerse, final int endVerse) {
         int checkedEndVerse = Math.max(startVerse, endVerse);
-        List<BookAddress> bookAddresses = readJsonBooks.execute();
         Book book = Book.getBookNameFromFullName(bookName);
         if (book == null) {
             return "";
         }
+        return getScripture(new ScriptureAddress(book, chapter, startVerse, checkedEndVerse));
+    }
+
+    @Override
+    public String getScripture(ScriptureAddress scriptureAddress){
+        List<BookAddress> bookAddresses = readJsonBooks.execute();
+        Book book = scriptureAddress.book();
+        int chapter = scriptureAddress.chapter();
+        int startVerse = scriptureAddress.verse();
+        int endVerse = scriptureAddress.endVerse();
+        int checkedEndVerse = Math.max(startVerse, endVerse);
         Optional<BookAddress> bookAddress = bookAddresses.stream()
                 .filter(b -> b.book().equals(book))
                 .findFirst();
         if (bookAddress.isEmpty()) {
-            throw new IllegalArgumentException("Book not found: " + bookName);
+            throw new IllegalArgumentException("Book not found: " + book.getFullName());
         }
         String url = bookAddress.get().url();
         return getScriptureFromSite(url, chapter, startVerse, checkedEndVerse, book);
