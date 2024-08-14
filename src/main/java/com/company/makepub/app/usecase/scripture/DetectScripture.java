@@ -19,7 +19,6 @@ public class DetectScripture {
     }
 
     public List<ScriptureAddress> execute() {
-
         var extractor = new ScriptureAddressExtractor(matcher, lastBookName);
         final String bookName = extractor.getBookName();
         final int chapter = extractor.getChapter();
@@ -28,7 +27,6 @@ public class DetectScripture {
         for (String verseString : versesBetweenCommas) {
             addToList(verseString, bookName, chapter);
         }
-
         return scriptureAddressList;
     }
 
@@ -56,8 +54,4 @@ public class DetectScripture {
         }
         return null;
     }
-
-
-
-
 }
