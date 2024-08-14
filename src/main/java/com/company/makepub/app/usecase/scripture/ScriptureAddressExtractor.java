@@ -36,14 +36,14 @@ public class ScriptureAddressExtractor {
     private void execute() {
         final String fullScriptureAddress;
         final String scriptureAddress;
-        if(isAddressWithBookName(matcher)) {
-            bookName = matcher.group(2).trim();
+        bookName = matcher.group(2).trim();
+        if(!bookName.isBlank()){
             lastBookName = bookName;
-            fullScriptureAddress = matcher.group(0).trim();
+            fullScriptureAddress = matcher.group(0);
             scriptureAddress = fullScriptureAddress.replace(bookName, "");
         }else{
             bookName = lastBookName;
-            fullScriptureAddress = matcher.group(0).trim();
+            fullScriptureAddress = matcher.group(0);
             scriptureAddress = fullScriptureAddress;
         }
         chapter = Integer.parseInt(scriptureAddress.split(":")[0].trim());
@@ -52,9 +52,5 @@ public class ScriptureAddressExtractor {
             addressPrefix = " " + chapter + ":";
         }
         allVerses = scriptureAddress.split(":")[1];
-
-    }
-    private boolean isAddressWithBookName(Matcher matcher) {
-        return matcher.groupCount() == 2;
     }
 }
