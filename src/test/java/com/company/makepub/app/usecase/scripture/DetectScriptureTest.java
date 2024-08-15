@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DetectScriptureTest {
 
-    @CanIgnoreReturnValue
     DetectScripture init(String html) {
         Matcher matcher = new MakeRegex().getMatcher(html);
         matcher.find();
