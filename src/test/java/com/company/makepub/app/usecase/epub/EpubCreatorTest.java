@@ -1,8 +1,6 @@
 package com.company.makepub.app.usecase.epub;
 
 import com.company.makepub.app.domain.EpubFile;
-import com.company.makepub.app.gateway.HtmlParser;
-import com.company.makepub.app.gateway.UUIDGenerator;
 import com.company.makepub.app.usecase.scripture.LinkScriptures;
 import com.company.makepub.app.usecase.types.EpubMap;
 import com.company.makepub.app.usecase.types.LinkReferencePage;

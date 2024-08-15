@@ -2,6 +2,7 @@ package com.company.makepub.app.usecase.scripture;
 
 import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.ScriptureAddress;
+import org.assertj.core.util.CanIgnoreReturnValue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class DetectScriptureTest {
 
+    @CanIgnoreReturnValue
     DetectScripture init(String html) {
         Matcher matcher = new MakeRegex().getMatcher(html);
         matcher.find();

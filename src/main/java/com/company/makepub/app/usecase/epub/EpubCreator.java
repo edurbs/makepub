@@ -1,15 +1,16 @@
 package com.company.makepub.app.usecase.epub;
 
 import com.company.makepub.app.domain.EpubFile;
-import com.company.makepub.app.gateway.HtmlParser;
-import com.company.makepub.app.gateway.UUIDGenerator;
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
 import com.company.makepub.app.usecase.scripture.LinkScriptures;
 import com.company.makepub.app.usecase.types.EpubMap;
 import com.company.makepub.app.usecase.types.LinkReferencePage;
 import com.company.makepub.app.usecase.types.StringConversor;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
