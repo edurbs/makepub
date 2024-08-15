@@ -4,6 +4,7 @@ import com.company.makepub.app.domain.BookAddress;
 import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.ScriptureAddress;
 import com.company.makepub.app.gateway.HtmlParser;
+import com.company.makepub.app.usecase.scripture.ConvertScripture;
 import com.company.makepub.app.usecase.types.BibleReader;
 
 import java.util.List;
@@ -13,11 +14,13 @@ public class ScriptureEarthReader implements BibleReader {
 
 
     private final HtmlParser htmlParser;
+    private final ConvertScripture convertScripture;
     private final ReadJsonBooks readJsonBooks;
 
-    public ScriptureEarthReader(HtmlParser htmlParser, ReadJsonBooks readJsonBooks) {
+    public ScriptureEarthReader(HtmlParser htmlParser, ReadJsonBooks readJsonBooks, ConvertScripture convertScripture) {
         this.readJsonBooks = readJsonBooks;
         this.htmlParser = htmlParser;
+        this.convertScripture = convertScripture;
     }
 
     @Override
@@ -53,7 +56,8 @@ public class ScriptureEarthReader implements BibleReader {
             return "";
         }
         String url = bookAddress.get().url();
-        return getScriptureFromSite(url, chapter, startVerse, checkedEndVerse, book);
+        String result = getScriptureFromSite(url, chapter, startVerse, checkedEndVerse, book);
+        return convertScripture.execute(result);
     }
 
     private String getScriptureFromSite(final String url, final int chapter, final int startVerse, final int endVerse, final Book book) {

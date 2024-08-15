@@ -4,13 +4,11 @@ package com.company.makepub.view.converter;
 import com.company.makepub.app.domain.EpubFile;
 import com.company.makepub.app.domain.JsonBookRecord;
 import com.company.makepub.app.domain.MarkupRecord;
-import com.company.makepub.app.gateway.HtmlParser;
-import com.company.makepub.app.gateway.JsonParser;
-import com.company.makepub.app.gateway.UUIDGenerator;
-import com.company.makepub.app.gateway.UrlReader;
+import com.company.makepub.app.gateway.*;
 import com.company.makepub.app.usecase.epub.ConvertMarkupToHtml;
 import com.company.makepub.app.usecase.epub.EpubCreator;
 import com.company.makepub.app.usecase.epub.LinkMusic;
+import com.company.makepub.app.usecase.scripture.ConvertScripture;
 import com.company.makepub.app.usecase.scripture.LinkScriptures;
 import com.company.makepub.app.usecase.scripture.MakeRegex;
 import com.company.makepub.app.usecase.scriptureearth.ReadJsonBooks;
@@ -20,6 +18,7 @@ import com.company.makepub.entity.repository.MarkupRepository;
 import com.company.makepub.utils.htmlparser.JsoupHtmlParser;
 import com.company.makepub.utils.jsonparser.GsonParser;
 import com.company.makepub.utils.linkreader.JavaUrlReader;
+import com.company.makepub.utils.requestapi.OkHttpRequestApi;
 import com.company.makepub.utils.uuid.MyUUIDGenerator;
 import com.company.makepub.view.main.MainView;
 import com.vaadin.flow.component.ClickEvent;
@@ -75,7 +74,9 @@ public class Converter extends StandardView {
         JsonParser<JsonBookRecord> jsonParser = new GsonParser<>();
         UrlReader urlReader = new JavaUrlReader();
         ReadJsonBooks readJsonBooks = new ReadJsonBooks(jsonParser, urlReader);
-        ScriptureEarthReader scriptureEarthReader = new ScriptureEarthReader(htmlParser, readJsonBooks);
+        RequestApi okHttpRequestApi = new OkHttpRequestApi();
+        ConvertScripture convertScripture = new ConvertScripture(okHttpRequestApi);
+        ScriptureEarthReader scriptureEarthReader = new ScriptureEarthReader(htmlParser, readJsonBooks, convertScripture);
         LinkScriptures linkScriptures = new LinkScriptures(makeRegex, uuidGenerator, scriptureEarthReader);
 
         EpubFile epubFile = new EpubCreator(
