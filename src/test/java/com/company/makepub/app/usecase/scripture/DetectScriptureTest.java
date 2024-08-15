@@ -2,7 +2,6 @@ package com.company.makepub.app.usecase.scripture;
 
 import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.ScriptureAddress;
-import org.assertj.core.util.CanIgnoreReturnValue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
