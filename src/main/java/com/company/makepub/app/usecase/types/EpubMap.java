@@ -1,5 +1,9 @@
 package com.company.makepub.app.usecase.types;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 public enum EpubMap {
@@ -68,19 +72,8 @@ public enum EpubMap {
             """),
     TEXT("OEBPS/Text/Section0001.xhtml",""),
     MUSIC("OEBPS/Text/Section0002.xhtml",""),
-    SCRIPTURES("OEBPS/Text/Section0003.xhtml", ""),
     IMAGE("OEBPS/Images/cover.png", ""),
-    STYLE("OEBPS/Styles/sgc-nav.css", """
-            nav#landmarks {
-                display:none;
-            }
-            nav#page-list {
-                display:none;
-            }
-            ol {
-                list-style-type: none;
-            }
-            """),
+    STYLE("OEBPS/Styles/sgc-nav.css", loadCss()),
     CONTENT("OEBPS/content.opf", """
             <?xml version="1.0" encoding="utf-8"?>
             <package version="3.0" unique-identifier="BookId" xmlns="http://www.idpf.org/2007/opf">
@@ -107,6 +100,17 @@ public enum EpubMap {
               </spine>
             </package>
             """);
+
+    private static String loadCss() {
+        try (InputStream inputStream = EpubMap.class.getClassLoader().getResourceAsStream("epub/epubs.css")) {
+            if (inputStream == null) {
+                throw new IllegalArgumentException("Resource not found");
+            }
+            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
 
     private final String path;
     private final String defaultText;
