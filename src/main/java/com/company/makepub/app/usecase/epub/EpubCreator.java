@@ -4,6 +4,7 @@ import com.company.makepub.app.domain.EpubFile;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.gateway.UUIDGenerator;
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
+import com.company.makepub.app.usecase.scripture.LinkScriptures;
 import com.company.makepub.app.usecase.types.EpubMap;
 import com.company.makepub.app.usecase.types.LinkReferencePage;
 import com.company.makepub.app.usecase.types.StringConversor;
@@ -17,18 +18,14 @@ import java.util.zip.ZipOutputStream;
 
 public class EpubCreator {
 
-    private final UUIDGenerator uuidGenerator;
-    private final HtmlParser htmlParser;
     private final StringConversor markupConversor;
     private final LinkReferencePage linkMusic;
-    private final LinkReferencePage linkScriptures;
+    private final LinkScriptures linkScriptures;
     private final String mainText;
     private final byte[] coverImage;
     private final Map<EpubMap, String> finalEpubMap = new HashMap<>();
 
-    public EpubCreator(UUIDGenerator uuidGenerator, HtmlParser htmlParser, StringConversor markupConversor, LinkReferencePage linkMusic, LinkReferencePage linkScriptures, String mainText, byte[] coverImage) {
-        this.uuidGenerator = uuidGenerator;
-        this.htmlParser = htmlParser;
+    public EpubCreator(StringConversor markupConversor, LinkReferencePage linkMusic, LinkScriptures linkScriptures, String mainText, byte[] coverImage) {
         this.markupConversor = markupConversor;
         this.linkMusic = linkMusic;
         this.linkScriptures = linkScriptures;
@@ -49,13 +46,11 @@ public class EpubCreator {
         finalEpubMap.put(EpubMap.CONTENT, EpubMap.CONTENT.getDefaultText());
         finalEpubMap.put(EpubMap.COVER, EpubMap.COVER.getDefaultText());
         finalEpubMap.put(EpubMap.NAV, EpubMap.NAV.getDefaultText());
-        finalEpubMap.put(EpubMap.STYLE, EpubMap.SCRIPTURES.getDefaultText());
+        finalEpubMap.put(EpubMap.STYLE, EpubMap.STYLE.getDefaultText());
     }
 
     private String createLinkedScritpures(String linkedTextWithMusic) {
-        Map<EpubMap, String> scripturesMap = linkScriptures.execute(linkedTextWithMusic);
-        finalEpubMap.put(EpubMap.SCRIPTURES, scripturesMap.get(EpubMap.SCRIPTURES));
-        return scripturesMap.get(EpubMap.TEXT);
+        return linkScriptures.execute(linkedTextWithMusic);
     }
 
     private String createLinkedMusic(String convertedText) {
@@ -71,7 +66,7 @@ public class EpubCreator {
             for(EpubMap epubMap : EpubMap.values()){
                 switch (epubMap) {
                     case EpubMap.IMAGE -> addByteArrayToZip(zos, epubMap.getPath(), coverImage);
-                    case EpubMap.TEXT, EpubMap.SCRIPTURES, EpubMap.MUSIC-> addStringToZip(zos, epubMap.getPath(), finalEpubMap.get(epubMap));
+                    case EpubMap.TEXT, EpubMap.MUSIC-> addStringToZip(zos, epubMap.getPath(), finalEpubMap.get(epubMap));
                     default -> addStringToZip(zos, epubMap.getPath(), epubMap.getDefaultText());
                 }
             }

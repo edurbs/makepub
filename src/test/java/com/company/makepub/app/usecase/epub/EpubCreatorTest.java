@@ -3,6 +3,7 @@ package com.company.makepub.app.usecase.epub;
 import com.company.makepub.app.domain.EpubFile;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.gateway.UUIDGenerator;
+import com.company.makepub.app.usecase.scripture.LinkScriptures;
 import com.company.makepub.app.usecase.types.EpubMap;
 import com.company.makepub.app.usecase.types.LinkReferencePage;
 import com.company.makepub.app.usecase.types.StringConversor;
@@ -22,19 +23,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class EpubCreatorTest {
 
     @Mock
-    private UUIDGenerator mockUuidGenerator;
-
-    @Mock
-    private HtmlParser mockHtmlParser;
-
-    @Mock
     private StringConversor mockMarkupConversor;
 
     @Mock
     private LinkReferencePage mockLinkMusic;
 
     @Mock
-    private LinkReferencePage mockLinkScriptures;
+    private LinkScriptures mockLinkScriptures;
 
     private EpubCreator epubCreator;
 
@@ -43,11 +38,11 @@ class EpubCreatorTest {
     void getEpubFile() {
         String fakeMainText = "some main text";
         byte[] fakeCoverImage = new byte[10];
-        this.epubCreator = new EpubCreator (mockUuidGenerator, mockHtmlParser, mockMarkupConversor, mockLinkMusic, mockLinkScriptures, fakeMainText, fakeCoverImage);
+        this.epubCreator = new EpubCreator (mockMarkupConversor, mockLinkMusic, mockLinkScriptures, fakeMainText, fakeCoverImage);
 
         Mockito.when(mockMarkupConversor.convert(ArgumentMatchers.any())).thenReturn("some text");
         Mockito.when(mockLinkMusic.execute(ArgumentMatchers.any())).thenReturn(Map.of(EpubMap.MUSIC, "some text", EpubMap.TEXT, "some text"));
-        Mockito.when(mockLinkScriptures.execute(ArgumentMatchers.any())).thenReturn(Map.of(EpubMap.SCRIPTURES, "some text", EpubMap.TEXT, "some text"));
+        Mockito.when(mockLinkScriptures.execute(ArgumentMatchers.any())).thenReturn( "some text");
 
         EpubFile actual = epubCreator.execute();
 

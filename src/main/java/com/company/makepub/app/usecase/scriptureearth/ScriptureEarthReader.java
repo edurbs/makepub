@@ -44,10 +44,13 @@ public class ScriptureEarthReader implements BibleReader {
         int endVerse = scriptureAddress.endVerse();
         int checkedEndVerse = Math.max(startVerse, endVerse);
         Optional<BookAddress> bookAddress = bookAddresses.stream()
-                .filter(b -> b.book().equals(book))
+                .filter(b -> {
+                    if(b.book()==null) return false;
+                    return b.book().equals(book);
+                })
                 .findFirst();
         if (bookAddress.isEmpty()) {
-            throw new IllegalArgumentException("Book not found: " + book.getFullName());
+            return "";
         }
         String url = bookAddress.get().url();
         return getScriptureFromSite(url, chapter, startVerse, checkedEndVerse, book);

@@ -143,5 +143,13 @@ class ScriptureEarthReaderTest {
         assertEquals(expected, result);
     }
 
+    @Test
+    @DisplayName("Should get blank if Inexistent Book")
+    void getScriptureInexistentBook() {
+        String result = sut.getScripture(new ScriptureAddress(Book.BOOK_23_ISA, 119, 10, 12));
+        String expected = "";
+        assertEquals(expected, result);
+    }
+
 
 }

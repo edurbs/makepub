@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class DetectScriptureTest {
 
     DetectScripture init(String html) {
-        Matcher matcher = new MakeRegex(html).getMatcher();
+        Matcher matcher = new MakeRegex().getMatcher(html);
         matcher.find();
         return new DetectScripture(matcher, "" );
     }
@@ -103,6 +103,18 @@ class DetectScriptureTest {
         List<ScriptureAddress> actual = sut.execute();
         List<ScriptureAddress> expected = List.of(
                 new ScriptureAddress(Book.BOOK_19_PSA, 10, 1, 4)
+        );
+        assertEquals(expected, actual);
+    }
+
+
+    @Test
+    @DisplayName("Detect 2 PED. 3:9.")
+    void testUpperCase(TestInfo testInfo) {
+        var sut = init(testInfo.getDisplayName());
+        List<ScriptureAddress> actual = sut.execute();
+        List<ScriptureAddress> expected = List.of(
+                new ScriptureAddress(Book.BOOK_61_2PE, 3, 9, 0)
         );
         assertEquals(expected, actual);
     }

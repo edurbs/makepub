@@ -45,10 +45,10 @@ public class DetectScripture {
 
     private Book getBook(String bookName) {
         for (Book book : Book.values()) {
-            if (book.getFullName().equals(bookName)) {
+            if (book.getFullName().equalsIgnoreCase(bookName)) {
                 return book;
             }
-            if(book.getAbbreviation1().equals(bookName)) {
+            if(book.getAbbreviation1().equalsIgnoreCase(bookName)) {
                 return book;
             }
         }

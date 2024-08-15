@@ -6,22 +6,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MakeRegex {
-    private final String text;
-    private Matcher matcher;
-    private static final Pattern pattern = Pattern.compile(getRegex());
+    private static final Pattern pattern = Pattern.compile(getRegex(), Pattern.CASE_INSENSITIVE);
 
-    public MakeRegex (String text) {
-        this.text = text;
-        execute();
-    }
-
-    public Matcher getMatcher() {
-        return matcher;
-    }
-
-    private void execute(){
+    public Matcher getMatcher(String text) {
         String cleanedText = cleanText(text);
-        matcher = pattern.matcher(cleanedText);
+        return pattern.matcher(cleanedText);
     }
 
     private String cleanText(String text) {

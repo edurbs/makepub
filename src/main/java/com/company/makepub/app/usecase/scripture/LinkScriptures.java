@@ -7,20 +7,21 @@ import com.company.makepub.app.usecase.types.BibleReader;
 import java.util.List;
 import java.util.regex.Matcher;
 
-public class LinkScripture {
+public class LinkScriptures {
 
-    private final Matcher matcher;
+    private final MakeRegex makeRegex;
     private final UUIDGenerator uuidGenerator;
     private final BibleReader bibleReader;
     private final StringBuilder linkedHtml = new StringBuilder();
 
-    public LinkScripture(Matcher matcher, UUIDGenerator uuidGenerator, BibleReader bibleReader) {
-        this.matcher = matcher;
+    public LinkScriptures(MakeRegex makeRegex, UUIDGenerator uuidGenerator, BibleReader bibleReader) {
+        this.makeRegex = makeRegex;
         this.uuidGenerator = uuidGenerator;
         this.bibleReader = bibleReader;
     }
     
-    public String execute() {
+    public String execute(String originalText) {
+        Matcher matcher = makeRegex.getMatcher(originalText);
         String lastBookName="";
         StringBuilder generatedScriptureContents = new StringBuilder();
         boolean first = true;
@@ -40,9 +41,11 @@ public class LinkScripture {
             generatedScriptureContents.append(generateScriptureContents(uuid, scriptureAddressText, scriptureAddresses));
             lastBookName = extractor.getBookName();
         }
+        matcher.appendTail(linkedHtml);
         linkedHtml.append("\n<div class=\"groupExt\">\n<div class=\"groupExtScrpCite\">");
         linkedHtml.append(generatedScriptureContents);
         linkedHtml.append("\n</div>\n</div>");
+        linkedHtml.append("\n</body>\n</html>");
         return linkedHtml.toString();
     }
 
@@ -73,5 +76,6 @@ public class LinkScripture {
         String linkedScripture = """
                  <a %s href="#%s">%s</a>""".formatted(optionsForTagA, uuid, scriptureAddress);
         matcher.appendReplacement(linkedHtml, linkedScripture);
+
     }
 }
