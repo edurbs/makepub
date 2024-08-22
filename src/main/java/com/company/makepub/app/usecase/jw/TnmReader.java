@@ -45,7 +45,10 @@ public class TnmReader implements BibleReader {
             String query = "span[id^=v" + bookNumber + "-" + chapterNumber + "-" + i + "-]";
             result.append(htmlParser.query(site, query));
         }
-        return result.toString();
+        String resultText = result.toString();
+        resultText = resultText.replace("*", "");
+        resultText = resultText.replace("+", "");
+        return resultText;
     }
 
     private String getChapterSite(ScriptureAddress scriptureAddress){
