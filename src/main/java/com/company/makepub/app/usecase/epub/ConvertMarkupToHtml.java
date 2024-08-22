@@ -86,11 +86,16 @@ public class ConvertMarkupToHtml implements StringConversor {
     }
 
     private String convertLineAsBlock(MarkupRecord markupRecord, final String text) {
-        final String regex = "^(" + markupRecord.id() + ")(\\d{1,2})";
-        final String subst = " <sup>$2</sup>";
-        final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        final Matcher matcher = pattern.matcher(text);
-        String textConverted = matcher.replaceAll(subst);
+        String textConverted;
+        try{
+            final String regex = "^(" + markupRecord.id() + ")(\\d{1,2})";
+            final String subst = " <sup>$2</sup>";
+            final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+            final Matcher matcher = pattern.matcher(text);
+            textConverted = matcher.replaceAll(subst);
+        } catch (Exception e) {
+            textConverted = text;
+        }
         String htmlEnd = markupRecord.htmlEnd() == null ? "" : markupRecord.htmlEnd();
         textConverted = markupRecord.htmlStart() + textConverted.substring(1) + htmlEnd;
         return textConverted;
