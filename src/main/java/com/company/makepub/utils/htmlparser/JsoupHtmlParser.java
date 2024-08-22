@@ -7,9 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 public class JsoupHtmlParser implements HtmlParser {
 
@@ -27,8 +29,26 @@ public class JsoupHtmlParser implements HtmlParser {
             return "";
         }
         return getTagContent(tagElement.wholeText());
-
     }
+
+    @Override
+    public String query(String site, String query){
+        Document doc = getDocument(site);
+        Elements elements = doc.select(query);
+        if(elements.isEmpty()) {
+            return "";
+        }
+        StringBuilder result = new StringBuilder();
+        for(Element element : elements) {
+            result.append(element.wholeText());
+            if(!Objects.equals(elements.last(), element)) {
+                result.append("<br>\n");
+            }
+        }
+        return result.toString().replace(" ", " ").trim();
+    }
+
+
 
     private  String getTagContent(String tagContent) {
         if(tagContent.isBlank()) {
