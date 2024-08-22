@@ -8,6 +8,7 @@ import com.company.makepub.app.gateway.*;
 import com.company.makepub.app.usecase.epub.ConvertMarkupToHtml;
 import com.company.makepub.app.usecase.epub.EpubCreator;
 import com.company.makepub.app.usecase.epub.LinkMusic;
+import com.company.makepub.app.usecase.jw.NwtpReader;
 import com.company.makepub.app.usecase.scripture.ConvertScripture;
 import com.company.makepub.app.usecase.scripture.LinkScriptures;
 import com.company.makepub.app.usecase.scripture.MakeRegex;
@@ -77,7 +78,8 @@ public class Converter extends StandardView {
         RequestApi okHttpRequestApi = new OkHttpRequestApi();
         ConvertScripture convertScripture = new ConvertScripture(okHttpRequestApi);
         ScriptureEarthReader scriptureEarthReader = new ScriptureEarthReader(htmlParser, readJsonBooks, convertScripture);
-        LinkScriptures linkScriptures = new LinkScriptures(makeRegex, uuidGenerator, scriptureEarthReader);
+        NwtpReader nwtpReader = new NwtpReader(htmlParser);
+        LinkScriptures linkScriptures = new LinkScriptures(makeRegex, uuidGenerator, scriptureEarthReader, nwtpReader);
 
         EpubFile epubFile = new EpubCreator(
                 markupConversor,
