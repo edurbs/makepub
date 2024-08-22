@@ -25,8 +25,11 @@ class LinkScriptureTest {
     @Mock
     private BibleReader nwtpReader;
 
+    @Mock
+    private BibleReader tnmReader;
+
     LinkScriptures init() {
-        return new LinkScriptures(new MakeRegex(), mockUUIDGenerator, scriptureEarthReader, nwtpReader);
+        return new LinkScriptures(new MakeRegex(), mockUUIDGenerator, scriptureEarthReader, nwtpReader, tnmReader);
     }
 
     void setupMock() {

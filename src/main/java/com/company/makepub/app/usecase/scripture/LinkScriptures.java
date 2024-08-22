@@ -13,13 +13,15 @@ public class LinkScriptures {
     private final UUIDGenerator uuidGenerator;
     private final BibleReader scriptureEarthReader;
     private final BibleReader nwtpReader;
+    private final BibleReader tnmReader;
     private final StringBuilder linkedHtml = new StringBuilder();
 
-    public LinkScriptures(MakeRegex makeRegex, UUIDGenerator uuidGenerator, BibleReader scriptureEarthReader, BibleReader nwtpReader) {
+    public LinkScriptures(MakeRegex makeRegex, UUIDGenerator uuidGenerator, BibleReader scriptureEarthReader, BibleReader nwtpReader, BibleReader tnmReader) {
         this.makeRegex = makeRegex;
         this.uuidGenerator = uuidGenerator;
         this.scriptureEarthReader = scriptureEarthReader;
         this.nwtpReader = nwtpReader;
+        this.tnmReader = tnmReader;
     }
     
     public String execute(String originalText) {
@@ -55,6 +57,9 @@ public class LinkScriptures {
         String scripture = scriptureEarthReader.getScripture(address);
         if(scripture.isBlank()) {
             scripture = nwtpReader.getScripture(address);
+        }
+        if(scripture.isBlank()) {
+            scripture = tnmReader.getScripture(address);
         }
         return scripture;
     }
