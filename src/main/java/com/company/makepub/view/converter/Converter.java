@@ -10,6 +10,7 @@ import com.company.makepub.app.usecase.epub.CreateCover;
 import com.company.makepub.app.usecase.epub.EpubCreator;
 import com.company.makepub.app.usecase.epub.LinkMusic;
 import com.company.makepub.app.usecase.jw.NwtpReader;
+import com.company.makepub.app.usecase.jw.TnmReader;
 import com.company.makepub.app.usecase.scripture.ConvertScripture;
 import com.company.makepub.app.usecase.scripture.LinkScriptures;
 import com.company.makepub.app.usecase.scripture.MakeRegex;
@@ -81,7 +82,8 @@ public class Converter extends StandardView {
         ConvertScripture convertScripture = new ConvertScripture(okHttpRequestApi);
         ScriptureEarthReader scriptureEarthReader = new ScriptureEarthReader(htmlParser, readJsonBooks, convertScripture);
         NwtpReader nwtpReader = new NwtpReader(htmlParser);
-        LinkScriptures linkScriptures = new LinkScriptures(makeRegex, uuidGenerator, scriptureEarthReader, nwtpReader);
+        TnmReader tnmReader = new TnmReader(htmlParser);
+        LinkScriptures linkScriptures = new LinkScriptures(makeRegex, uuidGenerator, scriptureEarthReader, nwtpReader, tnmReader);
         CreateCover createCover = new CreateCover();
 
         EpubFile epubFile = new EpubCreator(
