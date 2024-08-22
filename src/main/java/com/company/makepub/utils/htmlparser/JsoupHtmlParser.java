@@ -33,7 +33,12 @@ public class JsoupHtmlParser implements HtmlParser {
 
     @Override
     public String query(String site, String query){
-        Document doc = getDocument(site);
+        Document doc;
+        try{
+            doc = getDocument(site);
+        }catch (Exception e){
+            return "";
+        }
         Elements elements = doc.select(query);
         if(elements.isEmpty()) {
             return "";
@@ -78,7 +83,7 @@ public class JsoupHtmlParser implements HtmlParser {
     private @NotNull Document getDocument(String site) {
         try {
             return Jsoup.connect(site).get();
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new UseCaseException("Erro ao conectar ao site " + site, e);
         }
     }
