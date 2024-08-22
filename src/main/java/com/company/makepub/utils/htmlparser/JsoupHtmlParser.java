@@ -40,12 +40,17 @@ public class JsoupHtmlParser implements HtmlParser {
         }
         StringBuilder result = new StringBuilder();
         for(Element element : elements) {
-            result.append(element.wholeText());
+            result.append(element.text());
             if(!Objects.equals(elements.last(), element)) {
                 result.append("<br>\n");
             }
         }
-        return result.toString().replace(" ", " ").trim();
+        String resultText = result.toString();
+        resultText = resultText.replace(" ", " ");
+        resultText = resultText.replace("\n\n\n", "\n");
+        resultText = resultText.replace("\n\n", "\n");
+        resultText = resultText.replace("\n\n", "\n");
+        return resultText.trim();
     }
 
 
