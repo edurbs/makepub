@@ -20,24 +20,55 @@ class LinkScriptureTest {
     private UUIDGenerator mockUUIDGenerator;
 
     @Mock
-    private BibleReader bibleReader;
+    private BibleReader scriptureEarthReader;
+
+    @Mock
+    private BibleReader nwtpReader;
 
     LinkScriptures init() {
-        return new LinkScriptures(new MakeRegex(), mockUUIDGenerator, bibleReader);
+        return new LinkScriptures(new MakeRegex(), mockUUIDGenerator, scriptureEarthReader, nwtpReader);
     }
 
-    void setupMockUUIDGenerator() {
+    void setupMock() {
         Mockito.when(mockUUIDGenerator.generate())
                 .thenReturn("uuid");
-        Mockito.when(bibleReader.getScripture(Mockito.any()))
+        Mockito.when(scriptureEarthReader.getScripture(Mockito.any()))
                 .thenReturn("Some fake content.");
     }
 
 
     @Test
+    @DisplayName("Link Jó 2:2")
+    void linkJob2_2(TestInfo testInfo) {
+        Mockito.when(mockUUIDGenerator.generate())
+                .thenReturn("uuid");
+        Mockito.when(scriptureEarthReader.getScripture(Mockito.any()))
+                .thenReturn("");
+        Mockito.when(nwtpReader.getScripture(Mockito.any()))
+                .thenReturn("Some Job fake content.");
+        var sut = init();
+        String expectedHtml = """
+            Link %sJó 2:2</a>
+            <div class="groupExt">
+            <div class="groupExtScrpCite">
+            <aside epub:type="footnote">
+            <div epub:type="footnote" class="extScrpCite" id="uuid">
+            <p class="extScrpCiteTxt">
+            <strong>(Jó 2:2)</strong>
+            Some Job fake content.
+            </p>
+            </div>
+            </aside>
+            </div>
+            </div>""".formatted(TAG_A_PREFIX).trim();
+        String actualHtml = sut.execute(testInfo.getDisplayName());
+        assertEquals(expectedHtml, actualHtml);
+    }
+
+    @Test
     @DisplayName("Link Salmo 10:1")
     void linkSalmo10_1(TestInfo testInfo) {
-        setupMockUUIDGenerator();
+        setupMock();
         var sut = init();
         String expectedHtml = """
             Link %sSalmo 10:1</a>
@@ -61,7 +92,7 @@ class LinkScriptureTest {
     @Test
     @DisplayName("Link Salmo 10:1 some text after")
     void linkSalmo10_1WithTextAfter(TestInfo testInfo) {
-        setupMockUUIDGenerator();
+        setupMock();
         var sut = init();
         String expectedHtml = """
             Link %sSalmo 10:1</a> some text after
@@ -84,7 +115,7 @@ class LinkScriptureTest {
     @Test
     @DisplayName("Link Salmo 10:1, 2")
     void linkSalmo10_1_2(TestInfo testInfo) {
-        setupMockUUIDGenerator();
+        setupMock();
         var sut = init();
         String expectedHtml = """
             Link %sSalmo 10:1, 2</a>
@@ -107,7 +138,7 @@ class LinkScriptureTest {
     @Test
     @DisplayName("Link Salmo 10:1-3")
     void linkSamo10_1_3(TestInfo testInfo) {
-        setupMockUUIDGenerator();
+        setupMock();
         var sut = init();
         String expectedHtml = """
             Link %sSalmo 10:1-3</a>
@@ -130,7 +161,7 @@ class LinkScriptureTest {
     @Test
     @DisplayName("Link Salmo 10:1-3, 5-8, 10, 12")
     void Salmo10_1_3_5_8_10_12(TestInfo testInfo) {
-        setupMockUUIDGenerator();
+        setupMock();
         var sut = init();
         String expectedHtml = """
             Link %sSalmo 10:1-3, 5-8, 10, 12</a>
@@ -153,7 +184,7 @@ class LinkScriptureTest {
     @Test
     @DisplayName("Link Salmo 10:1; 11:1")
     void testSalmo10_1_11_1(TestInfo testInfo) {
-        setupMockUUIDGenerator();
+        setupMock();
         var sut = init();
         String expectedHtml = """
             Link %sSalmo 10:1</a>;%<s Salmo 11:1</a>
@@ -184,7 +215,7 @@ class LinkScriptureTest {
     @Test
     @DisplayName("Link Salmo 10:1; 11:1 some text after")
     void testSalmo10_1_11_1SomeTextAfter(TestInfo testInfo) {
-        setupMockUUIDGenerator();
+        setupMock();
         var sut = init();
         String expectedHtml = """
             Link %sSalmo 10:1</a>;%<s Salmo 11:1</a> some text after
@@ -215,7 +246,7 @@ class LinkScriptureTest {
     @Test
     @DisplayName("Link Salmo 10:1, 3-6, 10, 15-19; 11:10; 12:1-4, 6; 13:1-3")
     void test7l(TestInfo testInfo) {
-        setupMockUUIDGenerator();
+        setupMock();
         var sut = init();
         String expectedHtml = """
                 Link <a epub:type="noteref" href="#uuid">Salmo 10:1, 3-6, 10, 15-19</a>;<a epub:type="noteref" href="#uuid"> Salmo 11:10</a>;<a epub:type="noteref" href="#uuid"> Salmo 12:1-4, 6</a>;<a epub:type="noteref" href="#uuid"> Salmo 13:1-3</a>
@@ -263,7 +294,7 @@ class LinkScriptureTest {
     @Test
     @DisplayName("Link Salmo 10:1, 3-6, 10, 15-19; 11:10; 12:1-4, 6; 13:1-3; Mateus 24:14; 25:1-3")
     void test9l(TestInfo testInfo) {
-        setupMockUUIDGenerator();
+        setupMock();
         var sut = init();
         String expectedHtml = """
                 Link <a epub:type="noteref" href="#uuid">Salmo 10:1, 3-6, 10, 15-19</a>;<a epub:type="noteref" href="#uuid"> Salmo 11:10</a>;<a epub:type="noteref" href="#uuid"> Salmo 12:1-4, 6</a>;<a epub:type="noteref" href="#uuid"> Salmo 13:1-3</a>; <a epub:type="noteref" href="#uuid"> Mateus 24:14</a>;<a epub:type="noteref" href="#uuid"> Mateus 25:1-3</a>
