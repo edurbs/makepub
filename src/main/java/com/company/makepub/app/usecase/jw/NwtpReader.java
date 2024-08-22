@@ -42,7 +42,7 @@ public class NwtpReader implements BibleReader {
             endVerse = verseNumber;
         }
         for (int i = verseNumber; i <= endVerse; i++) {
-            String query = "span[id^=v" + bookNumber + "-" + chapterNumber + "-" + i + "]";
+            String query = "span[id^=v" + bookNumber + "-" + chapterNumber + "-" + i + "-]";
             result.append(htmlParser.query(site, query));
         }
         return result.toString();
