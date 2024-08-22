@@ -23,15 +23,15 @@ public class EpubCreator {
     private final LinkReferencePage linkMusic;
     private final LinkScriptures linkScriptures;
     private final String mainText;
-    private final byte[] coverImage;
     private final Map<EpubMap, String> finalEpubMap = new HashMap<>();
+    private final CreateCover createCover;
 
-    public EpubCreator(StringConversor markupConversor, LinkReferencePage linkMusic, LinkScriptures linkScriptures, String mainText, byte[] coverImage) {
+    public EpubCreator(StringConversor markupConversor, LinkReferencePage linkMusic, LinkScriptures linkScriptures, String mainText, CreateCover createCover) {
         this.markupConversor = markupConversor;
         this.linkMusic = linkMusic;
         this.linkScriptures = linkScriptures;
         this.mainText = mainText;
-        this.coverImage = coverImage;
+        this.createCover = createCover;
     }
 
     public EpubFile execute(){
@@ -63,10 +63,11 @@ public class EpubCreator {
     private EpubFile createEpubFile() {
         String zipFilename = "file.epub";
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] image = createCover.execute("Roꞌmadöꞌöꞌꞌwa", "Jeová nhorõwa ꞌre, ꞌre aihöimana uꞌötsi mono!", "19-25 Agosto na 2024 na", "Romnhoré 24:");
         try (ZipOutputStream zos = new ZipOutputStream(baos)) {
             for(EpubMap epubMap : EpubMap.values()){
                 switch (epubMap) {
-                    case EpubMap.IMAGE -> addByteArrayToZip(zos, epubMap.getPath(), coverImage);
+                    case EpubMap.IMAGE -> addByteArrayToZip(zos, epubMap.getPath(), image);
                     case EpubMap.TEXT, EpubMap.MUSIC-> addStringToZip(zos, epubMap.getPath(), finalEpubMap.get(epubMap));
                     default -> addStringToZip(zos, epubMap.getPath(), epubMap.getDefaultText());
                 }

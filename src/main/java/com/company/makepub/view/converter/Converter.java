@@ -6,6 +6,7 @@ import com.company.makepub.app.domain.JsonBookRecord;
 import com.company.makepub.app.domain.MarkupRecord;
 import com.company.makepub.app.gateway.*;
 import com.company.makepub.app.usecase.epub.ConvertMarkupToHtml;
+import com.company.makepub.app.usecase.epub.CreateCover;
 import com.company.makepub.app.usecase.epub.EpubCreator;
 import com.company.makepub.app.usecase.epub.LinkMusic;
 import com.company.makepub.app.usecase.jw.NwtpReader;
@@ -34,6 +35,7 @@ import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.kit.component.upload.event.FileUploadFailedEvent;
 import io.jmix.flowui.kit.component.upload.event.FileUploadSucceededEvent;
 import io.jmix.flowui.view.*;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -80,13 +82,14 @@ public class Converter extends StandardView {
         ScriptureEarthReader scriptureEarthReader = new ScriptureEarthReader(htmlParser, readJsonBooks, convertScripture);
         NwtpReader nwtpReader = new NwtpReader(htmlParser);
         LinkScriptures linkScriptures = new LinkScriptures(makeRegex, uuidGenerator, scriptureEarthReader, nwtpReader);
+        CreateCover createCover = new CreateCover();
 
         EpubFile epubFile = new EpubCreator(
                 markupConversor,
                 linkMusic,
                 linkScriptures,
                 inputText,
-                coverImage
+                createCover
                 ).execute();
 
         if(epubFile.content()!=null){
