@@ -32,12 +32,21 @@ class ConvertMarkupToHtmlTest {
         MY_MARKUPS.add(new MarkupRecord("*", "<b><sup><a epub:type=\"noteref\" href=\"#{idFootNote}\">*</a></sup></b>", "", false, true, false, false, null));
         MY_MARKUPS.add(new MarkupRecord("£", "<aside id=\"{idFootNote}\" epub:type=\"footnote\"><p>", "</p></aside>", true, false, true, false, null));
         MY_MARKUPS.add(new MarkupRecord("=", "<h5>", "</h5>", true, false, false, true, null));
+        MY_MARKUPS.add(new MarkupRecord("§", "<p>", "</p>", true, false, false, false, null));
 
     }
 
     @BeforeEach
     void setUp() {
         convertMarkupToHtml = new ConvertMarkupToHtml(mockUUIDGenerator, MY_MARKUPS);
+    }
+
+    @Test
+    @DisplayName("Should add superscript to an existing one")
+    void shouldConvertSuperscript(){
+        String text = "§12 Hello";
+        String expected = "<p><sup>12</sup> Hello</p>";
+        assertEquals(expected, convertMarkupToHtml.convert(text));
     }
 
     @Test
