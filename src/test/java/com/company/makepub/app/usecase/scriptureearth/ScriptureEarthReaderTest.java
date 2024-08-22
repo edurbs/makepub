@@ -25,7 +25,8 @@ class ScriptureEarthReaderTest {
         var htmlParser = new JsoupHtmlParser(urlReader);
         sut = new ScriptureEarthReader(
                 htmlParser,
-                readJson
+                readJson,
+                null
         );
     }
 
