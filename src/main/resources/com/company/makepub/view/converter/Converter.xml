@@ -6,9 +6,18 @@
     <layout alignItems="CENTER">
         <h3 text="Conversor de texto com markups para EPUB 3"/>
         <textArea id="textAreaInput" width="90%" alignSelf="CENTER" maxHeight="200px" minHeight="200px"/>
-        <fileUploadField id="coverUpload" uploadText="Imagem da Capa" acceptedFileTypes=".png"
-                         dropAllowed="true" uploadIcon="FILE_PICTURE" clearButtonVisible="true"
-                         fileNameVisible="true" fileNotSelectedText="Arquivo não selecionado"/>
+        <hbox width="90%">
+            <span text="Título" alignSelf="CENTER"/>
+            <textField id="textFieldSubtitulo" width="90%"/>
+        </hbox>
+        <hbox width="90%">
+            <span alignSelf="CENTER" text="Período"/>
+            <textField id="textFieldPeriodo" width="90%"/>
+        </hbox>
+        <hbox width="90%">
+            <span alignSelf="CENTER" text="Estudo"/>
+            <textField id="textFieldEstudo" width="90%"/>
+        </hbox>
         <button id="convertButton" alignSelf="CENTER" text="Gerar EPUB" icon="PLAY"/>
 
     </layout>

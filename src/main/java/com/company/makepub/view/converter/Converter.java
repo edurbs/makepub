@@ -29,6 +29,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.Route;
 import io.jmix.flowui.Notifications;
 import io.jmix.flowui.component.textarea.JmixTextArea;
+import io.jmix.flowui.component.textfield.TypedTextField;
 import io.jmix.flowui.component.upload.FileUploadField;
 import io.jmix.flowui.download.DownloadFormat;
 import io.jmix.flowui.download.Downloader;
@@ -60,10 +61,23 @@ public class Converter extends StandardView {
     private Downloader downloader;
 
     private byte[] coverImage;
+    @ViewComponent
+    private TypedTextField<Object> textFieldSubtitulo;
+    @ViewComponent
+    private TypedTextField<Object> textFieldPeriodo;
+    @ViewComponent
+    private TypedTextField<Object> textFieldEstudo;
+    @ViewComponent
+    private JmixButton convertButton;
 
     @Subscribe(id = "convertButton", subject = "clickListener")
     public void onConvertButtonClick(final ClickEvent<JmixButton> event) {
+        var button = convertButton;
+        button.setEnabled(false);
         String inputText = textAreaInput.getValue();
+        String subtitulo = textFieldSubtitulo.getValue();
+        String periodo = textFieldPeriodo.getValue();
+        String estudo = textFieldEstudo.getValue();
         List<MarkupRecord> markupRecordList = new ArrayList<>();
         markupRepository.findAll()
                 .forEach(m -> markupRecordList.add(
@@ -92,7 +106,7 @@ public class Converter extends StandardView {
                 linkScriptures,
                 inputText,
                 createCover
-                ).execute();
+                ).execute(subtitulo, periodo, estudo);
 
         if(epubFile.content()!=null){
             notifications.create("Epub criado com sucesso!")
@@ -104,23 +118,7 @@ public class Converter extends StandardView {
                     epubFile.filename(),
                     DownloadFormat.getByExtension("EPUB"));
         }
+        button.setEnabled(true);
     }
-
-    @Subscribe("coverUpload")
-    public void onCoverUploadFileUploadSucceeded(final FileUploadSucceededEvent<FileUploadField> event) {
-        notifications.create("Arquivo carregado com sucesso!")
-                .withType(Notifications.Type.SUCCESS)
-                .show();
-        coverImage = event.getSource().getValue();
-    }
-
-    @Subscribe("coverUpload")
-    public void onCoverUploadFileUploadFailed(final FileUploadFailedEvent<FileUploadField> event) {
-        notifications.create("Erro ao carregar arquivo!")
-                .withType(Notifications.Type.ERROR)
-                .show();
-
-    }
-
 
 }
