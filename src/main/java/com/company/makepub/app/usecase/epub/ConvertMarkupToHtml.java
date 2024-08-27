@@ -88,7 +88,7 @@ public class ConvertMarkupToHtml implements StringConversor {
     private String convertLineAsBlock(MarkupRecord markupRecord, final String text) {
         String textConverted;
         try{
-            final String regex = "^(" + markupRecord.id() + ")(\\d{1,2})";
+            final String regex = "^(" + markupRecord.id() + ")(\\d{1,2}[^.])";
             final String subst = " <sup>$2</sup>";
             final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
             final Matcher matcher = pattern.matcher(text);
