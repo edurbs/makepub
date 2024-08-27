@@ -47,7 +47,7 @@ public class JsoupHtmlParser implements HtmlParser {
         for(Element element : elements) {
             result.append(element.text());
             if(!Objects.equals(elements.last(), element)) {
-                result.append("<br>\n");
+                result.append("<br/>\n");
             }
         }
         String resultText = result.toString();
