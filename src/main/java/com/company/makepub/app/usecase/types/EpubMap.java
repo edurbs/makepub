@@ -78,6 +78,7 @@ public enum EpubMap {
             <package version="3.0" unique-identifier="BookId" xmlns="http://www.idpf.org/2007/opf">
               <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
                 <dc:language>xav</dc:language>
+                <dc:title>%s: %s</dc:title>
                 <meta property="dcterms:modified">2024-07-21T15:57:48Z</meta>
                 <meta name="cover" content="capa_6.png"/>
               </metadata>
@@ -87,7 +88,7 @@ public enum EpubMap {
                 <item id="Section0003.xhtml" href="Text/Section0003.xhtml" media-type="application/xhtml+xml"/>
                 <item id="sgc-nav.css" href="Styles/sgc-nav.css" media-type="text/css"/>
                 <item id="nav.xhtml" href="Text/nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>
-                <item id="cover.png" href="Images/cover.png" media-type="image/png"/>
+                <item id="cover.png" href="Images/cover.png" media-type="image/png" properties="cover-image"/>
                 <item id="cover.xhtml" href="Text/cover.xhtml" media-type="application/xhtml+xml" properties="svg"/>
               </manifest>
               <spine>
