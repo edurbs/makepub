@@ -49,8 +49,10 @@ public class LinkScriptures {
         linkedHtml.append("\n<div class=\"groupExt\">\n<div class=\"groupExtScrpCite\">");
         linkedHtml.append(generatedScriptureContents);
         linkedHtml.append("\n</div>\n</div>");
-        //linkedHtml.append("\n</body>\n</html>");
-        return linkedHtml.toString();
+        String stringLinkedHtml = linkedHtml.toString();
+        stringLinkedHtml = stringLinkedHtml.replace("</body>", "");
+        stringLinkedHtml = stringLinkedHtml.replace("</html>", "");
+        return stringLinkedHtml + "\n</body>\n</html>";
     }
 
     private String getScriptureFromBible(ScriptureAddress address) {
