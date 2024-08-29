@@ -101,6 +101,7 @@ public enum EpubMap {
     MUSIC("OEBPS/Text/Section0002.xhtml",""),
     IMAGE("OEBPS/Images/cover.png", ""),
     STYLE("OEBPS/Styles/sgc-nav.css", loadCss()),
+    FONT("OEBPS/fonts/NotoSans-Regular.ttf", ""),
     CONTENT("OEBPS/content.opf", """
             <?xml version="1.0" encoding="utf-8"?>
             <package version="3.0" unique-identifier="BookId" xmlns="http://www.idpf.org/2007/opf">
@@ -132,7 +133,7 @@ public enum EpubMap {
     private static String loadCss() {
         try (InputStream inputStream = EpubMap.class.getClassLoader().getResourceAsStream("epub/epubs.css")) {
             if (inputStream == null) {
-                throw new IllegalArgumentException("Resource not found");
+                throw new IllegalArgumentException("CSS not found");
             }
             return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {

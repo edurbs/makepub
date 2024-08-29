@@ -7,10 +7,7 @@ import com.company.makepub.app.usecase.types.EpubMap;
 import com.company.makepub.app.usecase.types.LinkReferencePage;
 import com.company.makepub.app.usecase.types.StringConversor;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -70,6 +67,7 @@ public class EpubCreator {
             for(EpubMap epubMap : EpubMap.values()){
                 switch (epubMap) {
                     case EpubMap.IMAGE -> addByteArrayToZip(zos, epubMap.getPath(), image);
+                    case EpubMap.FONT -> addByteArrayToZip(zos, epubMap.getPath(), loadFont());
                     case EpubMap.TEXT, EpubMap.MUSIC-> addStringToZip(zos, epubMap.getPath(), finalEpubMap.get(epubMap));
                     case EpubMap.CONTENT -> addTitle(zos, epubMap, subtitulo, estudo);
                     default -> addStringToZip(zos, epubMap.getPath(), epubMap.getDefaultText());
@@ -80,6 +78,19 @@ public class EpubCreator {
         }
         return new EpubFile(zipFilename, baos.toByteArray());
     }
+
+
+    private byte[] loadFont() {
+        try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("epub/NotoSans-Regular.ttf")) {
+            if (inputStream == null) {
+                throw new IllegalArgumentException("Font not found");
+            }
+            return inputStream.readAllBytes();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
 
     private void addTitle(ZipOutputStream zos, EpubMap epubMap, String subtitulo, String estudo) throws IOException {
         String content = finalEpubMap.get(epubMap);
