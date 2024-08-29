@@ -81,7 +81,10 @@ public class ConvertMarkupToHtml implements StringConversor {
 
     private String convertLineAsQuestionWithBox(final String textConverted) {
         String uuidQuestion = uuidGenerator.generate();
-        String questionBox = "<textarea id=\"" + uuidQuestion + "\" rows=\"3\" cols=\"40\"></textarea>";
+        String questionBox = """
+                <div class="gen-field">
+                <textarea id="%s" class="du-color--textSubdued du-fontSize--baseMinus1" ></textarea>
+                </div>""".formatted(uuidQuestion);
         return textConverted + questionBox;
     }
 

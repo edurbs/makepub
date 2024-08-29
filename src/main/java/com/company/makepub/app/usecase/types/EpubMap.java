@@ -101,7 +101,6 @@ public enum EpubMap {
     MUSIC("OEBPS/Text/Section0002.xhtml",""),
     IMAGE("OEBPS/Images/cover.png", ""),
     STYLE("OEBPS/Styles/sgc-nav.css", loadCss()),
-    FONT("OEBPS/fonts/NotoSans-Regular.ttf", ""),
     CONTENT("OEBPS/content.opf", """
             <?xml version="1.0" encoding="utf-8"?>
             <package version="3.0" unique-identifier="BookId" xmlns="http://www.idpf.org/2007/opf">
@@ -119,6 +118,7 @@ public enum EpubMap {
                 <item id="nav.xhtml" href="Text/nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>
                 <item id="cover.png" href="Images/cover.png" media-type="image/png" properties="cover-image"/>
                 <item id="cover.xhtml" href="Text/cover.xhtml" media-type="application/xhtml+xml" properties="svg"/>
+                <item id="NotoSans-Regular.ttf" href="Fonts/NotoSans-Regular.ttf" media-type="font/ttf"/>
               </manifest>
               <spine>
                 <itemref idref="cover.xhtml"/>

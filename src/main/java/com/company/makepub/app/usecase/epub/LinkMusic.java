@@ -71,7 +71,7 @@ public class LinkMusic implements LinkReferencePage {
 
     private String getMusicText(String musicNumber, String musicId) {
         String start = "<aside id=\""+musicId+"\" epub:type=\"footnote\">";
-        String end = "</aside><br/><hr></hr><br/>";
+        String end = "</aside><br/><hr/><br/>";
         StringBuilder sb = new StringBuilder();
         String musicPage = parseMusicPage(musicNumber);
         String[] lines = musicPage.split("\n");

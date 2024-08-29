@@ -67,7 +67,7 @@ public class EpubCreator {
             for(EpubMap epubMap : EpubMap.values()){
                 switch (epubMap) {
                     case EpubMap.IMAGE -> addByteArrayToZip(zos, epubMap.getPath(), image);
-                    case EpubMap.FONT -> addByteArrayToZip(zos, epubMap.getPath(), loadFont());
+
                     case EpubMap.TEXT, EpubMap.MUSIC-> addStringToZip(zos, epubMap.getPath(), finalEpubMap.get(epubMap));
                     case EpubMap.CONTENT -> addTitle(zos, epubMap, subtitulo, estudo);
                     default -> addStringToZip(zos, epubMap.getPath(), epubMap.getDefaultText());
@@ -78,19 +78,6 @@ public class EpubCreator {
         }
         return new EpubFile(zipFilename, baos.toByteArray());
     }
-
-
-    private byte[] loadFont() {
-        try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("epub/NotoSans-Regular.ttf")) {
-            if (inputStream == null) {
-                throw new IllegalArgumentException("Font not found");
-            }
-            return inputStream.readAllBytes();
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
 
     private void addTitle(ZipOutputStream zos, EpubMap epubMap, String subtitulo, String estudo) throws IOException {
         String content = finalEpubMap.get(epubMap);
