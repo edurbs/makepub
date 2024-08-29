@@ -38,7 +38,8 @@ public class EpubCreator {
         String convertedText = markupConversor.convert(mainText);
         String linkedTextWithMusic = createLinkedMusic(convertedText);
         String linkedTextWithMusicAndScriptures = createLinkedScritpures(linkedTextWithMusic);
-        finalEpubMap.put(EpubMap.TEXT, linkedTextWithMusicAndScriptures);
+        String startHtml = EpubMap.TEXT.getDefaultText().formatted(subtitulo);
+        finalEpubMap.put(EpubMap.TEXT, startHtml+linkedTextWithMusicAndScriptures);
         createOtherEpubPages();
         return createEpubFile(subtitulo, periodo, estudo);
     }

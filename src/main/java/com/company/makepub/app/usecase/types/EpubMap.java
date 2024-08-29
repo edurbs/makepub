@@ -69,7 +69,35 @@ public enum EpubMap {
             </body>
             </html>
             """),
-    TEXT("OEBPS/Text/Section0001.xhtml",""),
+    TEXT("OEBPS/Text/Section0001.xhtml", """
+            <?xml version="1.0" encoding="utf-8"?>
+            <!DOCTYPE html>
+            <html dir="ltr" class="dir-ltr ml-E ms-ROMAN" xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="en">\s
+            <head>\s
+            <meta charset="utf-8" />
+            <link rel="stylesheet" href="../Styles/sgc-nav.css" type="text/css" />
+            <title>%s</title>
+            <script>    \s
+            function saveAnnotation(textAreaId){
+               var annotation = document.getElementById(textAreaId).value;
+               localStorage.setItem(textAreaId, annotation);
+            }
+            window.onload = function(){
+               var textAreas = document.getElementsByTagName('textarea');
+               for (var i = 0; i &lt; textAreas.length; i++){
+                  var textAreaId = textAreas[i].id;
+                  var savedAnnotation = localStorage.getItem(textAreaId);
+                  if (savedAnnotation) {
+                     document.getElementById(textAreaId).value = savedAnnotation;
+                  }
+                  document.getElementById(textAreaId).addEventListener('input', function() {
+                     saveAnnotation(this.id);        \s
+                  });
+               }
+            };
+            </script>
+            </head>
+            <body dir="ltr" xml:lang="en" class="jwac dir-ltr ml-E ms-ROMAN docClass-40 pub-w docId-2024404">"""),
     MUSIC("OEBPS/Text/Section0002.xhtml",""),
     IMAGE("OEBPS/Images/cover.png", ""),
     STYLE("OEBPS/Styles/sgc-nav.css", loadCss()),
