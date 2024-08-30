@@ -1,8 +1,6 @@
 package com.company.makepub.app.usecase.epub;
 
-import com.company.makepub.app.domain.MarkupRecord;
 import com.company.makepub.app.gateway.UUIDGenerator;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,9 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -23,22 +18,11 @@ class ConvertMarkupToHtmlTest {
     private UUIDGenerator mockUUIDGenerator;
 
     private ConvertMarkupToHtml convertMarkupToHtml;
-    private static final List<MarkupRecord> MY_MARKUPS = new ArrayList<>();
 
-    @BeforeAll
-    static void beforeAll() {
-        MY_MARKUPS.add(new MarkupRecord("_", "<i>", "</i>", false, false, false, false, null));
-        MY_MARKUPS.add(new MarkupRecord("~", "<b>", "</b>", false, false, false, false, null));
-        MY_MARKUPS.add(new MarkupRecord("*", "<b><sup><a epub:type=\"noteref\" href=\"#{idFootNote}\">*</a></sup></b>", "", false, true, false, false, null));
-        MY_MARKUPS.add(new MarkupRecord("£", "<aside id=\"{idFootNote}\" epub:type=\"footnote\"><p>", "</p></aside>", true, false, true, false, null));
-        MY_MARKUPS.add(new MarkupRecord("=", "<h5>", "</h5>", true, false, false, true, null));
-        MY_MARKUPS.add(new MarkupRecord("§", "<p>", "</p>", true, false, false, false, null));
-
-    }
 
     @BeforeEach
     void setUp() {
-        convertMarkupToHtml = new ConvertMarkupToHtml(mockUUIDGenerator, MY_MARKUPS);
+        convertMarkupToHtml = new ConvertMarkupToHtml(mockUUIDGenerator);
     }
 
     @Test

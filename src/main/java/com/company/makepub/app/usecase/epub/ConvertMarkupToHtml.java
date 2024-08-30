@@ -1,6 +1,5 @@
 package com.company.makepub.app.usecase.epub;
 
-import com.company.makepub.app.domain.MarkupRecord;
 import com.company.makepub.app.gateway.UUIDGenerator;
 import com.company.makepub.app.usecase.types.StringConversor;
 
@@ -11,14 +10,12 @@ import java.util.regex.Pattern;
 
 public class ConvertMarkupToHtml implements StringConversor {
     private final UUIDGenerator uuidGenerator;
-    private final List<MarkupRecord> markupRecords = new ArrayList<>();
-
     private final List<String> footNotes = new ArrayList<>();
     private int footNoteIndex = 0;
 
-    public ConvertMarkupToHtml(UUIDGenerator uuidGenerator, List<MarkupRecord> markupRecords) {
+
+    public ConvertMarkupToHtml(UUIDGenerator uuidGenerator) {
         this.uuidGenerator = uuidGenerator;
-        this.markupRecords.addAll(markupRecords);
     }
 
     @Override
@@ -26,53 +23,53 @@ public class ConvertMarkupToHtml implements StringConversor {
         StringBuilder textConverted = new StringBuilder();
         List<String> lines = List.of(text.split("\n"));
         for(String line : lines) {
-            for (MarkupRecord markupRecord : markupRecords) {
-                line = applyMarkups(line, markupRecord);
+            for(MarkupEnum markupEnum : MarkupEnum.values()) {
+                line = applyMarkups(line, markupEnum);
             }
             textConverted.append(line).append("\n");
         }
         return textConverted.toString().trim();
     }
 
-    private String applyMarkups(String line, MarkupRecord markupRecord) {
-        int index = line.indexOf(markupRecord.id());
-        if(markupRecord.isParagraph() && index==0){
-            line = convertLine(markupRecord, line, index);
-        }else if (!markupRecord.isParagraph()){
-            line = formatAsNotParagraph(markupRecord, line, index);
+    private String applyMarkups(String line, MarkupEnum markupEnum) {
+        int index = line.indexOf(markupEnum.getId());
+        if(markupEnum.isParagraph() && index==0){
+            line = convertLine(markupEnum, line, index);
+        }else if (!markupEnum.isParagraph()){
+            line = formatAsNotParagraph(markupEnum, line, index);
         }
         return line;
     }
 
-    private String formatAsNotParagraph(MarkupRecord markupRecord, String line, int index) {
+    private String formatAsNotParagraph(MarkupEnum markupEnum, String line, int index) {
         while (index >= 0) {
             int lineSize = line.length();
-            line = convertLine(markupRecord, line, index);
+            line = convertLine(markupEnum, line, index);
             int diff =  line.length() - lineSize;
             index += diff;
-            index = line.indexOf(markupRecord.id(), index + 1);
+            index = line.indexOf(markupEnum.getId(), index + 1);
         }
         return line;
     }
 
-    private String convertLine(MarkupRecord markupRecord, final String text, final int firstIndex) {
+    private String convertLine(MarkupEnum markupEnum, final String text, final int firstIndex) {
         String textConverted = text;
-        if(markupRecord.isParagraph()) {
-            textConverted = convertLineAsBlock(markupRecord, textConverted);
+        if(markupEnum.isParagraph()) {
+            textConverted = convertLineAsBlock(markupEnum, textConverted);
         }else{
-            textConverted = replaceAt(firstIndex, textConverted, markupRecord.htmlStart());
+            textConverted = replaceAt(firstIndex, textConverted, markupEnum.getHtmlStart());
 
-            if(markupRecord.htmlEnd()!=null && !markupRecord.htmlEnd().isBlank()) {
-                int nextIndex = textConverted.indexOf(markupRecord.id());
+            if(markupEnum.getHtmlEnd()!=null && !markupEnum.getHtmlEnd().isBlank()) {
+                int nextIndex = textConverted.indexOf(markupEnum.getId());
                 if(nextIndex > 0){
-                    textConverted = replaceAt(nextIndex, textConverted, markupRecord.htmlEnd());
+                    textConverted = replaceAt(nextIndex, textConverted, markupEnum.getHtmlEnd());
                 }
             }
         }
-        if(markupRecord.isFootnote()) {
-            textConverted = replaceVariableFootnote(markupRecord, textConverted);
+        if(markupEnum.isFootnote()) {
+            textConverted = replaceVariableFootnote(markupEnum, textConverted);
         }
-        if(markupRecord.isQuestion()) {
+        if(markupEnum.isQuestion()) {
             textConverted = convertLineAsQuestionWithBox(textConverted);
         }
 
@@ -88,10 +85,10 @@ public class ConvertMarkupToHtml implements StringConversor {
         return textConverted + questionBox;
     }
 
-    private String convertLineAsBlock(MarkupRecord markupRecord, final String text) {
+    private String convertLineAsBlock(MarkupEnum markupEnum, final String text) {
         String textConverted;
         try{
-            final String regex = "^(" + markupRecord.id() + ")(\\d{1,2}[^.])";
+            final String regex = "^(" + markupEnum.getId() + ")(\\d{1,2}[^.])";
             final String subst = " <sup>$2</sup>";
             final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
             final Matcher matcher = pattern.matcher(text);
@@ -99,15 +96,15 @@ public class ConvertMarkupToHtml implements StringConversor {
         } catch (Exception e) {
             textConverted = text;
         }
-        String htmlEnd = markupRecord.htmlEnd() == null ? "" : markupRecord.htmlEnd();
-        textConverted = markupRecord.htmlStart() + textConverted.substring(1) + htmlEnd;
+        String htmlEnd = markupEnum.getHtmlEnd() == null ? "" : markupEnum.getHtmlEnd();
+        textConverted = markupEnum.getHtmlStart() + textConverted.substring(1) + htmlEnd;
         return textConverted;
     }
 
-    private String replaceVariableFootnote(MarkupRecord markupRecord, final String text) {
+    private String replaceVariableFootnote(MarkupEnum markupEnum, final String text) {
         String idFootnoteVariable = "{idFootNote}";
         String textConverted = text;
-        if(markupRecord.isFootnoteSymbol()) {
+        if(markupEnum.isFootnoteSymbol()) {
             String uuid = uuidGenerator.generate();
             footNotes.add(uuid);
             return textConverted.replace(idFootnoteVariable, uuid);

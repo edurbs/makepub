@@ -3,7 +3,6 @@ package com.company.makepub.view.converter;
 
 import com.company.makepub.app.domain.EpubFile;
 import com.company.makepub.app.domain.JsonBookRecord;
-import com.company.makepub.app.domain.MarkupRecord;
 import com.company.makepub.app.gateway.*;
 import com.company.makepub.app.usecase.epub.ConvertMarkupToHtml;
 import com.company.makepub.app.usecase.epub.CreateCover;
@@ -16,8 +15,6 @@ import com.company.makepub.app.usecase.scripture.LinkScriptures;
 import com.company.makepub.app.usecase.scripture.MakeRegex;
 import com.company.makepub.app.usecase.scriptureearth.ReadJsonBooks;
 import com.company.makepub.app.usecase.scriptureearth.ScriptureEarthReader;
-import com.company.makepub.entity.mapper.MarkupMapper;
-import com.company.makepub.entity.repository.MarkupRepository;
 import com.company.makepub.utils.htmlparser.JsoupHtmlParser;
 import com.company.makepub.utils.jsonparser.GsonParser;
 import com.company.makepub.utils.linkreader.JavaUrlReader;
@@ -27,21 +24,17 @@ import com.company.makepub.view.main.MainView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
 import io.jmix.flowui.Notifications;
+import io.jmix.flowui.app.main.StandardMainView;
 import io.jmix.flowui.component.textarea.JmixTextArea;
 import io.jmix.flowui.component.textfield.TypedTextField;
-import io.jmix.flowui.component.upload.FileUploadField;
 import io.jmix.flowui.download.DownloadFormat;
 import io.jmix.flowui.download.Downloader;
 import io.jmix.flowui.kit.component.button.JmixButton;
-import io.jmix.flowui.kit.component.upload.event.FileUploadFailedEvent;
-import io.jmix.flowui.kit.component.upload.event.FileUploadSucceededEvent;
 import io.jmix.flowui.view.*;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Route(value = "Converter", layout = MainView.class)
 @ViewController("Converter")
@@ -52,15 +45,11 @@ public class Converter extends StandardView {
     private JmixTextArea textAreaInput;
 
     @Autowired
-    private MarkupRepository markupRepository;
-
-    @Autowired
     private Notifications notifications;
 
     @Autowired
     private Downloader downloader;
 
-    private byte[] coverImage;
     @ViewComponent
     private TypedTextField<Object> textFieldSubtitulo;
     @ViewComponent
@@ -78,15 +67,10 @@ public class Converter extends StandardView {
         String subtitulo = textFieldSubtitulo.getValue();
         String periodo = textFieldPeriodo.getValue();
         String estudo = textFieldEstudo.getValue();
-        List<MarkupRecord> markupRecordList = new ArrayList<>();
-        markupRepository.findAll()
-                .forEach(m -> markupRecordList.add(
-                        new MarkupMapper().to(m)));
-
         UUIDGenerator uuidGenerator = new MyUUIDGenerator();
         UrlReader javaUrlReader = new JavaUrlReader();
         HtmlParser htmlParser = new JsoupHtmlParser(javaUrlReader);
-        ConvertMarkupToHtml markupConversor = new ConvertMarkupToHtml(uuidGenerator, markupRecordList);
+        ConvertMarkupToHtml markupConversor = new ConvertMarkupToHtml(uuidGenerator);
         LinkMusic linkMusic = new LinkMusic(htmlParser, uuidGenerator, "DANHOꞌRE");
         MakeRegex makeRegex = new MakeRegex();
         JsonParser<JsonBookRecord> jsonParser = new GsonParser<>();
