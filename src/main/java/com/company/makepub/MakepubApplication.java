@@ -24,7 +24,6 @@ import javax.sql.DataSource;
 @Theme(value = "makepub")
 @PWA(name = "Makepub", shortName = "Makepub")
 @SpringBootApplication
-@EnableJmixDataRepositories
 public class MakepubApplication implements AppShellConfigurator {
 
     @Autowired
