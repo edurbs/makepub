@@ -62,7 +62,7 @@ public class EpubCreator {
 
         String zipFilename = "file.epub";
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        byte[] image = createCover.execute("Roꞌmadöꞌöꞌꞌwa", subtitulo, periodo, estudo);
+        byte[] image = createCover.execute("Roꞌmadöꞌöꞌwa", subtitulo, periodo, estudo);
         try (ZipOutputStream zos = new ZipOutputStream(baos)) {
             for(EpubMap epubMap : EpubMap.values()){
                 switch (epubMap) {

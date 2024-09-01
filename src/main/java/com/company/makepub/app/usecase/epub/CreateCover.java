@@ -34,12 +34,12 @@ public class CreateCover {
 
         // Desenhar o título
         g2d.setColor(Color.WHITE);
-        Font fonteTitulo = new Font("Arial", Font.BOLD, 60);
+        Font fonteTitulo = new Font(null, Font.BOLD, 60);
         g2d.setFont(fonteTitulo);
         desenharTextoCentralizado(g2d, titulo, largura, 275);
 
         // Desenhar o subtítulo quebrado em múltiplas linhas
-        Font fonteSubtitulo = new Font("Arial", Font.BOLD, 40);
+        Font fonteSubtitulo = new Font(null, Font.BOLD, 40);
         g2d.setFont(fonteSubtitulo);
         g2d.setColor(new Color(101, 45, 98));
         List<String> linhas = quebrarTextoEmLinhas(g2d, subtitulo, largura-200);  // Limite de largura para subtítulo
@@ -53,7 +53,7 @@ public class CreateCover {
 
         // Desenhar o período na parte inferior
         g2d.setColor(new Color(101, 45, 98));
-        Font fontePeriodo = new Font("Arial", Font.PLAIN, 40);
+        Font fontePeriodo = new Font(null, Font.PLAIN, 40);
         g2d.setFont(fontePeriodo);
         desenharTextoCentralizado(g2d, estudo, largura, 1040);
         desenharTextoCentralizado(g2d, periodo, largura, 1080);

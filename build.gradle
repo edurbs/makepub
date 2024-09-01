@@ -11,7 +11,7 @@ jmix {
 }
 
 group = 'com.company'
-version = '0.0.1'
+version = '1.0.7'
 
 repositories {
     mavenCentral()
@@ -65,10 +65,11 @@ vaadin {
     productionMode = true
 }
 
-bootBuildImage {
-    environment = [
-            "BP_JVM_JLINK_ENABLED": "true",
-            "BP_JVM_VERSION"      : "21",
-            "BP_JVM_TYPE"         : "JRE"
-    ]
-}
+// to prevent error with jar provider not found
+//bootBuildImage {
+//    environment = [
+//            "BP_JVM_JLINK_ENABLED": "true",
+//            "BP_JVM_VERSION"      : "21",
+//            "BP_JVM_TYPE"         : "JRE"
+//    ]
+//}

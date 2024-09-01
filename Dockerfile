@@ -1,3 +1,14 @@
+# FROM eclipse-temurin:21
+# #EXPOSE 8085
+# #RUN apk add --no-cache fontconfig ttf-dejavu
+# RUN apt-get install -y libfontconfig1 && rm -rf /var/lib/apt/lists/*
+# ENV LC_CTYPE en_US.UTF-8
+# RUN addgroup -S spring && adduser -S spring -G spring
+# USER spring:spring
+# ARG JAR_FILE=build/libs/*.jar
+# COPY ${JAR_FILE} app.jar
+# ENTRYPOINT ["java","-jar","/app.jar"]
+
 # First stage, build the custom JRE
 FROM eclipse-temurin:21-jdk-alpine AS jre-builder
 
@@ -17,6 +28,14 @@ RUN $JAVA_HOME/bin/jlink \
 
 # Second stage, Use the custom JRE and build the app image
 FROM alpine:latest
+
+# Needed to fix 'Fontconfig warning: ignoring C.UTF-8: not a valid language tag'
+ENV LANG en_US.UTF-8
+
+# JRE fails to load fonts if there are no standard fonts in the image; DejaVu is a good choice,
+# see https://github.com/docker-library/openjdk/issues/73#issuecomment-207816707
+RUN apk add --no-cache fontconfig ttf-dejavu
+
 ENV JAVA_HOME=/opt/jdk/jdk-21
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
