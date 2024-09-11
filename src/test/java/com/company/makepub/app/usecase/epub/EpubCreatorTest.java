@@ -43,9 +43,9 @@ class EpubCreatorTest {
         Mockito.when(mockLinkMusic.execute(ArgumentMatchers.any())).thenReturn(Map.of(EpubMap.MUSIC, "some text", EpubMap.TEXT, "some text"));
         Mockito.when(mockLinkScriptures.execute(ArgumentMatchers.any())).thenReturn( "some text");
 
-        EpubFile actual = epubCreator.execute();
+        EpubFile actual = epubCreator.execute("", "", "");
 
-        assertDoesNotThrow(() -> epubCreator.execute());
+        assertDoesNotThrow(() -> epubCreator.execute("", "", ""));
         assertEquals("file.epub", actual.filename());
         assertNotNull(actual.content());
     }

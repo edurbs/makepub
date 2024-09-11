@@ -36,6 +36,27 @@ class BookNameTest {
     }
 
     @Test
+    @DisplayName("Given a null string should get 0")
+    void getOrdinalValueNull() {
+        int actual = Book.getOrdinalValue(null);
+        assertEquals(0, actual);
+    }
+
+    @Test
+    @DisplayName("Given a blank string should get 0")
+    void getOrdinalValueBlank() {
+        int actual = Book.getOrdinalValue("");
+        assertEquals(0, actual);
+    }
+
+    @Test
+    @DisplayName("Given a invalid string should get 0")
+    void getOrdinalValueInvalid() {
+        int actual = Book.getOrdinalValue("asd");
+        assertEquals(0, actual);
+    }
+
+    @Test
     @DisplayName("Given a book should ordinal value")
     void testGetOrdinalValue() {
         int actual = Book.BOOK_66_REV.getOrdinalValue();

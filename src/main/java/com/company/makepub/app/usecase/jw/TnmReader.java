@@ -32,6 +32,9 @@ public class TnmReader implements BibleReader {
         // v58-2-6 numero do versículo
         // v58-2-6-1 número do §
         // css selector span[id^=v58-2-6]
+        if(scriptureAddress.book()==null){
+            return "";
+        }
         int bookNumber = scriptureAddress.book().getOrdinalValue();
         int chapterNumber = scriptureAddress.chapter();
         int verseNumber = scriptureAddress.verse();
@@ -55,6 +58,9 @@ public class TnmReader implements BibleReader {
         // https://wol.jw.org/xav/wol/b/r511/lp-xv/nwtp/18/2
         // job book 18 chapter 2
         Book book = scriptureAddress.book();
+        if(book==null){
+            return "";
+        }
         int chapter = scriptureAddress.chapter();
         return "https://wol.jw.org/pt/wol/b/r5/lp-t/nwtsty/"+book.getOrdinalValue()+"/"+chapter;
     }

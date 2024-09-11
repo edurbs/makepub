@@ -56,6 +56,9 @@ public class LinkScriptures {
     }
 
     private String getScriptureFromBible(ScriptureAddress address) {
+        if(address.book()==null) {
+            return "";
+        }
         String scripture = scriptureEarthReader.getScripture(address);
         if(scripture.isBlank()) {
             scripture = nwtpReader.getScripture(address);

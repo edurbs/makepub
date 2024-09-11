@@ -2,6 +2,7 @@ package com.company.makepub.app.usecase.scripture;
 
 import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.ScriptureAddress;
+import jakarta.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public class DetectScripture {
         }
     }
 
-    private Book getBook(String bookName) {
+    private @Nullable  Book getBook(String bookName) {
         for (Book book : Book.values()) {
             if (book.getFullName().equalsIgnoreCase(bookName)) {
                 return book;

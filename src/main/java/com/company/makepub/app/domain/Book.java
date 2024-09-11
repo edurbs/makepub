@@ -105,8 +105,17 @@ public enum Book {
         return scriptures[chapter - 1];
     }
 
-    public static int getOrdinalValue(String book) {
-        return Book.valueOf(book.toUpperCase()).ordinal() + 1;
+    public static int getOrdinalValue(String bookString) {
+        if(bookString == null || bookString.isBlank()) {
+            return 0;
+        }
+        try{
+             Book bookEnum = Book.valueOf(bookString.toUpperCase());
+             int ordinal = bookEnum.ordinal();
+             return ordinal + 1;
+        }catch (IllegalArgumentException e){
+            return 0;
+        }
     }
 
     public int getOrdinalValue() {
