@@ -24,16 +24,23 @@ import com.company.makepub.view.main.MainView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
+import io.jmix.flowui.Dialogs;
 import io.jmix.flowui.Notifications;
-import io.jmix.flowui.app.main.StandardMainView;
+import io.jmix.flowui.backgroundtask.BackgroundTask;
+import io.jmix.flowui.backgroundtask.BackgroundTaskHandler;
+import io.jmix.flowui.backgroundtask.BackgroundWorker;
+import io.jmix.flowui.backgroundtask.TaskLifeCycle;
 import io.jmix.flowui.component.textarea.JmixTextArea;
 import io.jmix.flowui.component.textfield.TypedTextField;
 import io.jmix.flowui.download.DownloadFormat;
 import io.jmix.flowui.download.Downloader;
 import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.view.*;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.concurrent.TimeUnit;
 
 
 @Route(value = "Converter", layout = MainView.class)
@@ -59,19 +66,70 @@ public class Converter extends StandardView {
     @ViewComponent
     private JmixButton convertButton;
 
+    @Autowired
+    protected BackgroundWorker backgroundWorker;
+    protected BackgroundTaskHandler<Void> taskHandler;
+    @Autowired
+    private Dialogs dialogs;
+
     @Subscribe(id = "convertButton", subject = "clickListener")
     public void onConvertButtonClick(final ClickEvent<JmixButton> event) {
-        var button = convertButton;
-        button.setEnabled(false);
-        String inputText = textAreaInput.getValue();
-        String subtitulo = textFieldSubtitulo.getValue();
-        String periodo = textFieldPeriodo.getValue();
-        String estudo = textFieldEstudo.getValue();
-        UUIDGenerator uuidGenerator = new MyUUIDGenerator();
-        UrlReader javaUrlReader = new JavaUrlReader();
-        HtmlParser htmlParser = new JsoupHtmlParser(javaUrlReader);
-        ConvertMarkupToHtml markupConversor = new ConvertMarkupToHtml(uuidGenerator);
-        LinkMusic linkMusic = new LinkMusic(htmlParser, uuidGenerator, "DANHOꞌRE");
+        convertButton.setEnabled(false);
+        BackgroundTask<Integer, Void> task = new ConversionTask();
+        dialogs.createBackgroundTaskDialog(task)
+                .withHeader("Gerando EPUB")
+                .withText("Por favor aguarde...")
+                .open();
+    }
+
+    private class ConversionTask extends BackgroundTask<Integer, Void> {
+        private EpubFile epubFile;
+        public ConversionTask() {
+            super(10, TimeUnit.MINUTES, Converter.this);
+        }
+
+        @Override
+        public void done(@Nonnull Void result) {
+            if(epubFile.content()!=null){
+                notifications.create("Epub criado com sucesso!")
+                        .withType(Notifications.Type.SUCCESS)
+                        .withPosition(Notification.Position.BOTTOM_END)
+                        .show();
+                downloader.download(
+                        epubFile.content(),
+                        epubFile.filename(),
+                        DownloadFormat.getByExtension("EPUB"));
+            }
+            convertButton.setEnabled(true);
+        }
+
+        @Override
+        @Nonnull
+        public Void run(@Nonnull TaskLifeCycle<Integer> taskLifeCycle) {
+            String inputText = textAreaInput.getValue();
+            String subtitulo = textFieldSubtitulo.getValue();
+            String periodo = textFieldPeriodo.getValue();
+            String estudo = textFieldEstudo.getValue();
+            UUIDGenerator uuidGenerator = new MyUUIDGenerator();
+            UrlReader javaUrlReader = new JavaUrlReader();
+            HtmlParser htmlParser = new JsoupHtmlParser(javaUrlReader);
+            ConvertMarkupToHtml markupConversor = new ConvertMarkupToHtml(uuidGenerator);
+            LinkMusic linkMusic = new LinkMusic(htmlParser, uuidGenerator, "DANHOꞌRE");
+            LinkScriptures linkScriptures = getLinkScriptures(htmlParser, uuidGenerator);
+            CreateCover createCover = new CreateCover();
+            epubFile = new EpubCreator(
+                    markupConversor,
+                    linkMusic,
+                    linkScriptures,
+                    inputText,
+                    createCover
+            ).execute(subtitulo, periodo, estudo);
+            return null;
+        }
+    }
+
+    @Nonnull
+    private LinkScriptures getLinkScriptures(HtmlParser htmlParser, UUIDGenerator uuidGenerator) {
         MakeRegex makeRegex = new MakeRegex();
         JsonParser<JsonBookRecord> jsonParser = new GsonParser<>();
         UrlReader urlReader = new JavaUrlReader();
@@ -81,28 +139,8 @@ public class Converter extends StandardView {
         ScriptureEarthReader scriptureEarthReader = new ScriptureEarthReader(htmlParser, readJsonBooks, convertScripture);
         NwtpReader nwtpReader = new NwtpReader(htmlParser);
         TnmReader tnmReader = new TnmReader(htmlParser);
-        LinkScriptures linkScriptures = new LinkScriptures(makeRegex, uuidGenerator, scriptureEarthReader, nwtpReader, tnmReader);
-        CreateCover createCover = new CreateCover();
-
-        EpubFile epubFile = new EpubCreator(
-                markupConversor,
-                linkMusic,
-                linkScriptures,
-                inputText,
-                createCover
-                ).execute(subtitulo, periodo, estudo);
-
-        if(epubFile.content()!=null){
-            notifications.create("Epub criado com sucesso!")
-                    .withType(Notifications.Type.SUCCESS)
-                    .withPosition(Notification.Position.BOTTOM_END)
-                    .show();
-            downloader.download(
-                    epubFile.content(),
-                    epubFile.filename(),
-                    DownloadFormat.getByExtension("EPUB"));
-        }
-        button.setEnabled(true);
+        return new LinkScriptures(makeRegex, uuidGenerator, scriptureEarthReader, nwtpReader, tnmReader);
     }
+
 
 }
