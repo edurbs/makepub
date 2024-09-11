@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MakeRegex {
-    private static final Pattern pattern = Pattern.compile(getRegex(), Pattern.CASE_INSENSITIVE);
+    private static final Pattern pattern = Pattern.compile(getRegex(), Pattern.UNICODE_CASE|Pattern.CASE_INSENSITIVE);
 
     public Matcher getMatcher(String text) {
         String cleanedText = cleanText(text);
