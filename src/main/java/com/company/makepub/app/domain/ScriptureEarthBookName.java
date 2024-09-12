@@ -1,5 +1,8 @@
 package com.company.makepub.app.domain;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 public enum ScriptureEarthBookName {
 
     BOOK_GEN(Book.BOOK_01_GEN),
@@ -75,7 +78,13 @@ public enum ScriptureEarthBookName {
         this.book = book;
     }
 
+
+    @Nonnull
     public String getName() {
+        String bookString = this.toString();
+        if(bookString==null || bookString.isBlank() || bookString.length()<5){
+            return "";
+        }
         return this.toString().substring(5);
     }
 
@@ -83,7 +92,8 @@ public enum ScriptureEarthBookName {
         return this.book;
     }
 
-    public static ScriptureEarthBookName fromScriptureEarthString(String bookName) {
+    @Nullable
+    public static ScriptureEarthBookName fromScriptureEarthString(@Nonnull String bookName) {
         for (ScriptureEarthBookName name : ScriptureEarthBookName.values()) {
             String enumName = name.getName();
             if (enumName.equals(bookName)) {
@@ -93,16 +103,17 @@ public enum ScriptureEarthBookName {
         return null;
     }
 
-    public static ScriptureEarthBookName fromMepsFormatEnum(Book book) {
+    @Nullable
+    public static ScriptureEarthBookName fromMepsFormatEnum(@Nonnull Book book) {
         for (ScriptureEarthBookName scriptureEarthBookName : ScriptureEarthBookName.values()) {
             if (scriptureEarthBookName.book.equals(book)) {
                 return scriptureEarthBookName;
             }
         }
-        throw new IllegalArgumentException("No enum constant found for enum: " + book.name());
+        return null;
     }
 
-    public static Book getMepsFormatFromScriptureEarthEnum(ScriptureEarthBookName scriptureEarthBookName) {
+    public static Book getMepsFormatFromScriptureEarthEnum(@Nonnull ScriptureEarthBookName scriptureEarthBookName) {
         return scriptureEarthBookName.book;
     }
 

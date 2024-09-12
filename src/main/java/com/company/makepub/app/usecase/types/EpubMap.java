@@ -1,5 +1,7 @@
 package com.company.makepub.app.usecase.types;
 
+import jakarta.annotation.Nonnull;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -130,6 +132,7 @@ public enum EpubMap {
             </package>
             """);
 
+    @Nonnull
     private static String loadCss() {
         try (InputStream inputStream = EpubMap.class.getClassLoader().getResourceAsStream("epub/epubs.css")) {
             if (inputStream == null) {

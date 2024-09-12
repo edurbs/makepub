@@ -1,11 +1,12 @@
 package com.company.makepub.app.usecase.scriptureearth;
 
-import com.company.makepub.app.domain.BookAddress;
 import com.company.makepub.app.domain.Book;
+import com.company.makepub.app.domain.BookAddress;
 import com.company.makepub.app.domain.ScriptureAddress;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.usecase.scripture.ConvertScripture;
 import com.company.makepub.app.usecase.types.BibleReader;
+import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,13 +24,15 @@ public class ScriptureEarthReader implements BibleReader {
         this.convertScripture = convertScripture;
     }
 
+    @Nonnull
     @Override
-    public String getScripture(final String book, final int chapter, final int verse) {
+    public String getScripture(@Nonnull final String book, final int chapter, final int verse) {
         return getScripture(book, chapter, verse, verse);
     }
 
+    @Nonnull
     @Override
-    public String getScripture(final String bookName, final int chapter, final int startVerse, final int endVerse) {
+    public String getScripture(@Nonnull final String bookName, final int chapter, final int startVerse, final int endVerse) {
         int checkedEndVerse = Math.max(startVerse, endVerse);
         Book book = Book.getBookNameFromFullName(bookName);
         if (book == null) {
@@ -38,8 +41,9 @@ public class ScriptureEarthReader implements BibleReader {
         return getScripture(new ScriptureAddress(book, chapter, startVerse, checkedEndVerse));
     }
 
+    @Nonnull
     @Override
-    public String getScripture(ScriptureAddress scriptureAddress){
+    public String getScripture(@Nonnull ScriptureAddress scriptureAddress){
         List<BookAddress> bookAddresses = readJsonBooks.execute();
         Book book = scriptureAddress.book();
         int chapter = scriptureAddress.chapter();
@@ -60,7 +64,8 @@ public class ScriptureEarthReader implements BibleReader {
         return convertScripture.execute(result);
     }
 
-    private String getScriptureFromSite(final String url, final int chapter, final int startVerse, final int endVerse, final Book book) {
+    @Nonnull
+    private String getScriptureFromSite(@Nonnull final String url, final int chapter, final int startVerse, final int endVerse, @Nonnull final Book book) {
         List<String> tagsToRemove = List.of("div.s", "div.r", "div.video-block", "div.footer", "div.c-drop");
         String tagIdStart = "<a id=\"v" + startVerse + "\"></a>";
         String tagIdEnd = "<a id=\"v" + (endVerse+1) + "\"></a>";
@@ -86,7 +91,7 @@ public class ScriptureEarthReader implements BibleReader {
         return result;
     }
 
-    private boolean isLastVerse(int chapter, int endVerse, Book book) {
+    private boolean isLastVerse(int chapter, int endVerse, @Nonnull Book book) {
         return endVerse == book.getNumberOfScriptures(chapter);
     }
 

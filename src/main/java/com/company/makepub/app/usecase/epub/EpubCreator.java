@@ -6,6 +6,7 @@ import com.company.makepub.app.usecase.scripture.LinkScriptures;
 import com.company.makepub.app.usecase.types.EpubMap;
 import com.company.makepub.app.usecase.types.LinkReferencePage;
 import com.company.makepub.app.usecase.types.StringConversor;
+import jakarta.annotation.Nonnull;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -31,7 +32,8 @@ public class EpubCreator {
         this.createCover = createCover;
     }
 
-    public EpubFile execute(String subtitulo, String periodo, String estudo){
+    @Nonnull
+    public EpubFile execute(@Nonnull String subtitulo, @Nonnull String periodo, @Nonnull String estudo){
         String convertedText = markupConversor.convert(mainText);
         String linkedTextWithMusic = createLinkedMusic(convertedText);
         String linkedTextWithMusicAndScriptures = createLinkedScritpures(linkedTextWithMusic);
@@ -48,17 +50,20 @@ public class EpubCreator {
         finalEpubMap.put(EpubMap.STYLE, EpubMap.STYLE.getDefaultText());
     }
 
-    private String createLinkedScritpures(String linkedTextWithMusic) {
+    @Nonnull
+    private String createLinkedScritpures(@Nonnull String linkedTextWithMusic) {
         return linkScriptures.execute(linkedTextWithMusic);
     }
 
-    private String createLinkedMusic(String convertedText) {
+    @Nonnull
+    private String createLinkedMusic(@Nonnull String convertedText) {
         Map<EpubMap, String> musicMap = linkMusic.execute(convertedText);
         finalEpubMap.put(EpubMap.MUSIC, musicMap.get(EpubMap.MUSIC));
         return musicMap.get(EpubMap.TEXT);
     }
 
-    private EpubFile createEpubFile(String subtitulo, String periodo, String estudo) {
+    @Nonnull
+    private EpubFile createEpubFile(@Nonnull String subtitulo, @Nonnull String periodo, @Nonnull String estudo) {
 
         String zipFilename = "file.epub";
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -79,13 +84,13 @@ public class EpubCreator {
         return new EpubFile(zipFilename, baos.toByteArray());
     }
 
-    private void addTitle(ZipOutputStream zos, EpubMap epubMap, String subtitulo, String estudo) throws IOException {
+    private void addTitle(@Nonnull ZipOutputStream zos, @Nonnull EpubMap epubMap, @Nonnull String subtitulo, @Nonnull String estudo) throws IOException {
         String content = finalEpubMap.get(epubMap);
         content = content.formatted(estudo, subtitulo);
         addStringToZip(zos, epubMap.getPath(), content);
     }
 
-    private void addStringToZip(ZipOutputStream zos, String fileName, String content) throws IOException {
+    private void addStringToZip(@Nonnull ZipOutputStream zos, @Nonnull String fileName, @Nonnull String content) throws IOException {
         ZipEntry zipEntry = new ZipEntry(fileName);
         zos.putNextEntry(zipEntry);
 
@@ -100,7 +105,7 @@ public class EpubCreator {
         zos.closeEntry();
     }
 
-    private void addByteArrayToZip(ZipOutputStream zos, String fileName, byte[] content) throws IOException {
+    private void addByteArrayToZip(@Nonnull ZipOutputStream zos, @Nonnull String fileName, @Nonnull byte[] content) throws IOException {
         ZipEntry zipEntry = new ZipEntry(fileName);
         zos.putNextEntry(zipEntry);
 

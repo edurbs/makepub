@@ -2,6 +2,7 @@ package com.company.makepub.utils.linkreader;
 
 import com.company.makepub.app.gateway.UrlReader;
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
+import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +12,8 @@ import java.nio.charset.StandardCharsets;
 
 public class JavaUrlReader implements UrlReader {
     @Override
-    public String execute(String urlAddress) throws UseCaseException {
+    @Nonnull
+    public String execute(@Nonnull String urlAddress) throws UseCaseException {
         URL url;
         try {
             url = new URI(urlAddress).toURL();

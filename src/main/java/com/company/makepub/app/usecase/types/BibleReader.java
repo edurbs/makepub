@@ -1,9 +1,10 @@
 package com.company.makepub.app.usecase.types;
 
 import com.company.makepub.app.domain.ScriptureAddress;
+import jakarta.annotation.Nonnull;
 
 public interface BibleReader {
-    String getScripture(String book, int chapter, int verse); // TODO chave String book to ENUM
-    String getScripture(String book, int chapter, int startVerse, int endVerse);
-    String getScripture(ScriptureAddress scriptureAddress);
+    @Nonnull String getScripture(String book, int chapter, int verse);
+    @Nonnull String getScripture(String book, int chapter, int startVerse, int endVerse);
+    @Nonnull String getScripture(ScriptureAddress scriptureAddress);
 }

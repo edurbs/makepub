@@ -2,6 +2,7 @@ package com.company.makepub.app.usecase.scripture;
 
 import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.ScriptureAddress;
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class DetectScripture {
         this.lastBookName = lastBookName;
     }
 
+    @Nonnull
     public List<ScriptureAddress> execute() {
         var extractor = new ScriptureAddressExtractor(matcher, lastBookName);
         final String bookName = extractor.getBookName();
@@ -31,7 +33,7 @@ public class DetectScripture {
         return scriptureAddressList;
     }
 
-    private void addToList(String verseString, String bookName, int chapter) {
+    private void addToList(@Nonnull String verseString, @Nonnull String bookName, int chapter) {
         if(verseString.contains("-")) {
             String[] versesBetweenHyphens = verseString.split("-");
             final int startVerse = Integer.parseInt(versesBetweenHyphens[0].trim());
@@ -44,7 +46,7 @@ public class DetectScripture {
         }
     }
 
-    private @Nullable  Book getBook(String bookName) {
+    private @Nullable Book getBook(@Nonnull String bookName) {
         for (Book book : Book.values()) {
             if (book.getFullName().equalsIgnoreCase(bookName)) {
                 return book;

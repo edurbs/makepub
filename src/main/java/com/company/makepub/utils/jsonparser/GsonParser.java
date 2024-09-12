@@ -2,13 +2,15 @@ package com.company.makepub.utils.jsonparser;
 
 import com.company.makepub.app.gateway.JsonParser;
 import com.google.gson.Gson;
+import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
 public class GsonParser<T> implements JsonParser<T>  {
     @Override
-    public List<T> parse(String json, Class<T[]> clazz) {
-        if(json == null || json.isBlank()) {
+    @Nonnull
+    public List<T> parse(@Nonnull String json, @Nonnull Class<T[]> clazz) {
+        if(json.isBlank()) {
             return List.of();
         }
         try {

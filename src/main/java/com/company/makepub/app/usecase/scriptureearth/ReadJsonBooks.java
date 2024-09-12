@@ -6,6 +6,8 @@ import com.company.makepub.app.domain.JsonBookRecord;
 import com.company.makepub.app.domain.ScriptureEarthBookName;
 import com.company.makepub.app.gateway.JsonParser;
 import com.company.makepub.app.gateway.UrlReader;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,15 +22,16 @@ public class ReadJsonBooks {
         this.urlReader = urlReader;
     }
 
+    @Nonnull
     public List<BookAddress> execute() {
         String jsonBooks = getJsonBooks();
         List<JsonBookRecord> jsonBookRecords = jsonParser.parse(jsonBooks, JsonBookRecord[].class);
         String baseRef = "https://www.scriptureearth.org/data/xav/sab/xav/";
         return jsonBookRecords
                 .stream()
-                .map(record ->  {
+                .map(record -> {
                     if(record.ref() == null) {
-                        return null;
+                        return new BookAddress(null, null);
                     }
                     return new BookAddress(
                             getEnumFromName(record.ref()),
@@ -38,24 +41,28 @@ public class ReadJsonBooks {
                 .collect(Collectors.toList());
     }
 
-    private Book getEnumFromName(final String link) {
+    @Nullable
+    private Book getEnumFromName(@Nonnull final String link) {
         // given xav-19-LUK-001.html then extract LUK
         int index = link.indexOf("-") + 4;
         if (index >= 0) {
             String nameExtracted = link.substring(index, index + 3);
             ScriptureEarthBookName scriptureEarthBookName = ScriptureEarthBookName.fromScriptureEarthString(nameExtracted);
+            if(scriptureEarthBookName==null) return null;
             return Book.getBookNameFromScriptureEarth(scriptureEarthBookName);
         }
         return null;
     }
 
+    @Nonnull
     private String getJsonBooks() {
         String urlXav = "https://www.scriptureearth.org/data/xav/sab/xav/js/book-names.js";
         String jsonBooks = urlReader.execute(urlXav);
         return fixJsonString(jsonBooks);
     }
 
-    private String fixJsonString(String jsonBooks) {
+    @Nonnull
+    private String fixJsonString(@Nonnull String jsonBooks) {
         // remove "var books =" at start
         jsonBooks = jsonBooks.substring(11);
         // remove last 3 lines

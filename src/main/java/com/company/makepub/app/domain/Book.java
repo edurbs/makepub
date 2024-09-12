@@ -1,5 +1,8 @@
 package com.company.makepub.app.domain;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+
 public enum Book {
 
     BOOK_01_GEN("Gênesis",            "Gên.",    "Gên", new Integer[] {31, 25, 24, 26, 32, 22, 24, 22, 29, 32, 32, 20, 18, 24, 21, 16, 27, 33, 38, 18, 34, 24, 20, 67, 34, 35, 46, 22, 35, 43, 55, 32, 20, 31, 29, 43, 36, 30, 23, 23, 57, 38, 34, 34, 28, 34, 31, 22, 33, 26}),
@@ -89,12 +92,13 @@ public enum Book {
         return this.abbreviation1;
     }
 
-    public String getAbbreviation2() {
-        return this.abbreviation2;
-    }
-
+    @Nonnull
     public String getMepsFormat() {
-        return this.toString().substring(5);
+        String bookString = this.toString();
+        if(bookString!=null && bookString.length()>5) {
+            return bookString.substring(5);
+        }
+        return "";
     }
 
     public int getNumberOfChapters() {
@@ -105,8 +109,8 @@ public enum Book {
         return scriptures[chapter - 1];
     }
 
-    public static int getOrdinalValue(String bookString) {
-        if(bookString == null || bookString.isBlank()) {
+    public static int getOrdinalValue(@Nonnull String bookString) {
+        if(bookString.isBlank()) {
             return 0;
         }
         try{
@@ -122,7 +126,8 @@ public enum Book {
         return this.ordinal() + 1;
     }
 
-    public static Book getBookNameFromFullName(String fullName) {
+    @Nullable
+    public static Book getBookNameFromFullName(@Nonnull String fullName) {
         for (Book book : Book.values()) {
             if (book.fullName.equals(fullName.trim())) {
                 return book;
@@ -131,34 +136,18 @@ public enum Book {
         return null;
     }
 
-    public static Book getBookNameFromAbbreviation1(String abbreviation1) {
-        for (Book book : Book.values()) {
-            if (book.abbreviation1.equals(abbreviation1.trim())) {
-                return book;
-            }
-        }
-        return null;
-    }
 
-    public static Book getBookNameFromAbbreviation2(String abbreviation2) {
-        for (Book book : Book.values()) {
-            if (book.abbreviation2.equals(abbreviation2.trim())) {
-                return book;
-            }
-        }
-        return null;
-    }
-
-    public static ScriptureEarthBookName getScriptureEarthBookName(Book book) {
-        return ScriptureEarthBookName.fromMepsFormatEnum(book);
-    }
-
-    public static Book getBookNameFromScriptureEarth(ScriptureEarthBookName scriptureEarthBook) {
+    @Nullable
+    public static Book getBookNameFromScriptureEarth(@Nonnull ScriptureEarthBookName scriptureEarthBook) {
         for (ScriptureEarthBookName book : ScriptureEarthBookName.values()) {
             if (book.equals(scriptureEarthBook)) {
                 return book.getBook();
             }
         }
         return null;
+    }
+
+    public String getAbbreviation2() {
+        return abbreviation2;
     }
 }

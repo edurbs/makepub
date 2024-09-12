@@ -2,14 +2,16 @@ package com.company.makepub.utils.requestapi;
 
 import com.company.makepub.app.gateway.RequestApi;
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
+import jakarta.annotation.Nonnull;
 import okhttp3.*;
 
 import java.io.IOException;
 
 public class OkHttpRequestApi implements RequestApi {
     @Override
-    public String get(String apiUrl, String textToConvert) throws UseCaseException {
-        if(textToConvert == null || textToConvert.isBlank()) {
+    @Nonnull
+    public String get(@Nonnull String apiUrl, @Nonnull String textToConvert) throws UseCaseException {
+        if(textToConvert.isBlank()) {
             return "";
         }
         String requestBody = """

@@ -1,5 +1,7 @@
 package com.company.makepub.app.usecase.types;
 
+import jakarta.annotation.Nonnull;
+
 public interface StringConversor {
-    String convert(String text);
+    @Nonnull String convert(String text);
 }

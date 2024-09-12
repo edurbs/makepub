@@ -3,6 +3,7 @@ package com.company.makepub.app.usecase.scripture;
 import com.company.makepub.app.domain.ScriptureAddress;
 import com.company.makepub.app.gateway.UUIDGenerator;
 import com.company.makepub.app.usecase.types.BibleReader;
+import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -23,8 +24,9 @@ public class LinkScriptures {
         this.nwtpReader = nwtpReader;
         this.tnmReader = tnmReader;
     }
-    
-    public String execute(String originalText) {
+
+    @Nonnull
+    public String execute(@Nonnull String originalText) {
         Matcher matcher = makeRegex.getMatcher(originalText);
         String lastBookName="";
         StringBuilder generatedScriptureContents = new StringBuilder();
@@ -55,7 +57,8 @@ public class LinkScriptures {
         return stringLinkedHtml + "\n</body>\n</html>";
     }
 
-    private String getScriptureFromBible(ScriptureAddress address) {
+    @Nonnull
+    private String getScriptureFromBible(@Nonnull ScriptureAddress address) {
         if(address.book()==null) {
             return "";
         }
@@ -69,7 +72,8 @@ public class LinkScriptures {
         return scripture;
     }
 
-    private String generateScriptureContents(String uuid, String scriptureAddressText, List<ScriptureAddress> scriptureAddresses) {
+    @Nonnull
+    private String generateScriptureContents(@Nonnull String uuid, String scriptureAddressText, @Nonnull List<ScriptureAddress> scriptureAddresses) {
         StringBuilder footnotes = new StringBuilder();
         StringBuilder contents = new StringBuilder();
         for(ScriptureAddress scriptureAddress : scriptureAddresses) {
@@ -91,7 +95,7 @@ public class LinkScriptures {
                 </aside>""".formatted(uuid, footnotes);
     }
 
-    private void linkScripture(String scriptureAddress, Matcher matcher, final String uuid) {
+    private void linkScripture(@Nonnull String scriptureAddress, @Nonnull Matcher matcher, @Nonnull final String uuid) {
         String optionsForTagA = "epub:type=\"noteref\"";
         String linkedScripture = """
                  <a %s href="#%s">%s</a>""".formatted(optionsForTagA, uuid, scriptureAddress);

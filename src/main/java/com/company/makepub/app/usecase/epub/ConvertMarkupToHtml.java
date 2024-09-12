@@ -2,6 +2,7 @@ package com.company.makepub.app.usecase.epub;
 
 import com.company.makepub.app.gateway.UUIDGenerator;
 import com.company.makepub.app.usecase.types.StringConversor;
+import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +19,9 @@ public class ConvertMarkupToHtml implements StringConversor {
         this.uuidGenerator = uuidGenerator;
     }
 
+    @Nonnull
     @Override
-    public String convert(final String text) {
+    public String convert(@Nonnull final String text) {
         StringBuilder textConverted = new StringBuilder();
         List<String> lines = List.of(text.split("\n"));
         for(String line : lines) {
@@ -31,7 +33,8 @@ public class ConvertMarkupToHtml implements StringConversor {
         return textConverted.toString().trim();
     }
 
-    private String applyMarkups(String line, MarkupEnum markupEnum) {
+    @Nonnull
+    private String applyMarkups(@Nonnull String line, @Nonnull MarkupEnum markupEnum) {
         int index = line.indexOf(markupEnum.getId());
         if(markupEnum.isParagraph() && index==0){
             line = convertLine(markupEnum, line, index);
@@ -41,7 +44,8 @@ public class ConvertMarkupToHtml implements StringConversor {
         return line;
     }
 
-    private String formatAsNotParagraph(MarkupEnum markupEnum, String line, int index) {
+    @Nonnull
+    private String formatAsNotParagraph(@Nonnull MarkupEnum markupEnum, @Nonnull String line, int index) {
         while (index >= 0) {
             int lineSize = line.length();
             line = convertLine(markupEnum, line, index);
@@ -52,7 +56,8 @@ public class ConvertMarkupToHtml implements StringConversor {
         return line;
     }
 
-    private String convertLine(MarkupEnum markupEnum, final String text, final int firstIndex) {
+    @Nonnull
+    private String convertLine(@Nonnull MarkupEnum markupEnum, @Nonnull final String text, final int firstIndex) {
         String textConverted = text;
         if(markupEnum.isParagraph()) {
             textConverted = convertLineAsBlock(markupEnum, textConverted);
@@ -76,7 +81,8 @@ public class ConvertMarkupToHtml implements StringConversor {
         return textConverted;
     }
 
-    private String convertLineAsQuestionWithBox(final String textConverted) {
+    @Nonnull
+    private String convertLineAsQuestionWithBox(@Nonnull final String textConverted) {
         String uuidQuestion = uuidGenerator.generate();
         String questionBox = """
                 <div class="gen-field">
@@ -85,7 +91,8 @@ public class ConvertMarkupToHtml implements StringConversor {
         return textConverted + questionBox;
     }
 
-    private String convertLineAsBlock(MarkupEnum markupEnum, final String text) {
+    @Nonnull
+    private String convertLineAsBlock(@Nonnull MarkupEnum markupEnum, @Nonnull final String text) {
         String textConverted;
         try{
             final String regex = "^(" + markupEnum.getId() + ")(\\d{1,2}[^.])";
@@ -101,7 +108,8 @@ public class ConvertMarkupToHtml implements StringConversor {
         return textConverted;
     }
 
-    private String replaceVariableFootnote(MarkupEnum markupEnum, final String text) {
+    @Nonnull
+    private String replaceVariableFootnote(@Nonnull MarkupEnum markupEnum, @Nonnull final String text) {
         String idFootnoteVariable = "{idFootNote}";
         String textConverted = text;
         if(markupEnum.isFootnoteSymbol()) {
@@ -117,7 +125,8 @@ public class ConvertMarkupToHtml implements StringConversor {
         return textConverted;
     }
 
-    private String replaceAt(final int index, final String text, final String html){
+    @Nonnull
+    private String replaceAt(final int index, @Nonnull final String text, @Nonnull final String html){
         return text.substring(0, index)
                 + html
                 + text.substring(index + 1);

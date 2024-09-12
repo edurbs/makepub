@@ -3,25 +3,26 @@ package com.company.makepub.utils.htmlparser;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.gateway.UrlReader;
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
+import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotNull;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
 public class JsoupHtmlParser implements HtmlParser {
 
-    private UrlReader urlReader;
+    private final UrlReader urlReader;
 
     public JsoupHtmlParser(UrlReader urlReader) {
         this.urlReader = urlReader;
     }
 
     @Override
+    @Nonnull
     public String parse(@NotNull String site, @NotNull String tag) throws UseCaseException {
         Document doc = getDocument(site);
         Element tagElement = doc.getElementById(tag);
@@ -32,7 +33,8 @@ public class JsoupHtmlParser implements HtmlParser {
     }
 
     @Override
-    public String query(String site, String query){
+    @Nonnull
+    public String query(@Nonnull String site, @NotNull String query){
         Document doc;
         try{
             doc = getDocument(site);
@@ -60,7 +62,8 @@ public class JsoupHtmlParser implements HtmlParser {
 
 
 
-    private  String getTagContent(String tagContent) {
+    @Nonnull
+    private  String getTagContent(@Nonnull String tagContent) {
         if(tagContent.isBlank()) {
             return "";
         }
@@ -80,7 +83,8 @@ public class JsoupHtmlParser implements HtmlParser {
         return sb.toString();
     }
 
-    private @NotNull Document getDocument(String site) {
+    @Nonnull
+    private @NotNull Document getDocument(@NotNull String site) {
         try {
             return Jsoup.connect(site).get();
         } catch (Exception e) {
@@ -89,7 +93,8 @@ public class JsoupHtmlParser implements HtmlParser {
     }
 
     @Override
-    public String getTextBetweenTagId(String site, String tagIdStart, String tagIdEnd, List<String> tagsToRemove) {
+    @Nonnull
+    public String getTextBetweenTagId(@NotNull String site, @NotNull String tagIdStart, @NotNull String tagIdEnd, @NotNull List<String> tagsToRemove) {
         String scriptureText = "";
         String siteText = urlReader.execute(site);
         int startIndex = siteText.indexOf(tagIdStart);
@@ -103,7 +108,8 @@ public class JsoupHtmlParser implements HtmlParser {
         return removeHtmlTags(scriptureText, tagsToRemove);
     }
 
-    private String removeHtmlTags(String scriptureText, List<String> tagsToRemove) {
+    @Nonnull
+    private String removeHtmlTags(@NotNull String scriptureText, @NotNull List<String> tagsToRemove) {
         Document document = Jsoup.parse(scriptureText);
         String cssQuery = String.join(", ", tagsToRemove);
         document.select(cssQuery).remove();

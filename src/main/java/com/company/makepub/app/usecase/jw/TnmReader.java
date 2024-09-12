@@ -4,6 +4,7 @@ import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.ScriptureAddress;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.usecase.types.BibleReader;
+import jakarta.annotation.Nonnull;
 
 public class TnmReader implements BibleReader {
 
@@ -13,18 +14,21 @@ public class TnmReader implements BibleReader {
         this.htmlParser = htmlParser;
     }
 
+    @Nonnull
     @Override
     public String getScripture(String book, int chapter, int verse) {
         throw new UnsupportedOperationException();
     }
 
+    @Nonnull
     @Override
     public String getScripture(String book, int chapter, int startVerse, int endVerse) {
         throw new UnsupportedOperationException();
     }
 
+    @Nonnull
     @Override
-    public String getScripture(ScriptureAddress scriptureAddress) {
+    public String getScripture(@Nonnull ScriptureAddress scriptureAddress) {
         // id="v58-2-6-1"
         // id="v58-2-6-2" próximo §
         // v58 número do livro
@@ -54,7 +58,8 @@ public class TnmReader implements BibleReader {
         return resultText;
     }
 
-    private String getChapterSite(ScriptureAddress scriptureAddress){
+    @Nonnull
+    private String getChapterSite(@Nonnull ScriptureAddress scriptureAddress){
         // https://wol.jw.org/xav/wol/b/r511/lp-xv/nwtp/18/2
         // job book 18 chapter 2
         Book book = scriptureAddress.book();
