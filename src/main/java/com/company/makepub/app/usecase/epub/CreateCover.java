@@ -81,8 +81,6 @@ public class CreateCover {
         g2d.drawString(texto, x, y);
     }
 
-    // Método para quebrar o texto em múltiplas linhas com base na largura máxima
-    
     private List<String> quebrarTextoEmLinhas( Graphics2D g2d,  String texto, int larguraMaxima) {
         List<String> linhas = new ArrayList<>();
         FontMetrics metrics = g2d.getFontMetrics(g2d.getFont());
