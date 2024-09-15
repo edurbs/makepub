@@ -1,6 +1,5 @@
 package com.company.makepub.app.usecase.types;
 
-import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -136,7 +135,7 @@ public enum EpubMap {
             </package>
             """);
 
-    @Nonnull
+    
     private static String loadCss() {
         try (InputStream inputStream = EpubMap.class.getClassLoader().getResourceAsStream("epub/epubs.css")) {
             if (inputStream == null) {

@@ -3,7 +3,6 @@ package com.company.makepub.app.utils.htmlparser;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.gateway.UrlReader;
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
-import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
@@ -22,7 +21,7 @@ public class JsoupHtmlParser implements HtmlParser {
     private final UrlReader urlReader;
 
     @Override
-    @Nonnull
+    
     public String parse(@NotNull String site, @NotNull String tag) throws UseCaseException {
         Document doc = getDocument(site);
         Element tagElement = doc.getElementById(tag);
@@ -33,8 +32,8 @@ public class JsoupHtmlParser implements HtmlParser {
     }
 
     @Override
-    @Nonnull
-    public String query(@Nonnull String site, @NotNull String query){
+    
+    public String query( String site, @NotNull String query){
         Document doc;
         try{
             doc = getDocument(site);
@@ -62,8 +61,8 @@ public class JsoupHtmlParser implements HtmlParser {
 
 
 
-    @Nonnull
-    private  String getTagContent(@Nonnull String tagContent) {
+    
+    private  String getTagContent( String tagContent) {
         if(tagContent.isBlank()) {
             return "";
         }
@@ -83,7 +82,7 @@ public class JsoupHtmlParser implements HtmlParser {
         return sb.toString();
     }
 
-    @Nonnull
+    
     private @NotNull Document getDocument(@NotNull String site) {
         try {
             return Jsoup.connect(site).get();
@@ -93,7 +92,7 @@ public class JsoupHtmlParser implements HtmlParser {
     }
 
     @Override
-    @Nonnull
+    
     public String getTextBetweenTagId(@NotNull String site, @NotNull String tagIdStart, @NotNull String tagIdEnd, @NotNull List<String> tagsToRemove) {
         String scriptureText = "";
         String siteText = urlReader.execute(site);
@@ -108,7 +107,7 @@ public class JsoupHtmlParser implements HtmlParser {
         return removeHtmlTags(scriptureText, tagsToRemove);
     }
 
-    @Nonnull
+    
     private String removeHtmlTags(@NotNull String scriptureText, @NotNull List<String> tagsToRemove) {
         Document document = Jsoup.parse(scriptureText);
         String cssQuery = String.join(", ", tagsToRemove);

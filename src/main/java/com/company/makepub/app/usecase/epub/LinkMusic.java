@@ -5,7 +5,6 @@ import com.company.makepub.app.gateway.UUIDGenerator;
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
 import com.company.makepub.app.usecase.types.EpubMap;
 import com.company.makepub.app.usecase.types.LinkReferencePage;
-import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -19,14 +18,16 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class LinkMusic implements LinkReferencePage {
 
+    
     private final HtmlParser htmlParser;
+    
     private final UUIDGenerator uuidGenerator;
 
     private String musicPage = "";
 
     @Override
-    @Nonnull
-    public Map<EpubMap, String> execute(@Nonnull final String text) {
+    
+    public Map<EpubMap, String> execute( final String text) {
         StringBuilder linkedText = new StringBuilder();
         List<String> lines = List.of(text.split("\n"));
         for(String line : lines) {
@@ -42,7 +43,7 @@ public class LinkMusic implements LinkReferencePage {
         return result;
     }
 
-    @Nonnull
+    
     private String finalizeMusicPage() {
         String start = """
                 <?xml version="1.0" encoding="utf-8"?>
@@ -55,8 +56,8 @@ public class LinkMusic implements LinkReferencePage {
         return start + musicPage + end;
     }
 
-    @Nonnull
-    private String linkLine(@Nonnull final String text) {
+    
+    private String linkLine( final String text) {
         String musicId = uuidGenerator.generate();
         String regex = "\\s\\d{1,3}\\s";
         Pattern pattern = Pattern.compile(regex);
@@ -72,8 +73,8 @@ public class LinkMusic implements LinkReferencePage {
         return "<a href=\"Section0002.xhtml#" + musicId + "\">" + text + "</a>";
     }
 
-    @Nonnull
-    private String getMusicText(@Nonnull String musicNumber, @Nonnull String musicId) {
+    
+    private String getMusicText( String musicNumber,  String musicId) {
         String start = "<aside id=\""+musicId+"\" epub:type=\"footnote\">";
         String end = "</aside><br/><hr/><br/>";
         StringBuilder sb = new StringBuilder();
@@ -91,8 +92,8 @@ public class LinkMusic implements LinkReferencePage {
         return start + musicText + end;
     }
 
-    @Nonnull
-    private String parseMusicPage(@Nonnull String musicNumber) {
+    
+    private String parseMusicPage( String musicNumber) {
         // https://wol.jw.org/xav/wol/d/r511/lp-xv/1102016814 14
         // https://wol.jw.org/xav/wol/d/r511/lp-xv/1102016860 60
         // https://wol.jw.org/xav/wol/d/r511/lp-xv/1102016951 151

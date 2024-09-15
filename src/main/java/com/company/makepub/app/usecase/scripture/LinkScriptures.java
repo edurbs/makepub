@@ -3,7 +3,6 @@ package com.company.makepub.app.usecase.scripture;
 import com.company.makepub.app.domain.ScriptureAddress;
 import com.company.makepub.app.gateway.UUIDGenerator;
 import com.company.makepub.app.usecase.types.BibleReader;
-import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,10 +19,8 @@ public class LinkScriptures {
     private final BibleReader nwtpReader;
     private final BibleReader tnmReader;
 
-    private final StringBuilder linkedHtml = new StringBuilder();
-
-    @Nonnull
-    public String execute(@Nonnull String originalText) {
+    public String execute( String originalText) {
+        StringBuilder linkedHtml = new StringBuilder();
         Matcher matcher = makeRegex.getMatcher(originalText);
         String lastBookName="";
         StringBuilder generatedScriptureContents = new StringBuilder();
@@ -41,7 +38,7 @@ public class LinkScriptures {
             }else{
                 scriptureAddressText = " "+scriptureAddressText;
             }
-            linkScripture(scriptureAddressText, matcher, uuid);
+            linkScripture(scriptureAddressText, matcher, uuid, linkedHtml);
             generatedScriptureContents.append(generateScriptureContents(uuid, scriptureAddressText, scriptureAddresses));
             lastBookName = extractor.getBookName();
         }
@@ -55,8 +52,8 @@ public class LinkScriptures {
         return stringLinkedHtml + "\n</body>\n</html>";
     }
 
-    @Nonnull
-    private String getScriptureFromBible(@Nonnull ScriptureAddress address) {
+    
+    private String getScriptureFromBible( ScriptureAddress address) {
         if(address.book()==null) {
             return "";
         }
@@ -70,8 +67,8 @@ public class LinkScriptures {
         return scripture;
     }
 
-    @Nonnull
-    private String generateScriptureContents(@Nonnull String uuid, String scriptureAddressText, @Nonnull List<ScriptureAddress> scriptureAddresses) {
+    
+    private String generateScriptureContents( String uuid, String scriptureAddressText,  List<ScriptureAddress> scriptureAddresses) {
         StringBuilder footnotes = new StringBuilder();
         StringBuilder contents = new StringBuilder();
         for(ScriptureAddress scriptureAddress : scriptureAddresses) {
@@ -93,7 +90,7 @@ public class LinkScriptures {
                 </aside>""".formatted(uuid, footnotes);
     }
 
-    private void linkScripture(@Nonnull String scriptureAddress, @Nonnull Matcher matcher, @Nonnull final String uuid) {
+    private void linkScripture( String scriptureAddress,  Matcher matcher,  final String uuid, StringBuilder linkedHtml) {
         String optionsForTagA = "epub:type=\"noteref\"";
         String linkedScripture = """
                  <a %s href="#%s">%s</a>""".formatted(optionsForTagA, uuid, scriptureAddress);

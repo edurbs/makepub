@@ -4,7 +4,6 @@ import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.ScriptureAddress;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.usecase.types.BibleReader;
-import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -12,23 +11,24 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class NwtpReader implements BibleReader {
 
+    
     private final HtmlParser htmlParser;
 
-    @Nonnull
+    
     @Override
     public String getScripture(String book, int chapter, int verse) {
         throw new UnsupportedOperationException();
     }
 
-    @Nonnull
+    
     @Override
     public String getScripture(String book, int chapter, int startVerse, int endVerse) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    @Nonnull
-    public String getScripture(@Nonnull ScriptureAddress scriptureAddress) {
+    
+    public String getScripture( ScriptureAddress scriptureAddress) {
         // id="v58-2-6-1"
         // id="v58-2-6-2" próximo §
         // v58 número do livro
@@ -55,8 +55,8 @@ public class NwtpReader implements BibleReader {
         return result.toString();
     }
 
-    @Nonnull
-    private String getChapterSite(@Nonnull ScriptureAddress scriptureAddress){
+    
+    private String getChapterSite( ScriptureAddress scriptureAddress){
         // https://wol.jw.org/xav/wol/b/r511/lp-xv/nwtp/18/2
         // job book 18 chapter 2
         Book book = scriptureAddress.book();

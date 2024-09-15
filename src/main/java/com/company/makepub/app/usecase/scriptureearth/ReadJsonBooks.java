@@ -1,12 +1,11 @@
 package com.company.makepub.app.usecase.scriptureearth;
 
-import com.company.makepub.app.domain.BookAddress;
 import com.company.makepub.app.domain.Book;
+import com.company.makepub.app.domain.BookAddress;
 import com.company.makepub.app.domain.JsonBookRecord;
 import com.company.makepub.app.domain.ScriptureEarthBookName;
 import com.company.makepub.app.gateway.JsonParser;
 import com.company.makepub.app.gateway.UrlReader;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,7 +21,7 @@ public class ReadJsonBooks {
     private final JsonParser<JsonBookRecord> jsonParser;
     private final UrlReader urlReader;
 
-    @Nonnull
+    
     public List<BookAddress> execute() {
         String jsonBooks = getJsonBooks();
         List<JsonBookRecord> jsonBookRecords = jsonParser.parse(jsonBooks, JsonBookRecord[].class);
@@ -30,7 +29,7 @@ public class ReadJsonBooks {
         return jsonBookRecords
                 .stream()
                 .map(record -> {
-                    if(record.ref() == null) {
+                    if(record == null) {
                         return new BookAddress(null, null);
                     }
                     return new BookAddress(
@@ -42,7 +41,7 @@ public class ReadJsonBooks {
     }
 
     @Nullable
-    private Book getEnumFromName(@Nonnull final String link) {
+    private Book getEnumFromName( final String link) {
         // given xav-19-LUK-001.html then extract LUK
         int index = link.indexOf("-") + 4;
         if (index >= 0) {
@@ -54,15 +53,15 @@ public class ReadJsonBooks {
         return null;
     }
 
-    @Nonnull
+    
     private String getJsonBooks() {
         String urlXav = "https://www.scriptureearth.org/data/xav/sab/xav/js/book-names.js";
         String jsonBooks = urlReader.execute(urlXav);
         return fixJsonString(jsonBooks);
     }
 
-    @Nonnull
-    private String fixJsonString(@Nonnull String jsonBooks) {
+    
+    private String fixJsonString( String jsonBooks) {
         // remove "var books =" at start
         jsonBooks = jsonBooks.substring(11);
         // remove last 3 lines

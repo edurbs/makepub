@@ -1,6 +1,5 @@
 package com.company.makepub.app.domain;
 
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -76,9 +75,10 @@ public enum ScriptureEarthBookName {
     BOOK_JUD(Book.BOOK_65_JUD),
     BOOK_REV(Book.BOOK_66_REV);
 
+    
     private final Book book;
 
-    @Nonnull
+    
     public String getName() {
         String bookString = this.toString();
         if(bookString==null || bookString.isBlank() || bookString.length()<5){
@@ -88,7 +88,7 @@ public enum ScriptureEarthBookName {
     }
 
     @Nullable
-    public static ScriptureEarthBookName fromScriptureEarthString(@Nonnull String bookName) {
+    public static ScriptureEarthBookName fromScriptureEarthString( String bookName) {
         for (ScriptureEarthBookName name : ScriptureEarthBookName.values()) {
             String enumName = name.getName();
             if (enumName.equals(bookName)) {
@@ -99,7 +99,7 @@ public enum ScriptureEarthBookName {
     }
 
     @Nullable
-    public static ScriptureEarthBookName fromMepsFormatEnum(@Nonnull Book book) {
+    public static ScriptureEarthBookName fromMepsFormatEnum( Book book) {
         for (ScriptureEarthBookName scriptureEarthBookName : ScriptureEarthBookName.values()) {
             if (scriptureEarthBookName.book.equals(book)) {
                 return scriptureEarthBookName;
@@ -108,7 +108,7 @@ public enum ScriptureEarthBookName {
         return null;
     }
 
-    public static Book getMepsFormatFromScriptureEarthEnum(@Nonnull ScriptureEarthBookName scriptureEarthBookName) {
+    public static Book getMepsFormatFromScriptureEarthEnum( ScriptureEarthBookName scriptureEarthBookName) {
         return scriptureEarthBookName.book;
     }
 

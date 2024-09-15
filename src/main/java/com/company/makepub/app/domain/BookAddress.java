@@ -1,4 +1,6 @@
 package com.company.makepub.app.domain;
 
-public record BookAddress(Book book, String url) {
+import org.springframework.lang.Nullable;
+
+public record BookAddress(@Nullable Book book, @Nullable String url) {
 }

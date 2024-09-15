@@ -81,7 +81,6 @@ public enum Book {
     private final String abbreviation2;
     private final Integer[] scriptures;
 
-    @Nonnull
     public String getMepsFormat() {
         String bookString = this.toString();
         if(bookString!=null && bookString.length()>5) {
@@ -98,7 +97,7 @@ public enum Book {
         return scriptures[chapter - 1];
     }
 
-    public static int getOrdinalValue(@Nonnull String bookString) {
+    public static int getOrdinalValue(String bookString) {
         if(bookString.isBlank()) {
             return 0;
         }

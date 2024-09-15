@@ -64,8 +64,11 @@ public enum MarkupEnum {
             "", true, false, false, false)
     ;
 
+    
     private final String id;
+    
     private final String htmlStart;
+    
     private final String htmlEnd;
     private final boolean isParagraph;
     private final boolean isFootnoteSymbol;

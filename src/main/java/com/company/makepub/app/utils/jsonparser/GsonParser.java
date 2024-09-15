@@ -2,7 +2,6 @@ package com.company.makepub.app.utils.jsonparser;
 
 import com.company.makepub.app.gateway.JsonParser;
 import com.google.gson.Gson;
-import jakarta.annotation.Nonnull;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -10,8 +9,8 @@ import java.util.List;
 @Component
 public class GsonParser<T> implements JsonParser<T>  {
     @Override
-    @Nonnull
-    public List<T> parse(@Nonnull String json, @Nonnull Class<T[]> clazz) {
+    
+    public List<T> parse( String json,  Class<T[]> clazz) {
         if(json.isBlank()) {
             return List.of();
         }

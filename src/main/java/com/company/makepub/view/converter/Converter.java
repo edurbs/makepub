@@ -17,9 +17,9 @@ import io.jmix.flowui.download.DownloadFormat;
 import io.jmix.flowui.download.Downloader;
 import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.view.*;
-import jakarta.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
 
 import java.util.concurrent.TimeUnit;
 
@@ -65,14 +65,16 @@ public class Converter extends StandardView {
     }
 
     private class ConversionTask extends BackgroundTask<Integer, Void> {
+        @Nullable
         private EpubFile epubFile;
+
         public ConversionTask() {
             super(10, TimeUnit.MINUTES, Converter.this);
         }
 
         @Override
-        public void done(@Nonnull Void result) {
-            if(epubFile.content()!=null){
+        public void done( Void result) {
+            if(epubFile != null) {
                 notifications.create("Epub criado com sucesso!")
                         .withType(Notifications.Type.SUCCESS)
                         .withPosition(Notification.Position.BOTTOM_END)
@@ -86,8 +88,7 @@ public class Converter extends StandardView {
         }
 
         @Override
-        @Nonnull
-        public Void run(@Nonnull TaskLifeCycle<Integer> taskLifeCycle) {
+        public Void run( TaskLifeCycle<Integer> taskLifeCycle) {
             String inputText = textAreaInput.getValue();
             String subtitulo = textFieldSubtitulo.getValue();
             String periodo = textFieldPeriodo.getValue();
@@ -97,8 +98,4 @@ public class Converter extends StandardView {
             return null;
         }
     }
-
-
-
-
 }

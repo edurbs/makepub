@@ -1,7 +1,7 @@
 package com.company.makepub.app.usecase.scripture;
 
-import jakarta.annotation.Nonnull;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import java.util.regex.Matcher;
@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 public class ScriptureAddressExtractor {
 
     private final Matcher matcher;
-    @Nonnull
+    @NonNull
     private String lastBookName;
 
     private String allVerses = "";

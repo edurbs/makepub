@@ -1,6 +1,5 @@
 package com.company.makepub.app.usecase.epub;
 
-import jakarta.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -18,8 +17,8 @@ public class CreateCover {
 
     private static final Logger log = LoggerFactory.getLogger(CreateCover.class);
 
-    @Nonnull
-    public byte[] execute(@Nonnull String titulo, @Nonnull String subtitulo, @Nonnull String periodo, @Nonnull String estudo) {
+    
+    public byte[] execute( String titulo,  String subtitulo,  String periodo,  String estudo) {
         int largura = 800;  // Largura da imagem
         int altura = 1132;  // Altura da imagem
         BufferedImage imagem = new BufferedImage(largura, altura, BufferedImage.TYPE_INT_ARGB);
@@ -76,15 +75,15 @@ public class CreateCover {
         return new byte[0];
     }
 
-    private void desenharTextoCentralizado(@Nonnull Graphics2D g2d, @Nonnull String texto, int largura, int y) {
+    private void desenharTextoCentralizado( Graphics2D g2d,  String texto, int largura, int y) {
         FontMetrics metrics = g2d.getFontMetrics(g2d.getFont());
         int x = (largura - metrics.stringWidth(texto)) / 2;
         g2d.drawString(texto, x, y);
     }
 
     // Método para quebrar o texto em múltiplas linhas com base na largura máxima
-    @Nonnull
-    private List<String> quebrarTextoEmLinhas(@Nonnull Graphics2D g2d, @Nonnull String texto, int larguraMaxima) {
+    
+    private List<String> quebrarTextoEmLinhas( Graphics2D g2d,  String texto, int larguraMaxima) {
         List<String> linhas = new ArrayList<>();
         FontMetrics metrics = g2d.getFontMetrics(g2d.getFont());
 

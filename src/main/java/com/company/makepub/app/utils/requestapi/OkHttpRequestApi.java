@@ -2,7 +2,6 @@ package com.company.makepub.app.utils.requestapi;
 
 import com.company.makepub.app.gateway.RequestApi;
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
-import jakarta.annotation.Nonnull;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 
@@ -11,8 +10,8 @@ import java.io.IOException;
 @Component
 public class OkHttpRequestApi implements RequestApi {
     @Override
-    @Nonnull
-    public String get(@Nonnull String apiUrl, @Nonnull String textToConvert) throws UseCaseException {
+    
+    public String get( String apiUrl,  String textToConvert) throws UseCaseException {
         if(textToConvert.isBlank()) {
             return "";
         }

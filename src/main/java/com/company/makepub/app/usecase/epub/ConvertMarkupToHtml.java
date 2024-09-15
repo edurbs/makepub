@@ -2,7 +2,6 @@ package com.company.makepub.app.usecase.epub;
 
 import com.company.makepub.app.gateway.UUIDGenerator;
 import com.company.makepub.app.usecase.types.StringConversor;
-import jakarta.annotation.Nonnull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,14 +14,15 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class ConvertMarkupToHtml implements StringConversor {
 
+    
     private final UUIDGenerator uuidGenerator;
 
     private final List<String> footNotes = new ArrayList<>();
     private int footNoteIndex = 0;
 
-    @Nonnull
+    
     @Override
-    public String convert(@Nonnull final String text) {
+    public String convert( final String text) {
         StringBuilder textConverted = new StringBuilder();
         List<String> lines = List.of(text.split("\n"));
         for(String line : lines) {
@@ -34,8 +34,8 @@ public class ConvertMarkupToHtml implements StringConversor {
         return textConverted.toString().trim();
     }
 
-    @Nonnull
-    private String applyMarkups(@Nonnull String line, @Nonnull MarkupEnum markupEnum) {
+    
+    private String applyMarkups( String line,  MarkupEnum markupEnum) {
         int index = line.indexOf(markupEnum.getId());
         if(markupEnum.isParagraph() && index==0){
             line = convertLine(markupEnum, line, index);
@@ -45,8 +45,8 @@ public class ConvertMarkupToHtml implements StringConversor {
         return line;
     }
 
-    @Nonnull
-    private String formatAsNotParagraph(@Nonnull MarkupEnum markupEnum, @Nonnull String line, int index) {
+    
+    private String formatAsNotParagraph( MarkupEnum markupEnum,  String line, int index) {
         while (index >= 0) {
             int lineSize = line.length();
             line = convertLine(markupEnum, line, index);
@@ -57,8 +57,8 @@ public class ConvertMarkupToHtml implements StringConversor {
         return line;
     }
 
-    @Nonnull
-    private String convertLine(@Nonnull MarkupEnum markupEnum, @Nonnull final String text, final int firstIndex) {
+    
+    private String convertLine( MarkupEnum markupEnum,  final String text, final int firstIndex) {
         String textConverted = text;
         if(markupEnum.isParagraph()) {
             textConverted = convertLineAsBlock(markupEnum, textConverted);
@@ -82,8 +82,8 @@ public class ConvertMarkupToHtml implements StringConversor {
         return textConverted;
     }
 
-    @Nonnull
-    private String convertLineAsQuestionWithBox(@Nonnull final String textConverted) {
+    
+    private String convertLineAsQuestionWithBox( final String textConverted) {
         String uuidQuestion = uuidGenerator.generate();
         String questionBox = """
                 <div class="gen-field">
@@ -92,8 +92,8 @@ public class ConvertMarkupToHtml implements StringConversor {
         return textConverted + questionBox;
     }
 
-    @Nonnull
-    private String convertLineAsBlock(@Nonnull MarkupEnum markupEnum, @Nonnull final String text) {
+    
+    private String convertLineAsBlock( MarkupEnum markupEnum,  final String text) {
         String textConverted;
         try{
             final String regex = "^(" + markupEnum.getId() + ")(\\d{1,2}[^.])";
@@ -109,8 +109,8 @@ public class ConvertMarkupToHtml implements StringConversor {
         return textConverted;
     }
 
-    @Nonnull
-    private String replaceVariableFootnote(@Nonnull MarkupEnum markupEnum, @Nonnull final String text) {
+    
+    private String replaceVariableFootnote( MarkupEnum markupEnum,  final String text) {
         String idFootnoteVariable = "{idFootNote}";
         String textConverted = text;
         if(markupEnum.isFootnoteSymbol()) {
@@ -126,8 +126,8 @@ public class ConvertMarkupToHtml implements StringConversor {
         return textConverted;
     }
 
-    @Nonnull
-    private String replaceAt(final int index, @Nonnull final String text, @Nonnull final String html){
+    
+    private String replaceAt(final int index,  final String text,  final String html){
         return text.substring(0, index)
                 + html
                 + text.substring(index + 1);

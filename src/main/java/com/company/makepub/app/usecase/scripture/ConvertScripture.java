@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ConvertScripture {
 
+    
     private final RequestApi requestApi;
 
     public String execute(final String text) {
