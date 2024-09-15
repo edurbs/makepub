@@ -37,7 +37,8 @@ import io.jmix.flowui.download.Downloader;
 import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.view.*;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.concurrent.TimeUnit;
@@ -71,6 +72,8 @@ public class Converter extends StandardView {
     protected BackgroundTaskHandler<Void> taskHandler;
     @Autowired
     private Dialogs dialogs;
+
+    Logger log = LoggerFactory.getLogger(Converter.class);
 
     @Subscribe(id = "convertButton", subject = "clickListener")
     public void onConvertButtonClick(final ClickEvent<JmixButton> event) {
@@ -107,6 +110,7 @@ public class Converter extends StandardView {
         @Nonnull
         public Void run(@Nonnull TaskLifeCycle<Integer> taskLifeCycle) {
             String inputText = textAreaInput.getValue();
+            log.info(inputText);
             String subtitulo = textFieldSubtitulo.getValue();
             String periodo = textFieldPeriodo.getValue();
             String estudo = textFieldEstudo.getValue();
