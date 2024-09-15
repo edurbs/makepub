@@ -10,8 +10,6 @@ import com.vaadin.flow.router.Route;
 import io.jmix.flowui.Dialogs;
 import io.jmix.flowui.Notifications;
 import io.jmix.flowui.backgroundtask.BackgroundTask;
-import io.jmix.flowui.backgroundtask.BackgroundTaskHandler;
-import io.jmix.flowui.backgroundtask.BackgroundWorker;
 import io.jmix.flowui.backgroundtask.TaskLifeCycle;
 import io.jmix.flowui.component.textarea.JmixTextArea;
 import io.jmix.flowui.component.textfield.TypedTextField;
@@ -20,8 +18,7 @@ import io.jmix.flowui.download.Downloader;
 import io.jmix.flowui.kit.component.button.JmixButton;
 import io.jmix.flowui.view.*;
 import jakarta.annotation.Nonnull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.concurrent.TimeUnit;
@@ -30,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 @Route(value = "Converter", layout = MainView.class)
 @ViewController("Converter")
 @ViewDescriptor("Converter.xml")
+@Slf4j
 public class Converter extends StandardView {
 
     @ViewComponent
@@ -51,12 +49,7 @@ public class Converter extends StandardView {
     private JmixButton convertButton;
 
     @Autowired
-    protected BackgroundWorker backgroundWorker;
-    protected BackgroundTaskHandler<Void> taskHandler;
-    @Autowired
     private Dialogs dialogs;
-
-    Logger log = LoggerFactory.getLogger(Converter.class);
 
     @Autowired
     private EpubCreator epubCreator;
@@ -96,24 +89,10 @@ public class Converter extends StandardView {
         @Nonnull
         public Void run(@Nonnull TaskLifeCycle<Integer> taskLifeCycle) {
             String inputText = textAreaInput.getValue();
-            log.info(inputText);
             String subtitulo = textFieldSubtitulo.getValue();
             String periodo = textFieldPeriodo.getValue();
             String estudo = textFieldEstudo.getValue();
-            //UUIDGenerator uuidGenerator = new MyUUIDGenerator();
-            //UrlReader javaUrlReader = new JavaUrlReader();
-            //HtmlParser htmlParser = new JsoupHtmlParser(javaUrlReader);
-            //ConvertMarkupToHtml markupConversor = new ConvertMarkupToHtml(uuidGenerator);
-            //LinkMusic linkMusic = new LinkMusic(htmlParser, uuidGenerator);
-            //LinkScriptures linkScriptures = getLinkScriptures(htmlParser, uuidGenerator);
-            //CreateCover createCover = new CreateCover();
-//            epubFile = new EpubCreator(
-//                    markupConversor,
-//                    linkMusic,
-//                    linkScriptures,
-//                    inputText,
-//                    createCover
-//            )
+            log.info(inputText);
             epubFile = epubCreator.execute(inputText,subtitulo, periodo, estudo);
             return null;
         }
