@@ -7,6 +7,7 @@ import com.company.makepub.app.usecase.types.EpubMap;
 import com.company.makepub.app.usecase.types.LinkReferencePage;
 import com.company.makepub.app.usecase.types.StringConversor;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -15,25 +16,25 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+@Component
+
 public class EpubCreator {
 
     private final StringConversor markupConversor;
     private final LinkReferencePage linkMusic;
     private final LinkScriptures linkScriptures;
-    private final String mainText;
-    private final Map<EpubMap, String> finalEpubMap = new HashMap<>();
     private final CreateCover createCover;
+    private final Map<EpubMap, String> finalEpubMap = new HashMap<>();
 
-    public EpubCreator(StringConversor markupConversor, LinkReferencePage linkMusic, LinkScriptures linkScriptures, String mainText, CreateCover createCover) {
+    public EpubCreator(StringConversor markupConversor, LinkReferencePage linkMusic, LinkScriptures linkScriptures, CreateCover createCover) {
         this.markupConversor = markupConversor;
         this.linkMusic = linkMusic;
         this.linkScriptures = linkScriptures;
-        this.mainText = mainText;
         this.createCover = createCover;
     }
 
     @Nonnull
-    public EpubFile execute(@Nonnull String subtitulo, @Nonnull String periodo, @Nonnull String estudo){
+    public EpubFile execute(@Nonnull String mainText, @Nonnull String subtitulo, @Nonnull String periodo, @Nonnull String estudo){
         String convertedText = markupConversor.convert(mainText);
         String linkedTextWithMusic = createLinkedMusic(convertedText);
         String linkedTextWithMusicAndScriptures = createLinkedScritpures(linkedTextWithMusic);

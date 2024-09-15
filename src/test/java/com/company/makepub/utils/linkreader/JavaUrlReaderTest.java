@@ -1,6 +1,7 @@
 package com.company.makepub.utils.linkreader;
 
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
+import com.company.makepub.app.utils.linkreader.JavaUrlReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

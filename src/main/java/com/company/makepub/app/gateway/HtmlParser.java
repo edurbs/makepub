@@ -1,7 +1,5 @@
 package com.company.makepub.app.gateway;
 
-import com.company.makepub.app.usecase.exceptions.UseCaseException;
-
 import java.util.List;
 
 public interface HtmlParser

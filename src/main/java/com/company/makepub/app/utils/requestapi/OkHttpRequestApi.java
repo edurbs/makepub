@@ -1,12 +1,14 @@
-package com.company.makepub.utils.requestapi;
+package com.company.makepub.app.utils.requestapi;
 
 import com.company.makepub.app.gateway.RequestApi;
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
 import jakarta.annotation.Nonnull;
 import okhttp3.*;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class OkHttpRequestApi implements RequestApi {
     @Override
     @Nonnull

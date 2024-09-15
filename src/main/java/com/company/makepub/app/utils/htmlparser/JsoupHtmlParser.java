@@ -1,4 +1,4 @@
-package com.company.makepub.utils.htmlparser;
+package com.company.makepub.app.utils.htmlparser;
 
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.gateway.UrlReader;
@@ -9,10 +9,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
 
+@Component
 public class JsoupHtmlParser implements HtmlParser {
 
     private final UrlReader urlReader;

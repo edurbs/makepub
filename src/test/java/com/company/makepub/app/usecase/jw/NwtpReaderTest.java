@@ -4,12 +4,9 @@ import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.ScriptureAddress;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.usecase.scripture.ConvertScripture;
-import com.company.makepub.utils.linkreader.JavaUrlReader;
-import com.company.makepub.utils.requestapi.OkHttpRequestApi;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 

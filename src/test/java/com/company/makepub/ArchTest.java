@@ -22,6 +22,7 @@ public class ArchTest {
                 .resideOutsideOfPackages(
                         "com.company.makepub.app.domain..",
                         "jakarta..",
+                        "org.springframework.stereotype..",
                         "java..")
                 .check(importedClasses);
     }
@@ -37,6 +38,7 @@ public class ArchTest {
                 .resideOutsideOfPackages(
                         "com.company.makepub.app..",
                         "jakarta..",
+                        "org.springframework.stereotype..",
                         "java..")
                 .allowEmptyShould(true)
                 .check(importedClasses);

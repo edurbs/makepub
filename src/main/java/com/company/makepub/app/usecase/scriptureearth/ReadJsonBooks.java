@@ -8,10 +8,13 @@ import com.company.makepub.app.gateway.JsonParser;
 import com.company.makepub.app.gateway.UrlReader;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@Component
 public class ReadJsonBooks {
 
     private final JsonParser<JsonBookRecord> jsonParser;

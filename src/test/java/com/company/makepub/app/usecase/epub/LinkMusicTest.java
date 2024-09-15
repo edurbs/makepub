@@ -42,7 +42,7 @@ class LinkMusicTest {
         Mockito.when(mockUuidGenTest.generate()).thenReturn("123");
         Mockito.when(mockParser.parse(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn("fake music");
 
-        var linkMusic = new LinkMusic(mockParser, mockUuidGenTest, musicTitle);
+        var linkMusic = new LinkMusic(mockParser, mockUuidGenTest);
 
         String expected = """
                 <body lang="PT-BR" style='tab-interval:35.4pt;word-wrap:break-word'>
@@ -59,7 +59,7 @@ class LinkMusicTest {
     @DisplayName("Should throw exception if not found music number")
     void shouldThrowExceptionWithoutMusicNumber() {
 
-        var linkMusic = new LinkMusic(mockParser, mockUuidGenTest, musicTitle);
+        var linkMusic = new LinkMusic(mockParser, mockUuidGenTest);
         String textGivenWithoutMusicNumber = """
             <body lang="PT-BR" style='tab-interval:35.4pt;word-wrap:break-word'>
             <h4 style="text-align: center;">ROMNHORÉ 16</h4>
@@ -75,7 +75,7 @@ class LinkMusicTest {
     @DisplayName("Should get the right music number")
     void musicNumberTest(){
         Mockito.when(mockParser.parse(ArgumentMatchers.any(), ArgumentMatchers.any())).thenReturn("DANHOꞌRE 58 fake music");
-        var linkMusic = new LinkMusic(mockParser, mockUuidGenTest, musicTitle);
+        var linkMusic = new LinkMusic(mockParser, mockUuidGenTest);
 
         String expected = "58";
         String linkedText = linkMusic.execute(CORRECT_TEXT_TO_TEST).get(EpubMap.TEXT);
@@ -96,7 +96,7 @@ class LinkMusicTest {
         String fakeMusic = "music text comes here";
         Mockito.when(mockParser.parse(ArgumentMatchers.any(), ArgumentMatchers.any()))
                 .thenReturn(fakeMusic);
-        var linkMusic = new LinkMusic(mockParser, mockUuidGenTest, musicTitle);
+        var linkMusic = new LinkMusic(mockParser, mockUuidGenTest);
         String musicText = linkMusic.execute(CORRECT_TEXT_TO_TEST).get(EpubMap.MUSIC).trim();
         String expected = """
                 <?xml version="1.0" encoding="utf-8"?>

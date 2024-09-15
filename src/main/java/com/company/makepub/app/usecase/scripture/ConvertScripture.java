@@ -1,7 +1,9 @@
 package com.company.makepub.app.usecase.scripture;
 
 import com.company.makepub.app.gateway.RequestApi;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ConvertScripture {
 
     private final RequestApi requestApi;

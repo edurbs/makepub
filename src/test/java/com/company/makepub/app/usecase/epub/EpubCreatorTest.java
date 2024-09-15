@@ -37,15 +37,15 @@ class EpubCreatorTest {
         String fakeMainText = "some main text";
         byte[] fakeCoverImage = new byte[10];
         CreateCover createCover = Mockito.mock(CreateCover.class);
-        this.epubCreator = new EpubCreator (mockMarkupConversor, mockLinkMusic, mockLinkScriptures, fakeMainText, createCover);
+        this.epubCreator = new EpubCreator (mockMarkupConversor, mockLinkMusic, mockLinkScriptures, createCover);
 
         Mockito.when(mockMarkupConversor.convert(ArgumentMatchers.any())).thenReturn("some text");
         Mockito.when(mockLinkMusic.execute(ArgumentMatchers.any())).thenReturn(Map.of(EpubMap.MUSIC, "some text", EpubMap.TEXT, "some text"));
         Mockito.when(mockLinkScriptures.execute(ArgumentMatchers.any())).thenReturn( "some text");
 
-        EpubFile actual = epubCreator.execute("", "", "");
+        EpubFile actual = epubCreator.execute(fakeMainText,"", "", "");
 
-        assertDoesNotThrow(() -> epubCreator.execute("", "", ""));
+        assertDoesNotThrow(() -> epubCreator.execute(fakeMainText,"", "", ""));
         assertEquals("file.epub", actual.filename());
         assertNotNull(actual.content());
     }

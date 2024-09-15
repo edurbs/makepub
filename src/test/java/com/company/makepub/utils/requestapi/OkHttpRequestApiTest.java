@@ -1,5 +1,6 @@
 package com.company.makepub.utils.requestapi;
 
+import com.company.makepub.app.utils.requestapi.OkHttpRequestApi;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;

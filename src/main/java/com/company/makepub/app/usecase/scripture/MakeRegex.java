@@ -3,10 +3,12 @@ package com.company.makepub.app.usecase.scripture;
 import com.company.makepub.app.domain.Book;
 import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Contract;
+import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Component
 public class MakeRegex {
     private static final Pattern pattern = Pattern.compile(getRegex(), Pattern.UNICODE_CASE|Pattern.CASE_INSENSITIVE);
 

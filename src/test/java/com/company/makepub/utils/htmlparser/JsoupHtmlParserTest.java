@@ -2,7 +2,8 @@ package com.company.makepub.utils.htmlparser;
 
 import com.company.makepub.app.gateway.UrlReader;
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
-import com.company.makepub.utils.linkreader.JavaUrlReader;
+import com.company.makepub.app.utils.htmlparser.JsoupHtmlParser;
+import com.company.makepub.app.utils.linkreader.JavaUrlReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

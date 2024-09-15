@@ -5,7 +5,9 @@ import com.company.makepub.app.domain.ScriptureAddress;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.usecase.types.BibleReader;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
+@Component
 public class NwtpReader implements BibleReader {
 
     private final HtmlParser htmlParser;

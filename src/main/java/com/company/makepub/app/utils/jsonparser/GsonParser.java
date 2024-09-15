@@ -1,11 +1,13 @@
-package com.company.makepub.utils.jsonparser;
+package com.company.makepub.app.utils.jsonparser;
 
 import com.company.makepub.app.gateway.JsonParser;
 import com.google.gson.Gson;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class GsonParser<T> implements JsonParser<T>  {
     @Override
     @Nonnull

@@ -1,5 +1,6 @@
 package com.company.makepub.utils.uuid;
 
+import com.company.makepub.app.utils.uuid.MyUUIDGenerator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

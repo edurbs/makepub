@@ -4,10 +4,12 @@ import com.company.makepub.app.domain.ScriptureAddress;
 import com.company.makepub.app.gateway.UUIDGenerator;
 import com.company.makepub.app.usecase.types.BibleReader;
 import jakarta.annotation.Nonnull;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.regex.Matcher;
 
+@Component
 public class LinkScriptures {
 
     private final MakeRegex makeRegex;
@@ -16,6 +18,7 @@ public class LinkScriptures {
     private final BibleReader nwtpReader;
     private final BibleReader tnmReader;
     private final StringBuilder linkedHtml = new StringBuilder();
+
 
     public LinkScriptures(MakeRegex makeRegex, UUIDGenerator uuidGenerator, BibleReader scriptureEarthReader, BibleReader nwtpReader, BibleReader tnmReader) {
         this.makeRegex = makeRegex;
