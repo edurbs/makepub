@@ -3,6 +3,7 @@ package com.company.makepub.app.usecase.epub;
 import com.company.makepub.app.gateway.UUIDGenerator;
 import com.company.makepub.app.usecase.types.StringConversor;
 import jakarta.annotation.Nonnull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,14 +12,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
+@RequiredArgsConstructor
 public class ConvertMarkupToHtml implements StringConversor {
+
     private final UUIDGenerator uuidGenerator;
+
     private final List<String> footNotes = new ArrayList<>();
     private int footNoteIndex = 0;
-
-    public ConvertMarkupToHtml(UUIDGenerator uuidGenerator) {
-        this.uuidGenerator = uuidGenerator;
-    }
 
     @Nonnull
     @Override

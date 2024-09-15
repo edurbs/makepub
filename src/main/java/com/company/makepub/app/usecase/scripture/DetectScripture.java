@@ -4,25 +4,24 @@ import com.company.makepub.app.domain.Book;
 import com.company.makepub.app.domain.ScriptureAddress;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 
+@RequiredArgsConstructor
 public class DetectScripture {
 
-    private final List<ScriptureAddress> scriptureAddressList = new ArrayList<>();
     private final Matcher matcher;
     private final String lastBookName;
 
-    public DetectScripture(Matcher matcher, String lastBookName) {
-        this.matcher = matcher;
-        this.lastBookName = lastBookName;
-    }
+    private final List<ScriptureAddress> scriptureAddressList = new ArrayList<>();
 
     @Nonnull
     public List<ScriptureAddress> execute() {
         var extractor = new ScriptureAddressExtractor(matcher, lastBookName);
+        extractor.execute();
         final String bookName = extractor.getBookName();
         final int chapter = extractor.getChapter();
         final String allVerses = extractor.getAllVerses();

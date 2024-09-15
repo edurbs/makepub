@@ -1,5 +1,10 @@
 package com.company.makepub.app.usecase.epub;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum MarkupEnum {
 
     PERGUNTA_RECAPITULACAO("-", """
@@ -67,47 +72,8 @@ public enum MarkupEnum {
     private final boolean isFootnoteText;
     private final boolean isQuestion;
 
-    MarkupEnum(String id, String htmlStart, String htmlEnd, boolean isParagraph, boolean isFootnoteSymbol, boolean isFootnoteText, boolean isQuestion) {
-        this.id = id;
-        this.htmlStart = htmlStart;
-        this.htmlEnd = htmlEnd;
-        this.isParagraph = isParagraph;
-        this.isFootnoteSymbol = isFootnoteSymbol;
-        this.isFootnoteText = isFootnoteText;
-        this.isQuestion = isQuestion;
-    }
-
-    public boolean isFootnote() {
+    public boolean isFootnote(){
         return isFootnoteSymbol() || isFootnoteText();
     }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getHtmlStart() {
-        return htmlStart;
-    }
-
-    public String getHtmlEnd() {
-        return htmlEnd;
-    }
-
-    public boolean isParagraph() {
-        return isParagraph;
-    }
-
-    public boolean isFootnoteSymbol() {
-        return isFootnoteSymbol;
-    }
-
-    public boolean isFootnoteText() {
-        return isFootnoteText;
-    }
-
-    public boolean isQuestion() {
-        return isQuestion;
-    }
-
 }
 

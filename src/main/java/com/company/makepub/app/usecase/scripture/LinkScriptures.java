@@ -4,12 +4,14 @@ import com.company.makepub.app.domain.ScriptureAddress;
 import com.company.makepub.app.gateway.UUIDGenerator;
 import com.company.makepub.app.usecase.types.BibleReader;
 import jakarta.annotation.Nonnull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.regex.Matcher;
 
 @Component
+@RequiredArgsConstructor
 public class LinkScriptures {
 
     private final MakeRegex makeRegex;
@@ -17,16 +19,8 @@ public class LinkScriptures {
     private final BibleReader scriptureEarthReader;
     private final BibleReader nwtpReader;
     private final BibleReader tnmReader;
+
     private final StringBuilder linkedHtml = new StringBuilder();
-
-
-    public LinkScriptures(MakeRegex makeRegex, UUIDGenerator uuidGenerator, BibleReader scriptureEarthReader, BibleReader nwtpReader, BibleReader tnmReader) {
-        this.makeRegex = makeRegex;
-        this.uuidGenerator = uuidGenerator;
-        this.scriptureEarthReader = scriptureEarthReader;
-        this.nwtpReader = nwtpReader;
-        this.tnmReader = tnmReader;
-    }
 
     @Nonnull
     public String execute(@Nonnull String originalText) {
@@ -36,6 +30,7 @@ public class LinkScriptures {
         boolean first = true;
         while (matcher.find()) {
             var extractor = new ScriptureAddressExtractor(matcher, lastBookName);
+            extractor.execute();
             String addressPrefix = extractor.getAddressPrefix();
             String allScriptures = extractor.getAllVerses();
             String uuid = uuidGenerator.generate();

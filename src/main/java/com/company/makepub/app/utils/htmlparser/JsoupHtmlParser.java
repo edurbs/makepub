@@ -5,6 +5,7 @@ import com.company.makepub.app.gateway.UrlReader;
 import com.company.makepub.app.usecase.exceptions.UseCaseException;
 import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,13 +16,10 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
+@RequiredArgsConstructor
 public class JsoupHtmlParser implements HtmlParser {
 
     private final UrlReader urlReader;
-
-    public JsoupHtmlParser(UrlReader urlReader) {
-        this.urlReader = urlReader;
-    }
 
     @Override
     @Nonnull

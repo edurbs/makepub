@@ -1,39 +1,25 @@
 package com.company.makepub.app.usecase.scripture;
 
+import jakarta.annotation.Nonnull;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 import java.util.regex.Matcher;
 
+@RequiredArgsConstructor
+@Getter
 public class ScriptureAddressExtractor {
 
     private final Matcher matcher;
+    @Nonnull
     private String lastBookName;
-    private String allVerses;
-    private String addressPrefix;
-    private int chapter;
-    private String bookName;
 
-    public ScriptureAddressExtractor(Matcher matcher, String lastBookName) {
-        this.matcher = matcher;
-        this.lastBookName = lastBookName;
-        execute();
-    }
+    private String allVerses = "";
+    private String addressPrefix = "";
+    private int chapter = 0;
+    private String bookName = "";
 
-    public int getChapter() {
-        return chapter;
-    }
-
-    public String getBookName() {
-        return bookName;
-    }
-
-    public String getAllVerses() {
-        return allVerses;
-    }
-
-    public String getAddressPrefix() {
-        return addressPrefix;
-    }
-
-    private void execute() {
+    public void execute() {
         final String fullScriptureAddress;
         final String scriptureAddress;
         bookName = matcher.group(2).trim();

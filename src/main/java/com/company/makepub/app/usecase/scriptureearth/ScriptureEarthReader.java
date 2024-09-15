@@ -7,24 +7,20 @@ import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.usecase.scripture.ConvertScripture;
 import com.company.makepub.app.usecase.types.BibleReader;
 import jakarta.annotation.Nonnull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
 @Component
+@RequiredArgsConstructor
 public class ScriptureEarthReader implements BibleReader {
 
 
     private final HtmlParser htmlParser;
     private final ConvertScripture convertScripture;
     private final ReadJsonBooks readJsonBooks;
-
-    public ScriptureEarthReader(HtmlParser htmlParser, ReadJsonBooks readJsonBooks, ConvertScripture convertScripture) {
-        this.readJsonBooks = readJsonBooks;
-        this.htmlParser = htmlParser;
-        this.convertScripture = convertScripture;
-    }
 
     @Nonnull
     @Override

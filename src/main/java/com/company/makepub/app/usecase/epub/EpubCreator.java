@@ -7,6 +7,7 @@ import com.company.makepub.app.usecase.types.EpubMap;
 import com.company.makepub.app.usecase.types.LinkReferencePage;
 import com.company.makepub.app.usecase.types.StringConversor;
 import jakarta.annotation.Nonnull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -17,7 +18,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 @Component
-
+@RequiredArgsConstructor
 public class EpubCreator {
 
     private final StringConversor markupConversor;
@@ -25,13 +26,6 @@ public class EpubCreator {
     private final LinkScriptures linkScriptures;
     private final CreateCover createCover;
     private final Map<EpubMap, String> finalEpubMap = new HashMap<>();
-
-    public EpubCreator(StringConversor markupConversor, LinkReferencePage linkMusic, LinkScriptures linkScriptures, CreateCover createCover) {
-        this.markupConversor = markupConversor;
-        this.linkMusic = linkMusic;
-        this.linkScriptures = linkScriptures;
-        this.createCover = createCover;
-    }
 
     @Nonnull
     public EpubFile execute(@Nonnull String mainText, @Nonnull String subtitulo, @Nonnull String periodo, @Nonnull String estudo){

@@ -1,12 +1,16 @@
 package com.company.makepub.app.usecase.types;
 
 import jakarta.annotation.Nonnull;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 
+@Getter
+@RequiredArgsConstructor
 public enum EpubMap {
 
     MIME("mimetype", "application/epub+zip"),
@@ -147,16 +151,4 @@ public enum EpubMap {
     private final String path;
     private final String defaultText;
 
-    EpubMap(String path, String defaultText) {
-        this.path = path;
-        this.defaultText = defaultText;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public String getDefaultText() {
-        return defaultText;
-    }
 }

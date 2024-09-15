@@ -2,7 +2,11 @@ package com.company.makepub.app.domain;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@Getter
+@RequiredArgsConstructor
 public enum ScriptureEarthBookName {
 
     BOOK_GEN(Book.BOOK_01_GEN),
@@ -74,11 +78,6 @@ public enum ScriptureEarthBookName {
 
     private final Book book;
 
-    ScriptureEarthBookName(Book book) {
-        this.book = book;
-    }
-
-
     @Nonnull
     public String getName() {
         String bookString = this.toString();
@@ -86,10 +85,6 @@ public enum ScriptureEarthBookName {
             return "";
         }
         return this.toString().substring(5);
-    }
-
-    public Book getBook() {
-        return this.book;
     }
 
     @Nullable

@@ -6,6 +6,7 @@ import com.company.makepub.app.usecase.exceptions.UseCaseException;
 import com.company.makepub.app.usecase.types.EpubMap;
 import com.company.makepub.app.usecase.types.LinkReferencePage;
 import jakarta.annotation.Nonnull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -15,16 +16,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
+@RequiredArgsConstructor
 public class LinkMusic implements LinkReferencePage {
 
     private final HtmlParser htmlParser;
     private final UUIDGenerator uuidGenerator;
-    private String musicPage = "";
 
-    public LinkMusic(HtmlParser htmlParser, UUIDGenerator uuidGenerator1) {
-        this.htmlParser = htmlParser;
-        this.uuidGenerator = uuidGenerator1;
-    }
+    private String musicPage = "";
 
     @Override
     @Nonnull

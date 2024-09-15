@@ -5,16 +5,14 @@ import com.company.makepub.app.domain.ScriptureAddress;
 import com.company.makepub.app.gateway.HtmlParser;
 import com.company.makepub.app.usecase.types.BibleReader;
 import jakarta.annotation.Nonnull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class TnmReader implements BibleReader {
 
     private final HtmlParser htmlParser;
-
-    public TnmReader(HtmlParser htmlParser) {
-        this.htmlParser = htmlParser;
-    }
 
     @Nonnull
     @Override
